@@ -1,0 +1,15 @@
+{
+  "name"         : "rest-console",
+  "version"      : "0.1.0",
+  "description"  : "Display data from REST",
+  "main"         : "server.js",
+  "author"       : "maso",
+  "dependencies" : {
+    "express"         : "~4.6.1",
+    "morgan"          : "~1.1.1",
+    "body-parser"     : "~1.4.3",
+    "method-override" : "~2.1.1",
+    "simple-ssh"      : "~0.8.6",
+    "node-rest-client": "~1.5.1"
+  }
+}

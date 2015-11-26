@@ -1,0 +1,162 @@
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="cmsDashboard">
+<head>
+    <!-- META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Optimize mobile viewport -->
+
+    <title>2016</title>
+
+    <!-- SCROLLS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- load bootstrap -->
+    <link rel="stylesheet" href="css/angular-chart.css">
+    <!-- load chartjs -->
+
+    <!-- IMPORT -->
+    <script src="js/lib/angular.min.js"></script>
+    <!-- load angular -->
+    <!--<script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script> load angular UI -->
+    <script src="js/lib/Chart.min.js"></script>
+    <!-- load Chartjs -->
+    <script src="js/Chart.global.js"></script>
+    <!-- load Chartjs -->
+    <script src="js/lib/angular-chart.min.js"></script>
+
+    <!-- SELF -->
+    <script src="js/core.js"></script>
+    <script src="js/controllers/cms.js"></script>
+    <!-- load up our controller -->
+
+</head>
+<!-- SET THE CONTROLLER -->
+<body ng-controller="dashboardCtl">
+<div class="container" style="width: 90%">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <h5 class="pull-right">Latest Statics Time: <strong>{{ time }}</strong></h5>
+
+        <h2> {{ title }} </h2>
+    </div>
+
+    <!-- FORM TO CONFIG -->
+    <div id="topology-form" class="row">
+        <!-- <h4>Setting <small>display</small></h4> -->
+        <form class="form-inline">
+            <div class="form-group">
+                Server
+                <input type="text" placeholder="Input a query name" ng-model="disp_server">
+            </div>
+            <div class="form-group">
+                View
+                <input type="text" placeholder="Input a query name" ng-model="disp_view">
+            </div>
+            <div class="form-group">
+                Refresh Rate
+                <input type="text" placeholder="Sec." ng-model="disp_interval" size="1">Sec.
+            </div>
+            <div class="form-group">
+                Pagination Size
+                <input type="text" placeholder="5" ng-model="disp_pageSize" size="1">
+            </div>
+
+            <!--
+            <div class="form-group">
+                Charts Animation
+                <select ng-model="disp_animation" ng-options="animation for animation in chartAnimation"></select>
+            </div>
+            <div class="form-group">
+                Random value for Charts
+                <input type="checkbox" ng-model="disp_random" ng-checked="disp_random" ng-true-value="'true'"
+                ng-false-value="'false'">
+            </div>
+            -->
+
+            <button type="submit" ng-show="disp()" ng-click="submit()">Save</button>
+            <button type="cancel" ng-show="disp()" ng-click="reset()">Reset</button>
+
+            <span class="pull-right">
+              <strong>Go to:</strong>
+              <a href="/help.html"> Help </a>
+            </span>
+        </form>
+    </div>
+
+
+    <!-- STATISTICS -->
+    <div class="row">
+        <h4>Statistics</h4>
+
+        <div class="col-xs-6 col-md-3" ng-repeat="(key, value) in statistics">
+        <span class="thumbnail">
+           <h4><a ng-click="queryCis(key)">{{ t2t(key) }}</a></h4> {{ value }}
+       </span>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <!-- RECORDS -->
+        <div ng-show="cis">
+            <h4>Records
+                <small>{{ '- ' + t2t(formData.ciType) }}</small>
+                <small>({{ statistics[formData.ciType] }})</small>
+                <small class="pull-right">
+                    Search
+                    <input type="text" placeholder="Dynamic Search" ng-model="search"
+                           ng-change="formData.pageSize=(search.trim().length>0)?cis.length:10">
+                    Page
+                    <select ng-model="formData.pageSize" ng-options="o as o for o in [10, 50, 100]">
+                    </select>
+                </small>
+            </h4>
+
+            <p ng-show="cis.length==0">No Selected Element Layout for
+                <strong class="danger">{{ t2t(formData.ciType) }}</strong>
+            </p>
+
+            <table class="table table-striped">
+                <thead>
+                <tr ng-repeat="e in cis" ng-if="$first">
+                    <th ng-repeat="(key, value) in e" ng-show="key!='timestamp'">
+                        {{ t2t(key) }}
+                         <a class="glyphicon glyphicon-sort" aria-hidden="true" ng-click="order(key)"></a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="e in cis|filter:search|orderBy:predicate:reverse|startFrom:currentPage*formData.pageSize|limitTo:formData.pageSize">
+                    <td ng-repeat="(key, value) in e" ng-show="key!='timestamp'">{{ value }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <nav class="pull-right">
+                <ul class="pagination">
+                    <li>
+                        <a aria-label="Previous" ng-click="currentPage=(currentPage-1)<0?0:currentPage-1">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li ng-repeat="i in [] |range:cis.length/formData.pageSize" ng-class="{active: currentPage==i}"
+                        ng-click="jump(i)"><a>{{ i + 1 }}</a></li>
+                    <li>
+                        <a aria-label="Next"
+                           ng-click="currentPage=(currentPage+1)>cis.length/formData.pageSize?currentPage:currentPage+1">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

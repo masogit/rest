@@ -1,0 +1,51 @@
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="ssh">
+<head>
+    <!-- META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Optimize mobile viewport -->
+
+    <title>CMS Project 2015</title>
+
+    <!-- SCROLLS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- IMPORT -->
+    <script src="js/lib/angular.min.js"></script>
+
+    <!-- SELF -->
+    <script src="js/controllers/ssh.js"></script>
+    <!-- load up our controller -->
+
+</head>
+<!-- SET THE CONTROLLER -->
+<body ng-controller="sshCtl">
+<div class="container" style="width: 90%">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <h2> {{ title }} </h2>
+    </div>
+
+    <div class="row">
+        <form>
+            <!-- SSH -->
+            <input type="text" ng-model="ssh.host" placeholder="Server">
+            <input type="text" ng-model="ssh.user" placeholder="Username">
+            <input type="text" ng-model="ssh.pass" placeholder="Password">
+            <input type="text" ng-model="ssh.cmd" size="100" placeholder="Commands">
+            <button type="submit" ng-click="sshExec()">Execute</button>
+        </form>
+        <h4>Commands and Results</h4>
+        <div class="list-group">
+            <pre class="list-group-item" ng-repeat="msg in ssh.msg" style="">{{ msg }}</pre>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
