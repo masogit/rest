@@ -33,7 +33,7 @@ module.exports = function (app) {
 
     });
 
-    app.post('/ssh', function (req, res) {
+    app.post('/ssh/exec', function (req, res) {
         console.log("req.body.cmd: " + req.body.cmd);
         var ssh = new SSH({
             host: req.body.host,

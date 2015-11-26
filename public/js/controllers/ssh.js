@@ -14,7 +14,7 @@ ssh.controller('sshCtl', ['$scope', '$http', function ($scope, $http) {
     // SSH command
     $scope.sshExec = function () {
         $scope.ssh.msg.push($scope.ssh.cmd);
-        $http.post('/ssh', $scope.ssh).success(function (data) {
+        $http.post('/ssh/exec', $scope.ssh).success(function (data) {
             console.log("execute ssh command");
             if (data) {
                 $scope.ssh.msg.push(data);
