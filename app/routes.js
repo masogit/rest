@@ -34,9 +34,11 @@ module.exports = function (app) {
     });
 
     app.post('/am/rest', function (req, res) {
-        var url = "http://" + req.body.server + req.body.context + req.body.table;
+//        var url = "http://" + req.body.server + req.body.context + req.body.table;
+        var url = "http://${server}${context}${table}";
         var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
         var args = {
+            path: req.body,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": auth
