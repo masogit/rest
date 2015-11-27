@@ -1,0 +1,97 @@
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="am">
+<head>
+    <!-- META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Optimize mobile viewport -->
+
+    <title>AM REST Client</title>
+
+    <!-- SCROLLS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- IMPORT -->
+    <script src="js/lib/angular.min.js"></script>
+
+    <!-- SELF -->
+    <script src="js/controllers/am.js"></script>
+    <!-- load up our controller -->
+
+</head>
+<!-- SET THE CONTROLLER -->
+<body ng-controller="amCtl">
+<div class="container" style="width: 90%">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <h2> {{ title }} </h2>
+    </div>
+
+    <div class="row">
+        <h4>REST Configuration</h4>
+
+        <form class="form-inline">
+            <div class="form-group" ng-repeat="(key, value) in formData">
+                <label>{{ key }}</label>
+                <input type="text" class="form-control" placeholder="" ng-model="formData[key]">
+            </div>
+            <button type="submit" ng-click="query()">Query</button>
+        </form>
+
+    </div>
+    <hr>
+    <div class="row" ng-show="tableData">
+        <h4> AM Table: <strong>{{ formData.table }} </strong>
+            <small>({{ tableData.count }})</small>
+            <small class="pull-right">
+                Search
+                <input type="text" placeholder="Dynamic Search" ng-model="search"
+                       ng-change="formData.pageSize=(search.trim().length>0)?tableData.entities.length:10">
+                Page
+                <select ng-model="formData.pageSize" ng-options="o as o for o in [10, 50, 100]">
+                </select>
+            </small>
+        </h4>
+
+        <table class="table table-striped">
+            <thead>
+            <tr ng-repeat="e in tableData.entities" ng-if="$first">
+                <th ng-repeat="(key, value) in e">
+                    <a ng-click="order(key)">{{ key }}</a>
+                    <!--<a class="glyphicon glyphicon-sort" aria-hidden="true" ng-click="order(key)"></a>-->
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="e in tableData.entities|filter:search|orderBy:predicate:reverse|startFrom:currentPage*formData.pageSize|limitTo:formData.pageSize">
+                <td ng-repeat="(key, value) in e">{{ showValue(value) }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a aria-label="Previous" ng-click="currentPage=(currentPage-1)<0?0:currentPage-1">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li ng-repeat="i in [] |range:tableData.entities.length/formData.pageSize"
+                    ng-class="{active: currentPage==i}"
+                    ng-click="jump(i)"><a>{{ i + 1 }}</a></li>
+                <li>
+                    <a aria-label="Next"
+                       ng-click="currentPage=(currentPage+1)>tableData.entities.length/formData.pageSize?currentPage:currentPage+1">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+</body>
+</html>

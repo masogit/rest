@@ -1,7 +1,7 @@
 module.exports = function (app) {
     var SSH = require('simple-ssh');
     var Client = require('node-rest-client').Client;
-    client = new Client();
+    var client = new Client();
 
     // application -------------------------------------------------------------
     app.post('/rest/topology', function (req, res) {
@@ -31,6 +31,26 @@ module.exports = function (app) {
         //    console.log('request error');
         //});
 
+    });
+
+    app.post('/am/rest', function (req, res) {
+        var url = "http://" + req.body.server + req.body.context + req.body.table;
+        var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
+        var args = {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": auth
+            }
+        };
+
+        var req = client.get(url, args, function (data, response) {
+            console.log("url: " + url);
+            res.json(data);
+        });
+
+        req.on('error', function (err) {
+            console.log('request error: ' + err);
+        });
     });
 
     app.post('/ssh/exec', function (req, res) {
