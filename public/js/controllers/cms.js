@@ -1,31 +1,32 @@
 angular.module('cmsController', [])
 
     .controller('dashboardCtl', ['$scope', '$http', 'topology', '$interval', function ($scope, $http, topology, $interval) {
-
-        $scope.title = "Dashboard Console";
+        var CMS_FORM_DATA = "cmsFormData";
+        $scope.title = "CMS REST Console";
         $scope.formData = {
             server: "16.165.217.57:9091",
             view: "AM Node Push 2.0",
-            interval: 2,
+            history: "",
+            historyViews: ["AM Node Push 2.0", "AM Installed Software Push 2.0"],
+//            interval: 2,
             pageSize: 5,
             ciType: ''
         };
 
-        $scope.statistics = {};
-        $scope.time = "";
-        $scope.currentPage = 0;
-        $scope.raw = [];
-        $scope.cis = [];
 
-
-        // get UCMDB TQL data
-        $scope.getREST = function () {
-//            $scope.getContainer();
-            $scope.getTopology();
+        $scope.init = function () {
+            $scope.statistics = {};
+            $scope.time = "";
+            $scope.currentPage = 0;
+            $scope.raw = [];
+            $scope.cis = [];
+            if (localStorage)
+                $scope.formData = JSON.parse(localStorage.getItem(CMS_FORM_DATA));
         };
 
-
         $scope.getTopology = function () {
+            $scope.statistics = {};
+            $scope.cis = [];
             topology.get($scope.formData).success(function (data) {
                 var d = new Date();
                 $scope.time = d.toLocaleString();
@@ -35,7 +36,6 @@ angular.module('cmsController', [])
                     $scope.raw = data.cis; // save raw data
 
                     var ciNumber = {};
-                    var ISNumber = {};
                     data.cis.map(function (obj) {
 
                         // count all CI type
@@ -51,7 +51,6 @@ angular.module('cmsController', [])
 
                     });
 
-
                     $scope.statistics = ciNumber;	// caculate statistics
 
                     $scope.queryCis($scope.formData.ciType); // query specified Cis by ciType
@@ -65,11 +64,10 @@ angular.module('cmsController', [])
         $scope.queryCis = function (ciType) {
 
             $scope.formData.ciType = ciType;
-            $scope.disp_ciType = ciType;
 
             // save web storage
             if (localStorage)
-                localStorage.ciType = $scope.formData.ciType;
+                localStorage.setItem(CMS_FORM_DATA, JSON.stringify($scope.formData));
 
             $scope.cis = [];
             for (i in $scope.raw) {
@@ -86,46 +84,26 @@ angular.module('cmsController', [])
 
 
         // form behavior ==========================================
-        $scope.submit = function () {
-            for (form in $scope.formData) {
-                $scope.formData[form] = $scope["disp_" + form];
+        $scope.save = function () {
+//            console.log("$scope.view: " + $scope.view);
+            if ($scope.formData.view && $scope.formData.historyViews.indexOf($scope.formData.view) < 0)
+                $scope.formData.historyViews.push($scope.formData.view);
 
-                // save web storage
-                if (localStorage)
-                    localStorage[form] = $scope.formData[form];
-            }
+            if (localStorage)
+                localStorage.setItem(CMS_FORM_DATA, JSON.stringify($scope.formData));
 
-            $scope.getREST();
-            $scope.setInterval();
-            $scope.initCharts();
+            $scope.getTopology();
 
         };
 
-        $scope.reset = function () {
+        $scope.remove = function () {
+            var i = $scope.formData.historyViews.indexOf($scope.formData.view);
+            $scope.formData.historyViews.splice(i, 1);
 
-            for (form in $scope.formData) {
-                // load web storage
-                if (localStorage)
-                    $scope.formData[form] = localStorage[form] ? localStorage[form] : $scope.formData[form];
+            if ($scope.formData.historyViews[0])
+                $scope.formData.view = $scope.formData.historyViews[0];
 
-                $scope["disp_" + form] = $scope.formData[form]
-            }
-
-        };
-
-        $scope.setInterval = function () {
-            $interval.cancel(interval);
-            interval = $interval(function () {
-                $scope.getREST();
-            }, $scope.formData.interval * 1000);
-        };
-
-        $scope.disp = function () {
-            var display = false;
-            for (form in $scope.formData) {
-                display = display || ($scope.formData[form] != $scope["disp_" + form]);
-            }
-            return display;
+            $scope.save();
         };
 
 
@@ -144,10 +122,6 @@ angular.module('cmsController', [])
         };
 
         // initial ======================================================
-        $scope.reset();	// inital run for set disp value
-        $scope.getREST(); // inital get, then interval
-        var interval = $interval(function () {
-            $scope.getREST();
-        }, $scope.formData.interval * 1000);
+        $scope.init();	// inital run for set disp value
 
     }]);

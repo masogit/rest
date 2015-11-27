@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Optimize mobile viewport -->
 
-    <title>2016</title>
+    <title>CMS REST Client</title>
 
     <!-- SCROLLS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -49,35 +49,27 @@
         <form class="form-inline">
             <div class="form-group">
                 Server
-                <input type="text" placeholder="Input a query name" ng-model="disp_server">
+                <input type="text" placeholder="Input a query name" ng-model="formData.server">
             </div>
             <div class="form-group">
                 View
-                <input type="text" placeholder="Input a query name" ng-model="disp_view">
+                <input type="text" placeholder="Input a query name" ng-model="formData.view">
             </div>
             <div class="form-group">
-                Refresh Rate
-                <input type="text" placeholder="Sec." ng-model="disp_interval" size="1">Sec.
+                History
+                <select ng-model="formData.view" ng-options="history for history in formData.historyViews"></select>
             </div>
+            <button ng-click="remove()">X</button>
+            <!--<div class="form-group">-->
+            <!--Refresh Rate-->
+            <!--<input type="text" placeholder="Sec." ng-model="formData.interval" size="1">Sec.-->
+            <!--</div>-->
             <div class="form-group">
                 Pagination Size
-                <input type="text" placeholder="5" ng-model="disp_pageSize" size="1">
+                <input type="text" placeholder="5" ng-model="formData.pageSize" size="1">
             </div>
 
-            <!--
-            <div class="form-group">
-                Charts Animation
-                <select ng-model="disp_animation" ng-options="animation for animation in chartAnimation"></select>
-            </div>
-            <div class="form-group">
-                Random value for Charts
-                <input type="checkbox" ng-model="disp_random" ng-checked="disp_random" ng-true-value="'true'"
-                ng-false-value="'false'">
-            </div>
-            -->
-
-            <button type="submit" ng-show="disp()" ng-click="submit()">Save</button>
-            <button type="cancel" ng-show="disp()" ng-click="reset()">Reset</button>
+            <button type="submit" ng-click="save()">Query</button>
 
             <span class="pull-right">
               <strong>Go to:</strong>
@@ -124,7 +116,7 @@
                 <tr ng-repeat="e in cis" ng-if="$first">
                     <th ng-repeat="(key, value) in e" ng-show="key!='timestamp'">
                         {{ t2t(key) }}
-                         <a class="glyphicon glyphicon-sort" aria-hidden="true" ng-click="order(key)"></a>
+                        <a class="glyphicon glyphicon-sort" aria-hidden="true" ng-click="order(key)"></a>
                     </th>
                 </tr>
                 </thead>
