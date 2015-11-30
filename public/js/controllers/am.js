@@ -6,7 +6,7 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
         server: "16.165.217.186:8081",
         context: "/AssetManagerWebService/rs/",
         "ref-link": "db/amLocation/126874",
-        collection: "/EmplDepts",
+        collection: "EmplDepts",
         param: {
             limit: "10",
             offset: "1",
@@ -20,8 +20,8 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
     };
     $scope.pageSize = 10;
 
-    if (localStorage && localStorage[AM_FORM_DATA])
-        $scope.formData = JSON.parse(localStorage.getItem(AM_FORM_DATA));
+//    if (localStorage && localStorage[AM_FORM_DATA])
+//        $scope.formData = JSON.parse(localStorage.getItem(AM_FORM_DATA));
 
     $scope.query = function () {
         $scope.tableData = {};
