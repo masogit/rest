@@ -1,5 +1,5 @@
-var am = angular.module('am', []);
-am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
+var am = angular.module('am', ['ui.bootstrap']);
+am.controller('amCtl', ['$scope', '$http', '$uibModal', '$log', function ($scope, $http, $uibModal, $log) {
     var AM_FORM_DATA = "amFormData";
     $scope.title = "AM REST DB Client";
     $scope.formData = {
@@ -20,8 +20,8 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
     };
     $scope.pageSize = 10;
 
-//    if (localStorage && localStorage[AM_FORM_DATA])
-//        $scope.formData = JSON.parse(localStorage.getItem(AM_FORM_DATA));
+    if (localStorage && localStorage[AM_FORM_DATA])
+        $scope.formData = JSON.parse(localStorage.getItem(AM_FORM_DATA));
 
     $scope.query = function () {
         $scope.tableData = {};
@@ -41,49 +41,34 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
         $scope.store();
     };
 
-    $scope.update = function (record) {
-        var form = clone($scope.formData);
-        form["ref-link"] = record["ref-link"];
-        delete form["param"];
-        form["collection"] = "";
-        $http.post('/am/get', form).success(function (data) {
-            if (data instanceof Object) {
-                // compare
-                var update = {};
-                for (key in data) {
-                    if (JSON.stringify(data[key]) != JSON.stringify(record[key]))
-                        update[key] = record[key];
+    $scope.load = function (data) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'am_modal.html',
+            controller: 'amModalCtrl',
+            size: "modal-lg",
+            resolve: {
+                data: function () {
+                    return data;
+                },
+                form: function () {
+                    return $scope.formData;
                 }
-                form["data"] = update;
-                $http.post('/am/put', form).success(function (data) {
-                    $scope.message = data;
-                });
             }
         });
-    };
 
-    $scope.delete = function (record) {
-        var form = clone($scope.formData);
-        form["ref-link"] = record["ref-link"];
-        delete form["param"];
-        form["collection"] = "";
-        $http.post('/am/delete', form).success(function (data) {
-            $scope.message = data;
+        modalInstance.result.then(function () {
+            $scope.query();
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
         });
-    };
-
-    $scope.load = function (data) {
-        $scope.recordData = clone(data);
-    };
-
-    $scope.close = function () {
-        delete $scope.recordData;
     };
 
     $scope.store = function () {
         if (localStorage)
             localStorage.setItem(AM_FORM_DATA, JSON.stringify($scope.formData));
     };
+
     // list order by and pagination =============================
     $scope.predicate = '';
     $scope.reverse = true;
@@ -105,13 +90,56 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
             return value;
     };
 
-    $scope.showObject = function (obj) {
-        var json = obj;
-//        console.log("obj: " + obj);
-        return JSON.stringify(json);
-    };
 }]);
 
+am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, form) {
+    $scope.title = data['ref-link'];
+    $scope.recordData = data;
+    $scope.modifyData = {};
+    for (key in $scope.recordData) {
+        $scope.modifyData[key] = "";
+    }
+    var form = clone(form);
+
+    $scope.update = function (record) {
+        form["ref-link"] = data["ref-link"];
+        delete form["param"];
+        form["collection"] = "";
+
+        var update = {};
+        for (key in record) {
+            if (!record[key].isEmpty())
+                update[key] = record[key];
+        }
+        form["data"] = update;
+        $http.post('/am/put', form).success(function (data) {
+            $scope.message = data;
+//            $uibModalInstance.close();
+        });
+    };
+
+    $scope.delete = function (record) {
+        form["ref-link"] = record["ref-link"];
+        delete form["param"];
+        form["collection"] = "";
+        $http.post('/am/delete', form).success(function (data) {
+            $scope.message = data;
+//            $uibModalInstance.close();
+        });
+    };
+
+    $scope.clearMsg = function () {
+        delete $scope.message;
+    };
+
+    $scope.ok = function () {
+        $uibModalInstance.close();
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+});
 
 am.filter('startFrom', function () {
     return function (input, start) {
@@ -155,3 +183,7 @@ function clone(obj) {
     }
     return o;
 }
+
+String.prototype.isEmpty = function () {
+    return (this.length === 0 || !this.trim());
+};

@@ -15,6 +15,7 @@
 
     <!-- IMPORT -->
     <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/ui-bootstrap-tpls-0.14.3.min.js"></script>
 
     <!-- SELF -->
     <script src="js/controllers/am.js"></script>
@@ -52,20 +53,7 @@
 
     </div>
     <hr>
-    <p class="text-danger">{{ message }}</p>
-    <div class="row" ng-show="recordData">
-        <h4> Record: <strong>{{ recordData['ref-link'] }} </strong></h4>
-        <!--<label>{{ recordData }}</label>-->
-        <form class="form-inline">
-            <div class="form-group" ng-repeat="(key, value) in recordData" ng-show="key!='ref-link'">
-                <label>{{ key }}</label>
-                <input type="text" class="form-control" ng-model="recordData[key]">
-            </div>
-            <button type="submit" ng-click="update(recordData)">Update</button>
-            <button type="submit" ng-click="delete(recordData)">Delete</button>
-            <button type="submit" ng-click="close()">Close</button>
-        </form>
-    </div>
+
     <div class="row" ng-show="tableData">
         <h4> AM Table: <strong>{{ formData.table }} </strong>
             <small>({{ tableData.count }})</small>
@@ -85,7 +73,6 @@
                 <th ng-show="e['ref-link']"><a ng-click="order('ref-link')">ref-link</a></th>
                 <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
                     <a ng-click="order(key)">{{ key }}</a>
-                    <!--<a class="glyphicon glyphicon-sort" aria-hidden="true" ng-click="order(key)"></a>-->
                 </th>
             </tr>
             </thead>
@@ -117,6 +104,6 @@
         </nav>
 
     </div>
-
+</div>
 </body>
 </html>

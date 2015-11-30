@@ -79,7 +79,7 @@ module.exports = function (app) {
 
         var req = client.put(url, args, function (data, response) {
             console.log("put data: " + data);
-            res.send(data);
+            res.json(data);
         });
         console.log("req.options: " + JSON.stringify(req.options));
 
@@ -104,7 +104,7 @@ module.exports = function (app) {
 
         var req = client.delete(url, args, function (data, response) {
             console.log("put data: " + data);
-            res.send(data);
+            res.json(data);
         });
         console.log("req.options: " + JSON.stringify(req.options));
 
