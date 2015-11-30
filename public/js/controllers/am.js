@@ -25,7 +25,7 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.query = function () {
         $scope.tableData = {};
-        $http.post('/am/rest', $scope.formData).success(function (data) {
+        $http.post('/am/get', $scope.formData).success(function (data) {
             if (data instanceof Object) {
                 if (data.entities instanceof Array)
                     $scope.tableData = data;
@@ -38,10 +38,49 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
         });
-        $scope.save();
+        $scope.store();
     };
 
-    $scope.save = function () {
+    $scope.update = function (record) {
+        var form = clone($scope.formData);
+        form["ref-link"] = record["ref-link"];
+        delete form["param"];
+        form["collection"] = "";
+        $http.post('/am/get', form).success(function (data) {
+            if (data instanceof Object) {
+                // compare
+                var update = {};
+                for (key in data) {
+                    if (JSON.stringify(data[key]) != JSON.stringify(record[key]))
+                        update[key] = record[key];
+                }
+                form["data"] = update;
+                $http.post('/am/put', form).success(function (data) {
+                    $scope.message = data;
+                });
+            }
+        });
+    };
+
+    $scope.delete = function (record) {
+        var form = clone($scope.formData);
+        form["ref-link"] = record["ref-link"];
+        delete form["param"];
+        form["collection"] = "";
+        $http.post('/am/delete', form).success(function (data) {
+            $scope.message = data;
+        });
+    };
+
+    $scope.load = function (data) {
+        $scope.recordData = clone(data);
+    };
+
+    $scope.close = function () {
+        delete $scope.recordData;
+    };
+
+    $scope.store = function () {
         if (localStorage)
             localStorage.setItem(AM_FORM_DATA, JSON.stringify($scope.formData));
     };
@@ -65,7 +104,14 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
         else
             return value;
     };
+
+    $scope.showObject = function (obj) {
+        var json = obj;
+//        console.log("obj: " + obj);
+        return JSON.stringify(json);
+    };
 }]);
+
 
 am.filter('startFrom', function () {
     return function (input, start) {
@@ -85,3 +131,27 @@ am.filter('range', function () {
         return input;
     };
 });
+
+function clone(obj) {
+    var o;
+    if (typeof obj == "object") {
+        if (obj === null) {
+            o = null;
+        } else {
+            if (obj instanceof Array) {
+                o = [];
+                for (var i = 0, len = obj.length; i < len; i++) {
+                    o.push(clone(obj[i]));
+                }
+            } else {
+                o = {};
+                for (var j in obj) {
+                    o[j] = clone(obj[j]);
+                }
+            }
+        }
+    } else {
+        o = obj;
+    }
+    return o;
+}

@@ -33,12 +33,12 @@ module.exports = function (app) {
 
     });
 
-    app.post('/am/rest', function (req, res) {
+    app.post('/am/get', function (req, res) {
 //        var url = "http://" + req.body.server + req.body.context + req.body.table;
         var url = "http://${server}${context}${ref-link}/${collection}";
         var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
 
-        if (req.body.param['orderby'].isEmpty())
+        if (req.body.param && req.body.param['orderby'].isEmpty())
             delete req.body.param['orderby'];
 
         var args = {
@@ -50,17 +50,69 @@ module.exports = function (app) {
             }
         };
 
+
         var req = client.get(url, args, function (data, response) {
-//            console.log("url: " + url);
-//            console.log("data: " + JSON.stringify(data));
             res.json(data);
         });
         console.log("req.options: " + JSON.stringify(req.options));
+
+
         req.on('error', function (err) {
             console.log('request error: ' + err);
         });
     });
 
+    app.post('/am/put', function (req, res) {
+//        var url = "http://" + req.body.server + req.body.context + req.body.table;
+        var url = "http://${server}${context}${ref-link}";
+        var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
+        console.log("req.body.data: " + JSON.stringify(req.body.data));
+        var args = {
+            path: req.body,
+            data: req.body.data,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": auth
+            }
+        };
+
+
+        var req = client.put(url, args, function (data, response) {
+            console.log("put data: " + data);
+            res.send(data);
+        });
+        console.log("req.options: " + JSON.stringify(req.options));
+
+
+        req.on('error', function (err) {
+            console.log('request error: ' + err);
+        });
+    });
+
+    app.post('/am/delete', function (req, res) {
+//        var url = "http://" + req.body.server + req.body.context + req.body.table;
+        var url = "http://${server}${context}${ref-link}";
+        var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
+        var args = {
+            path: req.body,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": auth
+            }
+        };
+
+
+        var req = client.delete(url, args, function (data, response) {
+            console.log("put data: " + data);
+            res.send(data);
+        });
+        console.log("req.options: " + JSON.stringify(req.options));
+
+
+        req.on('error', function (err) {
+            console.log('request error: ' + err);
+        });
+    });
     app.post('/ssh/exec', function (req, res) {
         console.log("req.body.cmd: " + req.body.cmd);
         var ssh = new SSH({

@@ -52,6 +52,20 @@
 
     </div>
     <hr>
+    <p class="text-danger">{{ message }}</p>
+    <div class="row" ng-show="recordData">
+        <h4> Record: <strong>{{ recordData['ref-link'] }} </strong></h4>
+        <!--<label>{{ recordData }}</label>-->
+        <form class="form-inline">
+            <div class="form-group" ng-repeat="(key, value) in recordData" ng-show="key!='ref-link'">
+                <label>{{ key }}</label>
+                <input type="text" class="form-control" ng-model="recordData[key]">
+            </div>
+            <button type="submit" ng-click="update(recordData)">Update</button>
+            <button type="submit" ng-click="delete(recordData)">Delete</button>
+            <button type="submit" ng-click="close()">Close</button>
+        </form>
+    </div>
     <div class="row" ng-show="tableData">
         <h4> AM Table: <strong>{{ formData.table }} </strong>
             <small>({{ tableData.count }})</small>
@@ -77,7 +91,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="e in tableData.entities|filter:search|orderBy:predicate:reverse|startFrom:currentPage*pageSize|limitTo:pageSize">
-                <td ng-show="e['ref-link']">{{ e['ref-link'] }}</td>
+                <td ng-show="e['ref-link']"><a ng-click="load(e)">{{ e['ref-link'] }}</a></td>
                 <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}</td>
             </tr>
             </tbody>
