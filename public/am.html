@@ -31,12 +31,21 @@
     </div>
 
     <div class="row">
-        <h4>REST Configuration</h4>
+        <h4>
+            <small>Path:</small>
+        </h4>
 
         <form class="form-inline">
-            <div class="form-group" ng-repeat="(key, value) in formData">
+            <div class="form-group" ng-repeat="(key, value) in formData" ng-show="key!='param'">
                 <label>{{ key }}</label>
                 <input type="text" class="form-control" placeholder="" ng-model="formData[key]">
+            </div>
+            <h4>
+                <small>Parameters:</small>
+            </h4>
+            <div class="form-group" ng-repeat="(key, value) in formData.param">
+                <label>{{ key }}</label>
+                <input type="text" class="form-control" placeholder="" ng-model="formData.param[key]">
             </div>
             <button type="submit" ng-click="query()">Query</button>
         </form>
@@ -49,9 +58,9 @@
             <small class="pull-right">
                 Search
                 <input type="text" placeholder="Dynamic Search" ng-model="search"
-                       ng-change="formData.pageSize=(search.trim().length>0)?tableData.entities.length:10">
+                       ng-change="pageSize=(search.trim().length>0)?tableData.entities.length:10">
                 Page
-                <select ng-model="formData.pageSize" ng-options="o as o for o in [10, 50, 100]">
+                <select ng-model="pageSize" ng-options="o as o for o in [10, 50, 100]">
                 </select>
             </small>
         </h4>
@@ -59,15 +68,17 @@
         <table class="table table-striped">
             <thead>
             <tr ng-repeat="e in tableData.entities" ng-if="$first">
-                <th ng-repeat="(key, value) in e">
+                <th ng-show="e['ref-link']"><a ng-click="order('ref-link')">ref-link</a></th>
+                <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
                     <a ng-click="order(key)">{{ key }}</a>
                     <!--<a class="glyphicon glyphicon-sort" aria-hidden="true" ng-click="order(key)"></a>-->
                 </th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="e in tableData.entities|filter:search|orderBy:predicate:reverse|startFrom:currentPage*formData.pageSize|limitTo:formData.pageSize">
-                <td ng-repeat="(key, value) in e">{{ showValue(value) }}</td>
+            <tr ng-repeat="e in tableData.entities|filter:search|orderBy:predicate:reverse|startFrom:currentPage*pageSize|limitTo:pageSize">
+                <td ng-show="e['ref-link']">{{ e['ref-link'] }}</td>
+                <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}</td>
             </tr>
             </tbody>
         </table>
@@ -79,12 +90,12 @@
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                <li ng-repeat="i in [] |range:tableData.entities.length/formData.pageSize"
+                <li ng-repeat="i in [] |range:tableData.entities.length/pageSize"
                     ng-class="{active: currentPage==i}"
                     ng-click="jump(i)"><a>{{ i + 1 }}</a></li>
                 <li>
                     <a aria-label="Next"
-                       ng-click="currentPage=(currentPage+1)>tableData.entities.length/formData.pageSize?currentPage:currentPage+1">
+                       ng-click="currentPage=(currentPage+1)>tableData.entities.length/pageSize?currentPage:currentPage+1">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

@@ -3,21 +3,22 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
     var AM_FORM_DATA = "amFormData";
     $scope.title = "AM REST DB Client";
     $scope.formData = {
-        user: "admin",
-        password: "",
         server: "16.165.217.186:8081",
-        context: "/AssetManagerWebService/rs/db/",
-        table: "amEmplDept",
-        limit: "10",
-        offset: "0",
-        filter: "",
-        orderBy: "",
-        fields: [],
-        id: "",
-        collection: "",
-        pageSize: 5,
-        binary: 'false'
+        context: "/AssetManagerWebService/rs/",
+        "ref-link": "db/amLocation/126874",
+        collection: "/EmplDepts",
+        param: {
+            limit: "10",
+            offset: "1",
+            filter: "",
+            orderby: "",
+            fields: []
+        },
+
+        user: "admin",
+        password: ""
     };
+    $scope.pageSize = 10;
 
     if (localStorage && localStorage[AM_FORM_DATA])
         $scope.formData = JSON.parse(localStorage.getItem(AM_FORM_DATA));
@@ -25,8 +26,16 @@ am.controller('amCtl', ['$scope', '$http', function ($scope, $http) {
     $scope.query = function () {
         $scope.tableData = {};
         $http.post('/am/rest', $scope.formData).success(function (data) {
-            if (data) {
-                $scope.tableData = data;
+            if (data instanceof Object) {
+                if (data.entities instanceof Array)
+                    $scope.tableData = data;
+                else if (data.type == 'Buffer') {
+                    $scope.tableData.count = 0;
+                } else {
+                    $scope.tableData.count = 1;
+                    $scope.tableData.entities = [];
+                    $scope.tableData.entities.push(data);
+                }
             }
         });
         $scope.save();

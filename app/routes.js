@@ -35,10 +35,15 @@ module.exports = function (app) {
 
     app.post('/am/rest', function (req, res) {
 //        var url = "http://" + req.body.server + req.body.context + req.body.table;
-        var url = "http://${server}${context}${table}";
+        var url = "http://${server}${context}${ref-link}${collection}";
         var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
+
+        if (req.body.param['orderby'].isEmpty())
+            delete req.body.param['orderby'];
+
         var args = {
             path: req.body,
+            parameters: req.body.param,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": auth
@@ -46,10 +51,11 @@ module.exports = function (app) {
         };
 
         var req = client.get(url, args, function (data, response) {
-            console.log("url: " + url);
+//            console.log("url: " + url);
+//            console.log("data: " + JSON.stringify(data));
             res.json(data);
         });
-
+        console.log("req.options: " + JSON.stringify(req.options));
         req.on('error', function (err) {
             console.log('request error: ' + err);
         });
@@ -92,4 +98,9 @@ module.exports = function (app) {
         res.sendfile('./public/help.html'); // load the single view file (angular will handle the page changes on the front-end)
     });
 
+};
+
+
+String.prototype.isEmpty = function () {
+    return (this.length === 0 || !this.trim());
 };
