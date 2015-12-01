@@ -52,8 +52,13 @@ module.exports = function (app) {
 
 
         var req = client.get(url, args, function (data, response) {
-//            console.log("get data: " + JSON.stringify(data));
-            res.json(data);
+            console.log("get data: " + data);
+            try {
+                JSON.parse(data);
+                res.json(data);
+            } catch (e) {
+                res.send(data);
+            }
         });
         console.log("req.options: " + JSON.stringify(req.options));
 
