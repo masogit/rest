@@ -52,7 +52,7 @@ module.exports = function (app) {
 
 
         var req = client.get(url, args, function (data, response) {
-            console.log("get data: " + JSON.stringify(data));
+//            console.log("get data: " + JSON.stringify(data));
             res.json(data);
         });
         console.log("req.options: " + JSON.stringify(req.options));

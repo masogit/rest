@@ -52,7 +52,7 @@
             <thead>
             <th>Field</th>
             <th>Old Value</th>
-            <th>New Value</th>
+            <th>New Value <a ng-click="fill()">(Fill with old values)</a> </th>
             </thead>
             <tbody>
             <tr ng-repeat="(key, value) in recordData" ng-show="key!='ref-link'">
@@ -64,10 +64,12 @@
         </table>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="fill()">Fill New</button>
-        <button class="btn btn-primary" type="button" ng-click="create(modifyData)">Create</button>
-        <button class="btn btn-primary" type="button" ng-click="update(modifyData)">Update</button>
-        <button class="btn btn-primary" type="button" ng-click="delete(recordData)">Delete</button>
+        <div class="pull-left">
+            <!--<button class="btn btn-primary" type="button" ng-click="fill()">Fill New</button>-->
+            <button class="btn btn-primary" type="button" ng-click="create(modifyData)">Create</button>
+            <button class="btn btn-primary" type="button" ng-click="update(modifyData)">Update</button>
+            <button class="btn btn-primary" type="button" ng-click="delete(recordData)">Delete</button>
+        </div>
         <button class="btn btn-warning" type="button" ng-click="ok()">Close</button>
     </div>
 
