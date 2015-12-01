@@ -1,7 +1,7 @@
 var ssh = angular.module('ssh', []);
 ssh.controller('sshCtl', ['$scope', '$http', function ($scope, $http) {
 
-    $scope.title = "Dashboard Console";
+    $scope.title = "SSH Console";
 
     $scope.ssh = {
         host: '16.165.217.163',

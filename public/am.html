@@ -50,8 +50,18 @@
                 <input type="text" class="form-control" placeholder="" ng-model="formData.param[key]">
             </div>
             <button type="submit" ng-click="query()">Query</button>
+            <div class="pull-right">
+                <small>
+                    <a href="http://{{formData.server}}{{formData.context}}metadata/tables" target="_blank">
+                        [All tables DEF]
+                    </a>
+                    <a href="http://{{formData.server}}{{formData.context}}{{getMeta(formData['ref-link'])}}"
+                       target="_blank">
+                        [A table DEF]
+                    </a>
+                </small>
+            </div>
         </form>
-
     </div>
     <hr>
 

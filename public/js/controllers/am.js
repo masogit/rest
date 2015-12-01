@@ -90,6 +90,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             return value;
     };
 
+    $scope.getMeta = function (ref) {
+        return ref.replace(/db/g, 'metadata/schema');
+    };
 });
 
 am.filter('startFrom', function () {
