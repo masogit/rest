@@ -20,7 +20,7 @@ angular.module('cmsController', [])
             $scope.currentPage = 0;
             $scope.raw = [];
             $scope.cis = [];
-            if (localStorage)
+            if (localStorage[CMS_FORM_DATA])
                 $scope.formData = JSON.parse(localStorage.getItem(CMS_FORM_DATA));
         };
 
@@ -79,7 +79,10 @@ angular.module('cmsController', [])
 
         // capitalize each word, replace _ to " "
         $scope.t2t = function (type) {
-            return type.replace(/_/g, " ").capitalize();
+            if (type)
+                return type.replace(/_/g, " ").capitalize();
+            else
+                return "";
         };
 
 
