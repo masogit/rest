@@ -111,7 +111,7 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
 
         var update = {};
         for (key in record) {
-            if (!JSON.stringify(record[key]).isEmpty() && key != 'ref-link' && key != 'self')
+            if (JSON.stringify(record[key]).length > 2 && key != 'ref-link' && key != 'self')
                 update[key] = record[key];
         }
         form["data"] = update;
@@ -128,8 +128,7 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
 
         var update = {};
         for (key in record) {
-//            console.log("JSON.stringify(record[key]: " + JSON.stringify(record[key]));
-            if (!JSON.stringify(record[key]).isEmpty() && key != 'ref-link' && key != 'self')
+            if (JSON.stringify(record[key]).length > 2 && key != 'ref-link' && key != 'self')
                 update[key] = record[key];
         }
         form["data"] = update;
@@ -218,5 +217,5 @@ function clone(obj) {
 }
 
 String.prototype.isEmpty = function () {
-    return (this.length === 0 || !this.trim());
+    return (this.trim().length === 0 || !this.trim());
 };
