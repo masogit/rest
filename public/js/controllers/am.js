@@ -96,6 +96,7 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
     $scope.title = data['ref-link'];
     $scope.recordData = data;
     $scope.modifyData = {};
+    $scope.ifUpdated = false;
     for (key in $scope.recordData) {
         $scope.modifyData[key] = "";
     }
@@ -114,7 +115,7 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
         form["data"] = update;
         $http.post('/am/put', form).success(function (data) {
             $scope.message = data;
-//            $uibModalInstance.close();
+            $scope.ifUpdated = true;
         });
     };
 
@@ -124,7 +125,7 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
         form["collection"] = "";
         $http.post('/am/delete', form).success(function (data) {
             $scope.message = data;
-//            $uibModalInstance.close();
+            $scope.ifUpdated = true;
         });
     };
 
@@ -133,7 +134,10 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
     };
 
     $scope.ok = function () {
-        $uibModalInstance.close();
+        if ($scope.ifUpdated)
+            $uibModalInstance.close();
+        else
+            $uibModalInstance.dismiss('cancel');
     };
 
     $scope.cancel = function () {

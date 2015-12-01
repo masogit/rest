@@ -20,13 +20,32 @@
     <!-- SELF -->
     <script src="js/controllers/am.js"></script>
     <!-- load up our controller -->
-
+    <style>
+        .modal-dialog {
+            width: 900px;
+        }
+        @media only screen and (min-height: 600px) {
+            .modal-body {
+                max-height: 550px;
+                overflow-y: auto;
+            }
+        }
+        @media only screen and (min-height: 1000px) {
+            .modal-body {
+                max-height: 850px;
+                overflow-y: auto;
+            }
+        }
+    </style>
 </head>
 <!-- SET THE CONTROLLER -->
 <body ng-controller="amModalCtrl">
 <div>
     <div class="modal-header">
         <h3 class="modal-title">{{ title }}</h3>
+        <span class="text-danger" ng-show="message">
+            <a ng-click="clearMsg()">X</a>{{ message }}
+        </span>
     </div>
     <div class="modal-body">
         <table class="table table-striped">
@@ -43,10 +62,6 @@
             </tr>
             </tbody>
         </table>
-        <p class="text-danger" ng-show="message">
-            <a ng-click="clearMsg()">X</a>
-            {{ message }}
-        </p>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="update(modifyData)">Update</button>
