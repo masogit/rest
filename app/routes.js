@@ -52,6 +52,33 @@ module.exports = function (app) {
 
 
         var req = client.get(url, args, function (data, response) {
+            console.log("get data: " + JSON.stringify(data));
+            res.json(data);
+        });
+        console.log("req.options: " + JSON.stringify(req.options));
+
+
+        req.on('error', function (err) {
+            console.log('request error: ' + err);
+        });
+    });
+
+    app.post('/am/post', function (req, res) {
+//        var url = "http://" + req.body.server + req.body.context + req.body.table;
+        var url = "http://${server}${context}${ref-link}";
+        var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
+        console.log("req.body.data: " + JSON.stringify(req.body.data));
+        var args = {
+            path: req.body,
+            data: req.body.data,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": auth
+            }
+        };
+
+        var req = client.post(url, args, function (data, response) {
+            console.log("post data: " + data);
             res.json(data);
         });
         console.log("req.options: " + JSON.stringify(req.options));

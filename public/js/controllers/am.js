@@ -102,6 +102,25 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
     }
     var form = clone(form);
 
+    $scope.create = function (record) {
+        var pos = data["ref-link"].lastIndexOf("/")
+        form["ref-link"] = data["ref-link"].substring(0, pos);
+        console.log("ref-link:" + form["ref-link"]);
+        delete form["param"];
+        form["collection"] = "";
+
+        var update = {};
+        for (key in record) {
+            if (!JSON.stringify(record[key]).isEmpty() && key != 'ref-link' && key != 'self')
+                update[key] = record[key];
+        }
+        form["data"] = update;
+        $http.post('/am/post', form).success(function (data) {
+            $scope.message = data;
+            $scope.ifUpdated = true;
+        });
+    };
+
     $scope.update = function (record) {
         form["ref-link"] = data["ref-link"];
         delete form["param"];
@@ -109,7 +128,8 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
 
         var update = {};
         for (key in record) {
-            if (!record[key].isEmpty())
+//            console.log("JSON.stringify(record[key]: " + JSON.stringify(record[key]));
+            if (!JSON.stringify(record[key]).isEmpty() && key != 'ref-link' && key != 'self')
                 update[key] = record[key];
         }
         form["data"] = update;
@@ -127,6 +147,15 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
             $scope.message = data;
             $scope.ifUpdated = true;
         });
+    };
+
+    $scope.fill = function () {
+        for (var data in $scope.recordData) {
+            if ($scope.recordData[data] instanceof Object)
+                $scope.modifyData[data] = Object.keys($scope.recordData[data])[0];
+            else
+                $scope.modifyData[data] = $scope.recordData[data];
+        }
     };
 
     $scope.clearMsg = function () {
