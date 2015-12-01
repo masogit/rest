@@ -19,17 +19,20 @@
 
     <!-- SELF -->
     <script src="js/controllers/am.js"></script>
+    <script src="js/controllers/am_modal.js"></script>
     <!-- load up our controller -->
     <style>
         .modal-dialog {
             width: 900px;
         }
+
         @media only screen and (min-height: 600px) {
             .modal-body {
                 max-height: 550px;
                 overflow-y: auto;
             }
         }
+
         @media only screen and (min-height: 1000px) {
             .modal-body {
                 max-height: 850px;
@@ -52,7 +55,7 @@
             <thead>
             <th>Field</th>
             <th>Old Value</th>
-            <th>New Value <a ng-click="fill()">(Fill with old values)</a> </th>
+            <th>New Value <a ng-click="fill()">(Fill with old values)</a></th>
             </thead>
             <tbody>
             <tr ng-repeat="(key, value) in recordData" ng-show="key!='ref-link'">
