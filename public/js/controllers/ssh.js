@@ -1,6 +1,6 @@
 var ssh = angular.module('ssh', []);
 ssh.controller('sshCtl', ['$scope', '$http', function ($scope, $http) {
-
+    var SSH_FORM_DATA = "sshFormData";
     $scope.title = "SSH Console";
 
     $scope.ssh = {
@@ -11,6 +11,9 @@ ssh.controller('sshCtl', ['$scope', '$http', function ($scope, $http) {
         msg: []
     };
 
+    if (localStorage && localStorage[SSH_FORM_DATA])
+        $scope.ssh = JSON.parse(localStorage.getItem(SSH_FORM_DATA));
+
     // SSH command
     $scope.sshExec = function () {
         $scope.ssh.msg.push($scope.ssh.cmd);
@@ -20,5 +23,7 @@ ssh.controller('sshCtl', ['$scope', '$http', function ($scope, $http) {
                 $scope.ssh.msg.push(data);
             }
         });
+        if (localStorage)
+            localStorage.setItem(SSH_FORM_DATA, JSON.stringify($scope.ssh));
     };
 }]);
