@@ -40,6 +40,18 @@
         </dl>
         <u>UCMDB REST Client</u>
         <dl class="dl-horizontal">
+            <dt>Setup REST Agent</dt>
+            <dd>
+                <ol>
+                    <li>Deploy rest-gateway in you UCMDB server
+                        <a href="file/ucmdb-rest-service.zip">Download package</a>
+                    </li>
+                    <li>Edit config.properties file in package</li>
+                    <li>Run <code>startup.bat</code> in package (latest Java is required)</li>
+                </ol>
+            </dd>
+            <dt>Sever</dt>
+            <dd>Input your rest-gateway URL and PORT (Sample: <code>16.165.219.18:9091</code>)</dd>
             <dt>View</dt>
             <dd>Manually input TQL view name, after query this view name will be saved in history</dd>
             <dt>History</dt>
@@ -51,11 +63,7 @@
             <dd>Say what, too simple</dd>
         </dl>
     </div>
-    <!--<ol>-->
-    <!--<li>Edit config.properties file in package</li>-->
-    <!--<li>Run <code>startup.bat</code> in package (latest Java is required)</li>-->
-    <!--<li>Configure below parameters in Dashborad UI, browser will save your settings for next time:</li>-->
-    <!--</ol>-->
+
     <br>
     <code>** Browser will save your last parameters!</code>
 </div>
