@@ -26,6 +26,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
     $scope.query = function () {
         $scope.tableData = {};
         $http.post('/am/get', $scope.formData).success(function (data) {
+
             if (data instanceof Object) {
                 if (data.entities instanceof Array)
                     $scope.tableData = data;
@@ -36,6 +37,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
                     $scope.tableData.entities = [];
                     $scope.tableData.entities.push(data);
                 }
+            } else {
+//                console.log("get data: " + data);
+                $scope.message = data;
             }
         });
         $scope.store();
@@ -91,7 +95,16 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
     };
 
     $scope.getMeta = function (ref) {
-        return ref.replace(/db/g, 'metadata/schema');
+        var words = ref.split('/');
+        for (var i in words) {
+            if (words[i].indexOf("am") == 0)
+                return 'metadata/schema/' + words[i];
+        }
+        return "metadata/tables";
+    };
+
+    $scope.clearMsg = function () {
+        delete $scope.message;
     };
 });
 

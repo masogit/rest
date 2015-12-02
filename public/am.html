@@ -65,6 +65,10 @@
     </div>
     <hr>
 
+    <label class="text-danger" ng-show="message">
+        <a ng-click="clearMsg()">X</a> {{ message }}
+    </label>
+
     <div class="row" ng-show="tableData">
         <h4> AM Table: <strong>{{ formData.table }} </strong>
             <small>({{ tableData.count }})</small>
