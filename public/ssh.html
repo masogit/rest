@@ -40,24 +40,10 @@
             <button type="submit" ng-click="sshExec()">Execute</button>
         </form>
         <h4>Commands and Results</h4>
-        <!--<table class="table">-->
-        <!--<thead>-->
-        <!--<tr>-->
-        <!--<th>Time</th>-->
-        <!--<th>Message</th>-->
-        <!--</tr>-->
-        <!--</thead>-->
-        <!--<tbody>-->
-        <!--<tr ng-repeat="m in msg | orderBy:'$index':true">-->
-        <!--<td>{{ m.time }}</td>-->
-        <!--<td>-->
-        <!--<pre>{{ m.content }}</pre>-->
-        <!--</td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-        <!--</table>-->
+
         <div class="list-group">
-            <pre class="list-group-item" ng-repeat="m in msg | orderBy:'$index':true"><small><strong>{{ m.time }}</strong></small><br>{{ m.content }}</pre>
+            <pre class="list-group-item" ng-repeat="m in msg | orderBy:'$index':true"><small><strong>{{ m.time
+                }}</strong></small><br>{{ m.content }}</pre>
         </div>
     </div>
 
