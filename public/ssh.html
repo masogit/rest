@@ -33,10 +33,10 @@
     <div class="row">
         <form>
             <!-- SSH -->
-            <input type="text" ng-model="ssh.host" placeholder="Server">
-            <input type="text" ng-model="ssh.user" placeholder="Username">
-            <input type="text" ng-model="ssh.pass" placeholder="Password">
-            <input type="text" ng-model="ssh.cmd" size="100" placeholder="Commands">
+            Server:<input type="text" ng-model="ssh.host" placeholder="Server">
+            Username:<input type="text" ng-model="ssh.user" placeholder="Username">
+            Password:<input type="text" ng-model="ssh.pass" placeholder="Password">
+            Commands:<input type="text" ng-model="ssh.cmd" size="100" placeholder="Commands">
             <button type="submit" ng-click="sshExec()">Execute</button>
         </form>
         <h4>Commands and Results</h4>
