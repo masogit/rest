@@ -25,9 +25,11 @@ angular.module('cmsController', [])
         };
 
         $scope.getTopology = function () {
+            $scope.loading = true;
             $scope.statistics = {};
             $scope.cis = [];
             topology.get($scope.formData).success(function (data) {
+                $scope.loading = false;
                 var d = new Date();
                 $scope.time = d.toLocaleString();
 

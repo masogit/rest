@@ -78,12 +78,7 @@
     <!-- STATISTICS -->
     <div class="row">
         <h4>Statistics</h4>
-
-        <!--<div class="col-xs-6 col-md-3" ng-repeat="(key, value) in statistics">-->
-        <!--<span class="thumbnail">-->
-           <!--<h4><a ng-click="queryCis(key)">{{ t2t(key) }}</a></h4> {{ value }}-->
-        <!--</span>-->
-        <!--</div>-->
+        <span class="text-center" ng-show="loading">Loading....</span>
         <ul class="nav nav-pills">
             <li role="presentation" ng-repeat="(key, value) in statistics" ng-class="{active: formData.ciType==key}">
                 <a ng-click="queryCis(key)">{{ t2t(key) }} <small>({{ statistics[key] }})</small></a>

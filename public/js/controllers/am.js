@@ -24,9 +24,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         $scope.formData = JSON.parse(localStorage.getItem(AM_FORM_DATA));
 
     $scope.query = function () {
+        $scope.loading = true;
         $scope.tableData = {};
         $http.post('/am/get', $scope.formData).success(function (data) {
-
+            $scope.loading = false;
             if (data instanceof Object) {
                 if (data.entities instanceof Array)
                     $scope.tableData = data;
