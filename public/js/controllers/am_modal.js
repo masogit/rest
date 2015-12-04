@@ -14,14 +14,16 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
         console.log("ref-link:" + form["ref-link"]);
         delete form["param"];
         form["collection"] = "";
+        form.method = "post";
 
+        // check if have value
         var update = {};
         for (key in record) {
             if (JSON.stringify(record[key]).length > 2 && key != 'ref-link' && key != 'self')
                 update[key] = record[key];
         }
         form["data"] = update;
-        $http.post('/am/post', form).success(function (data) {
+        $http.post('/am/rest', form).success(function (data) {
             $scope.message = data;
             $scope.ifUpdated = true;
         });
@@ -31,14 +33,16 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
         form["ref-link"] = data["ref-link"];
         delete form["param"];
         form["collection"] = "";
+        form.method = "put";
 
+        // check if have value
         var update = {};
         for (key in record) {
             if (JSON.stringify(record[key]).length > 2 && key != 'ref-link' && key != 'self')
                 update[key] = record[key];
         }
         form["data"] = update;
-        $http.post('/am/put', form).success(function (data) {
+        $http.post('/am/rest', form).success(function (data) {
             $scope.message = data;
             $scope.ifUpdated = true;
         });
@@ -48,7 +52,9 @@ am.controller('amModalCtrl', function ($scope, $http, $uibModalInstance, data, f
         form["ref-link"] = record["ref-link"];
         delete form["param"];
         form["collection"] = "";
-        $http.post('/am/delete', form).success(function (data) {
+        form.method = "delete";
+
+        $http.post('/am/rest', form).success(function (data) {
             $scope.message = data;
             $scope.ifUpdated = true;
         });

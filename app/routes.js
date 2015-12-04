@@ -3,11 +3,11 @@ module.exports = function (app) {
     var Client = require('node-rest-client').Client;
     var client = new Client();
 
-    // application -------------------------------------------------------------
+    // CMS REST -------------------------------------------------------------
     app.post('/rest/topology', function (req, res) {
         var server = "http://" + req.body.server;
         var args = {
-            data: req.body.view, //"queryNodes",
+            data: req.body.view, // TQL Name,
             headers: {"Content-Type": "text/plain"},
             requestConfig: {timeout: 2000},
             responseConfig: {timeout: 5000}
@@ -17,134 +17,54 @@ module.exports = function (app) {
             res.json(data);
         });
 
-        //req.on('requestTimeout', function (req) {
-        //    console.log(server + "/rest/topology/" + 'request has expired');
-        //    req.abort();
-        //});
-        //
-        //req.on('responseTimeout', function (res) {
-        //    console.log('response has expired');
-        //    res.abort();
-        //});
-        //
-        //req.on('error', function (err) {
-        //    console.log('request error');
-        //});
+        req.on('error', function (err) {
+            console.log('request error');
+        });
 
     });
 
-    app.post('/am/get', function (req, res) {
-//        var url = "http://" + req.body.server + req.body.context + req.body.table;
+    // AM REST -------------------------------------------------------------
+    app.post('/am/rest', function (req, res) {
         var url = "http://${server}${context}${ref-link}/${collection}";
         var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
-
+        var request;
         if (req.body.param && req.body.param['orderby'].isEmpty())
             delete req.body.param['orderby'];
 
         var args = {
             path: req.body,
             parameters: req.body.param,
+            data: req.body.data,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": auth
             }
         };
 
-
-        var req = client.get(url, args, function (data, response) {
-            console.log("get data: " + data);
-            try {
-                JSON.parse(data);
-                res.json(data);
-            } catch (e) {
+        if (req.body.method == "get") {
+            request = client.get(url, args, function (data, response) {
                 res.send(data);
-            }
-        });
-        console.log("req.options: " + JSON.stringify(req.options));
+            });
+        } else if (req.body.method == "post") {
+            request = client.post(url, args, function (data, response) {
+                res.json(data);
+            });
+        } else if (req.body.method == "put") {
+            request = client.put(url, args, function (data, response) {
+                res.json(data);
+            });
+        } else if (req.body.method == "delete") {
+            request = client.delete(url, args, function (data, response) {
+                res.json(data);
+            });
+        }
 
-
-        req.on('error', function (err) {
+        request.on('error', function (err) {
             console.log('request error: ' + err);
         });
     });
 
-    app.post('/am/post', function (req, res) {
-//        var url = "http://" + req.body.server + req.body.context + req.body.table;
-        var url = "http://${server}${context}${ref-link}";
-        var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
-        console.log("req.body.data: " + JSON.stringify(req.body.data));
-        var args = {
-            path: req.body,
-            data: req.body.data,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": auth
-            }
-        };
-
-        var req = client.post(url, args, function (data, response) {
-            console.log("post data: " + data);
-            res.json(data);
-        });
-        console.log("req.options: " + JSON.stringify(req.options));
-
-
-        req.on('error', function (err) {
-            console.log('request error: ' + err);
-        });
-    });
-
-    app.post('/am/put', function (req, res) {
-//        var url = "http://" + req.body.server + req.body.context + req.body.table;
-        var url = "http://${server}${context}${ref-link}";
-        var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
-        console.log("req.body.data: " + JSON.stringify(req.body.data));
-        var args = {
-            path: req.body,
-            data: req.body.data,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": auth
-            }
-        };
-
-
-        var req = client.put(url, args, function (data, response) {
-            console.log("put data: " + data);
-            res.json(data);
-        });
-        console.log("req.options: " + JSON.stringify(req.options));
-
-
-        req.on('error', function (err) {
-            console.log('request error: ' + err);
-        });
-    });
-
-    app.post('/am/delete', function (req, res) {
-//        var url = "http://" + req.body.server + req.body.context + req.body.table;
-        var url = "http://${server}${context}${ref-link}";
-        var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
-        var args = {
-            path: req.body,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": auth
-            }
-        };
-
-
-        var req = client.delete(url, args, function (data, response) {
-            console.log("put data: " + data);
-            res.json(data);
-        });
-        console.log("req.options: " + JSON.stringify(req.options));
-
-
-        req.on('error', function (err) {
-            console.log('request error: ' + err);
-        });
-    });
+    // SSH CMD -------------------------------------------------------------
     app.post('/ssh/exec', function (req, res) {
         console.log("req.body.cmd: " + req.body.cmd);
         var ssh = new SSH({
@@ -161,25 +81,26 @@ module.exports = function (app) {
 
             err: function (stderr) {
                 res.send(stderr);
-                console.log("stderr: " + stderr); // this-does-not-exist: command not found
+                console.log("stderr: " + stderr);
             }
         }).start();
     });
 
+    // load the single view file
     app.get('/ssh', function (req, res) {
-        res.sendfile('./public/ssh.html'); // load the single view file (angular will handle the page changes on the front-end)
+        res.sendfile('./public/ssh.html');
     });
 
     app.get('/cms', function (req, res) {
-        res.sendfile('./public/cms.html'); // load the single view file (angular will handle the page changes on the front-end)
+        res.sendfile('./public/cms.html');
     });
 
     app.get('/am', function (req, res) {
-        res.sendfile('./public/am.html'); // load the single view file (angular will handle the page changes on the front-end)
+        res.sendfile('./public/am.html');
     });
 
     app.get('/', function (req, res) {
-        res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+        res.sendfile('./public/index.html');
     });
 
 };

@@ -26,7 +26,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
     $scope.query = function () {
         $scope.loading = true;
         $scope.tableData = {};
-        $http.post('/am/get', $scope.formData).success(function (data) {
+        var form = clone($scope.formData);
+        form.method="get";
+        $http.post('/am/rest', form).success(function (data) {
             $scope.loading = false;
             if (data instanceof Object) {
                 if (data.entities instanceof Array)
@@ -39,7 +41,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
                     $scope.tableData.entities.push(data);
                 }
             } else {
-//                console.log("get data: " + data);
                 $scope.message = data;
             }
         });
