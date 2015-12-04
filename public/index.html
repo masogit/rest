@@ -46,7 +46,8 @@
                     <li>Deploy rest-gateway in you UCMDB server
                         <a href="file/ucmdb-rest-service.zip">Download package</a>
                     </li>
-                    <li>Edit config.properties file in package</li>
+                    <li>Edit config.properties file in package (UCMDB Info)</li>
+                    <li>Edit <code>gateway.home</code>(this package installed folder) in startup.bat (java -Drest.gateway.home=<code>C:\hp\UCMDB\REST</code> -jar rest-gateway-1.0.jar)</li>
                     <li>Run <code>startup.bat</code> in package (latest Java is required)</li>
                 </ol>
             </dd>
@@ -57,10 +58,16 @@
             <dt>History</dt>
             <dd>Display all views your query before, click button <kbd>X</kbd> to remove items</dd>
         </dl>
-        <u>SSH Web Client</u>
+        <u>Install this Web APP</u>
         <dl class="dl-horizontal">
-            <dt>?</dt>
-            <dd>Say what, too simple</dd>
+            <dt>Git</dt>
+            <dd>Install Git, then <kbd>git clone https://github.com/masogit/rest.git</kbd></dd>
+            <dt>NodeJS</dt>
+            <dd>Install NodeJS, then <kbd>npm install</kbd> to install components</dd>
+            <dt>Specify Port </dt>
+            <dd>Windows:<kbd>set PORT=80</kbd> Linux:<kbd>export PORT=80</kbd> default is 8080</dd>
+            <dt>Start Service</dt>
+            <dd><kbd>node server.js</kbd></dd>
         </dl>
     </div>
 
