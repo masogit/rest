@@ -75,7 +75,7 @@ angular.module('cmsController', [])
 
             $scope.cis = [];
             for (i in $scope.rawCis) {
-                if ($scope.rawCis[i].type == ciType && $scope.rawCis[i].properties){
+                if ($scope.rawCis[i].type == ciType && $scope.rawCis[i].properties) {
                     var properties = clone($scope.rawCis[i].properties);
                     // add ucmdb id in properties
                     properties['id'] = $scope.rawCis[i].ucmdbid.id;
@@ -84,6 +84,39 @@ angular.module('cmsController', [])
             }
 
         };
+
+        // query relation
+        $scope.showRelations = function (ucmdbid) {
+            console.log("rawRelations: " + JSON.stringify($scope.rawRelations));
+            var ids = [];
+            ids.push(ucmdbid);
+            findRelId(ids, 0);
+
+            console.log("relation ids: " + JSON.stringify(ids));
+        };
+
+        function findRelId(ids, pos) {
+            var ucmdbid = ids[pos];
+            var number = 0;
+
+            for (var i in $scope.rawRelations) {
+                var end1Id = $scope.rawRelations[i]['end1Id']['id'];
+                var end2Id = $scope.rawRelations[i]['end2Id']['id'];
+
+                if (end1Id == ucmdbid && ids.indexOf(end2Id) < 0) {
+                    ids.push(end2Id);
+                    number++;
+                }
+                if (end2Id == ucmdbid && ids.indexOf(end1Id) < 0) {
+                    ids.push(end1Id);
+                    number++;
+                }
+            }
+
+            if (number > 0) {
+                findRelId(ids, pos + 1)
+            }
+        }
 
         // capitalize each word, replace _ to " "
         $scope.t2t = function (type) {
