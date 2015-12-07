@@ -18,7 +18,8 @@ angular.module('cmsController', [])
             $scope.statistics = {};
             $scope.time = "";
             $scope.currentPage = 0;
-            $scope.raw = [];
+            $scope.rawCis = [];
+            $scope.rawRelations = [];
             $scope.cis = [];
             if (localStorage[CMS_FORM_DATA])
                 $scope.formData = JSON.parse(localStorage.getItem(CMS_FORM_DATA));
@@ -35,7 +36,8 @@ angular.module('cmsController', [])
 
                 if (data.cis instanceof Array) {
 
-                    $scope.raw = data.cis; // save raw data
+                    $scope.rawCis = data.cis; // save raw data
+                    $scope.rawRelations = data.relations;
 
                     var ciNumber = {};
                     data.cis.map(function (obj) {
@@ -72,9 +74,13 @@ angular.module('cmsController', [])
                 localStorage.setItem(CMS_FORM_DATA, JSON.stringify($scope.formData));
 
             $scope.cis = [];
-            for (i in $scope.raw) {
-                if ($scope.raw[i].type == ciType && $scope.raw[i].properties)
-                    $scope.cis.push($scope.raw[i].properties);
+            for (i in $scope.rawCis) {
+                if ($scope.rawCis[i].type == ciType && $scope.rawCis[i].properties){
+                    var properties = clone($scope.rawCis[i].properties);
+                    // add ucmdb id in properties
+                    properties['id'] = $scope.rawCis[i].ucmdbid.id;
+                    $scope.cis.push(properties);
+                }
             }
 
         };
@@ -130,3 +136,28 @@ angular.module('cmsController', [])
         $scope.init();	// inital run for set disp value
 
     }]);
+
+
+function clone(obj) {
+    var o;
+    if (typeof obj == "object") {
+        if (obj === null) {
+            o = null;
+        } else {
+            if (obj instanceof Array) {
+                o = [];
+                for (var i = 0, len = obj.length; i < len; i++) {
+                    o.push(clone(obj[i]));
+                }
+            } else {
+                o = {};
+                for (var j in obj) {
+                    o[j] = clone(obj[j]);
+                }
+            }
+        }
+    } else {
+        o = obj;
+    }
+    return o;
+}

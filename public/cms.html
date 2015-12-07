@@ -81,7 +81,9 @@
         <span class="text-center" ng-show="loading">Loading....</span>
         <ul class="nav nav-pills">
             <li role="presentation" ng-repeat="(key, value) in statistics" ng-class="{active: formData.ciType==key}">
-                <a ng-click="queryCis(key)">{{ t2t(key) }} <small>({{ statistics[key] }})</small></a>
+                <a ng-click="queryCis(key)">{{ t2t(key) }}
+                    <small>({{ statistics[key] }})</small>
+                </a>
 
             </li>
         </ul>
@@ -111,14 +113,16 @@
             <table class="table table-striped">
                 <thead>
                 <tr ng-repeat="e in cis" ng-if="$first">
-                    <th ng-repeat="(key, value) in e" ng-show="key!='timestamp'">
+                    <th><a ng-click="order(key)">id</a></th>
+                    <th ng-repeat="(key, value) in e" ng-show="key!='timestamp' && key!='id'">
                         <a ng-click="order(key)">{{ t2t(key) }}</a>
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="e in cis|filter:search|orderBy:predicate:reverse|startFrom:currentPage*formData.pageSize|limitTo:formData.pageSize">
-                    <td ng-repeat="(key, value) in e" ng-show="key!='timestamp'">{{ value }}</td>
+                    <td><a ng-click="showRelations(e.id)">{{ e.id }}</a></td>
+                    <td ng-repeat="(key, value) in e" ng-show="key!='timestamp' && key!='id'">{{ value }}</td>
                 </tr>
                 </tbody>
             </table>
