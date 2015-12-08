@@ -85,16 +85,39 @@ angular.module('cmsController', [])
 
         };
 
+        // hide relation
+        $scope.hideRelations = function () {
+            delete $scope.relations;
+        };
+
         // query relation
         $scope.showRelations = function (ucmdbid) {
-            console.log("rawRelations: " + JSON.stringify($scope.rawRelations));
+//            console.log("rawRelations: " + JSON.stringify($scope.rawRelations));
             var ids = [];
             ids.push(ucmdbid);
             findRelId(ids, 0);
 
-            console.log("relation ids: " + JSON.stringify(ids));
+            // add $scope.relations
+            $scope.relations = findCisByIds(ids).sort(function(a, b) {
+                return a.type > b.type;
+            });
+
+            console.log("relation ids: " + JSON.stringify($scope.relations));
         };
 
+        // get all related Cis by ids
+        function findCisByIds(ids) {
+            var cis = [];
+            for (var i in ids) {
+                var result = $scope.rawCis.filter(function (obj) {
+                    return obj.ucmdbid.id == ids[i];
+                });
+                cis.push(result[0]);
+            }
+            return cis;
+        }
+
+        // get all related ids recursion
         function findRelId(ids, pos) {
             var ucmdbid = ids[pos];
             var number = 0;

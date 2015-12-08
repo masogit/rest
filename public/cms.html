@@ -91,13 +91,34 @@
 
 
     <div class="row">
+
         <!-- Relations -->
         <div ng-show="relations">
+            <h4>Relations
+                <small><a ng-click="hideRelations()">Close</a></small>
+            </h4>
+
+            <table class="table table-striped" ng-repeat="r in relations">
+                <thead>
+                <tr>
+                    <th>{{ t2t(r.type) }} - id</th>
+                    <th ng-repeat="(key, value) in r.properties" ng-show="key!='timestamp' && key!='id'">
+                        {{ t2t(key) }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ r.ucmdbid.id }}</td>
+                    <td ng-repeat="(key, value) in r.properties" ng-show="key!='timestamp' && key!='id'">{{ value }}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
 
         <!-- RECORDS -->
-        <div ng-show="cis">
+        <div ng-show="cis&&!relations">
             <h4>Records
                 <small>{{ '- ' + t2t(formData.ciType) }}</small>
                 <small>({{ statistics[formData.ciType] }})</small>
