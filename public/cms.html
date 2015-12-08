@@ -95,13 +95,13 @@
         <!-- Relations -->
         <div ng-show="relations">
             <h4>Relations
-                <small><a ng-click="hideRelations()">Close</a></small>
+                <small class="pull-right"><a ng-click="hideRelations()">Back</a></small>
             </h4>
 
             <table class="table table-striped" ng-repeat="r in relations">
                 <thead>
                 <tr>
-                    <th>{{ t2t(r.type) }} - id</th>
+                    <th>[{{ t2t(r.type) }}]</th>
                     <th ng-repeat="(key, value) in r.properties" ng-show="key!='timestamp' && key!='id'">
                         {{ t2t(key) }}
                     </th>
