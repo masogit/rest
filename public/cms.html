@@ -94,8 +94,11 @@
 
         <!-- Relations -->
         <div ng-show="relations">
-            <h4>Relations
-                <small class="pull-right"><a ng-click="hideRelations()">Back</a></small>
+            <h4>
+                <small class="pull-left"><a ng-click="hideRelations()"><span
+                        class="glyphicon glyphicon-chevron-left"></span>Back</a>
+                </small>
+                <span class="pull-right">Show all related CIs</span>
             </h4>
 
             <table class="table table-striped" ng-repeat="(type, cis) in relations">
@@ -110,7 +113,8 @@
                 <tbody>
                 <tr ng-repeat="ci in cis">
                     <td>{{ ci.ucmdbid.id }}</td>
-                    <td ng-repeat="(key, value) in ci.properties" ng-show="key!='timestamp' && key!='id'">{{ value }}</td>
+                    <td ng-repeat="(key, value) in ci.properties" ng-show="key!='timestamp' && key!='id'">{{ value }}
+                    </td>
                 </tr>
                 </tbody>
             </table>
