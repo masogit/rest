@@ -98,19 +98,19 @@
                 <small class="pull-right"><a ng-click="hideRelations()">Back</a></small>
             </h4>
 
-            <table class="table table-striped" ng-repeat="r in relations">
+            <table class="table table-striped" ng-repeat="(type, cis) in relations">
                 <thead>
-                <tr>
-                    <th>[{{ t2t(r.type) }}]</th>
-                    <th ng-repeat="(key, value) in r.properties" ng-show="key!='timestamp' && key!='id'">
+                <tr ng-repeat="ci in cis" ng-if="$first">
+                    <th>[{{ t2t(type) }}]</th>
+                    <th ng-repeat="(key, value) in ci.properties" ng-show="key!='timestamp' && key!='id'">
                         {{ t2t(key) }}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>{{ r.ucmdbid.id }}</td>
-                    <td ng-repeat="(key, value) in r.properties" ng-show="key!='timestamp' && key!='id'">{{ value }}</td>
+                <tr ng-repeat="ci in cis">
+                    <td>{{ ci.ucmdbid.id }}</td>
+                    <td ng-repeat="(key, value) in ci.properties" ng-show="key!='timestamp' && key!='id'">{{ value }}</td>
                 </tr>
                 </tbody>
             </table>

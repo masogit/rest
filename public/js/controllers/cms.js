@@ -97,12 +97,23 @@ angular.module('cmsController', [])
             ids.push(ucmdbid);
             findRelId(ids, 0);
 
-            // add $scope.relations
-            $scope.relations = findCisByIds(ids).sort(function(a, b) {
+
+            var sorted = findCisByIds(ids).sort(function (a, b) {
                 return a.type > b.type;
             });
 
-            console.log("relation ids: " + JSON.stringify($scope.relations));
+            // group by type
+            $scope.relations = {};
+            for (var i in sorted) {
+                if ($scope.relations[sorted[i].type]) {
+                    $scope.relations[sorted[i].type].push(sorted[i]);
+                } else {
+                    $scope.relations[sorted[i].type] = [];
+                    $scope.relations[sorted[i].type].push(sorted[i]);
+                }
+            }
+
+//            console.log("relation ids: " + JSON.stringify($scope.relations));
         };
 
         // get all related Cis by ids
