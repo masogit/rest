@@ -59,11 +59,7 @@
                 History
                 <select ng-model="formData.view" ng-options="history for history in formData.historyViews"></select>
             </div>
-            <button ng-click="remove()">X</button>
-            <!--<div class="form-group">-->
-            <!--Refresh Rate-->
-            <!--<input type="text" placeholder="Sec." ng-model="formData.interval" size="1">Sec.-->
-            <!--</div>-->
+            <a ng-click="remove()"><span class="glyphicon glyphicon-log-out"></span></a>
             <div class="form-group">
                 Pagination Size
                 <input type="text" placeholder="5" ng-model="formData.pageSize" size="1">
