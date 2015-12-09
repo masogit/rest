@@ -24,7 +24,11 @@ angular.module('cmsTopology', [])
     .factory('topology', ['$http', function ($http) {
         return {
             get: function (formData) {
-                return $http.post('/rest/topology', formData);
+                return $http.post('/cms/get', formData);
+            },
+
+            post: function (formData) {
+                return $http.post('/cms/post', formData);
             }
         }
     }]);

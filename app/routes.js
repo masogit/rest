@@ -4,7 +4,7 @@ module.exports = function (app) {
     var client = new Client();
 
     // CMS REST -------------------------------------------------------------
-    app.post('/rest/topology', function (req, res) {
+    app.post('/cms/get', function (req, res) {
         var server = "http://" + req.body.server;
         var args = {
             data: req.body.view, // TQL Name,
