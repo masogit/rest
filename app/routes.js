@@ -25,7 +25,7 @@ module.exports = function (app) {
 
     // AM REST -------------------------------------------------------------
     app.post('/am/rest', function (req, res) {
-        var url = "http://${server}${context}${ref-link}/${collection}";
+        var url = "http://${server}${context}${ref-link}${collection}";
         var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
         var request;
         if (req.body.param && req.body.param['orderby'].isEmpty())
