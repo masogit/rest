@@ -1,0 +1,156 @@
+<!doctype html>
+<html ng-app="am">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AM Advanced REST Client</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/ui-bootstrap-tpls-0.14.3.min.js"></script>
+    <script src="js/controllers/am.js"></script>
+    <script src="js/controllers/am_modal.js"></script>
+
+    <style>
+
+    </style>
+</head>
+<!-- SET THE CONTROLLER -->
+<body ng-controller="amCtl">
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"> {{ title }} </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <input type="text" class="form-control" placeholder="Search..." ng-model="tableSearch">
+            <ul class="nav" style="max-height: 600px; overflow-y: auto">
+                <li ng-repeat="table in metadata.tables | filter: tableSearch"><a href="#" ng-click="metadata(table.id)">{{ table.id }} <span class="sr-only">(current)</span></a></li>
+            </ul>
+        </div>
+        <div class="col-md-10 main">
+
+            <div class="table-responsive" ng-show="tableData">
+
+                <label class="text-danger" ng-show="message">
+                    <a ng-click="clearMsg()">X</a> {{ message }}
+                </label>
+
+                <h4> AM Table: <strong>{{ formData.table }} </strong>
+                    <small>({{ tableData.count }})</small>
+                    <small class="pull-right">
+                        Search
+                        <input type="text" placeholder="Dynamic Search" ng-model="search"
+                               ng-change="pageSize=(search.trim().length>0)?tableData.entities.length:10">
+                        Page
+                        <select ng-model="pageSize" ng-options="o as o for o in [10, 50, 100]">
+                        </select>
+                    </small>
+                </h4>
+
+                <span class="text-center" ng-show="loading">Loading....</span>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr ng-repeat="e in tableData.entities" ng-if="$first">
+                        <th ng-show="e['ref-link']"><a ng-click="order('ref-link')">ref-link</a></th>
+                        <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
+                            <a ng-click="order(key)">{{ key }}</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="e in tableData.entities|filter:search|orderBy:predicate:reverse|startFrom:currentPage*pageSize|limitTo:pageSize">
+                        <td ng-show="e['ref-link']"><a ng-click="load(e)">{{ e['ref-link'] }}</a></td>
+                        <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <nav class="pull-right">
+                    <ul class="pagination">
+                        <li>
+                            <a aria-label="Previous" ng-click="currentPage=(currentPage-1)<0?0:currentPage-1">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li ng-repeat="i in [] |range:tableData.entities.length/pageSize"
+                            ng-class="{active: currentPage==i}"
+                            ng-click="jump(i)"><a>{{ i + 1 }}</a></li>
+                        <li>
+                            <a aria-label="Next"
+                               ng-click="currentPage=(currentPage+1)>tableData.entities.length/pageSize?currentPage:currentPage+1">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="container" style="width: 90%">-->
+
+    <!--&lt;!&ndash; HEADER &ndash;&gt;-->
+    <!--<div class="page-header">-->
+        <!--<h2> {{ title }} </h2>-->
+    <!--</div>-->
+
+    <!--<div class="row">-->
+        <!--<h4>-->
+            <!--<small>Path: <i><u>http://{{formData.server}}{{formData.context}}{{formData['ref-link']}}{{formData.collection}}</u></i>-->
+            <!--</small>-->
+        <!--</h4>-->
+
+        <!--<form class="form-inline">-->
+            <!--<div class="form-group" ng-repeat="(key, value) in formData" ng-show="key!='param'">-->
+                <!--<label>{{ key }}</label>-->
+                <!--<input type="text" class="form-control" placeholder="" ng-model="formData[key]">-->
+            <!--</div>-->
+            <!--<h4>-->
+                <!--<small>Parameters:</small>-->
+            <!--</h4>-->
+            <!--<div class="form-group" ng-repeat="(key, value) in formData.param">-->
+                <!--<label>{{ key }}</label>-->
+                <!--<input type="text" class="form-control" placeholder="" ng-model="formData.param[key]">-->
+            <!--</div>-->
+            <!--<button type="submit" ng-click="query()">Query</button>-->
+            <!--<button type="submit" ng-click="metadata('all')">Query</button>-->
+            <!--&lt;!&ndash;<div class="pull-right">&ndash;&gt;-->
+                <!--&lt;!&ndash;<small>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<a href="http://{{formData.server}}{{formData.context}}metadata/tables" target="_blank">&ndash;&gt;-->
+                        <!--&lt;!&ndash;[All tables DEF]&ndash;&gt;-->
+                    <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<a href="http://{{formData.server}}{{formData.context}}{{getMeta(formData['ref-link'])}}"&ndash;&gt;-->
+                       <!--&lt;!&ndash;target="_blank">&ndash;&gt;-->
+                        <!--&lt;!&ndash;[A table DEF]&ndash;&gt;-->
+                    <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                <!--&lt;!&ndash;</small>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--</form>-->
+    <!--</div>-->
+    <!--<hr>-->
+
+<!--</div>-->
+</body>
+</html>

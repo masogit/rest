@@ -27,7 +27,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         $scope.loading = true;
         $scope.tableData = {};
         var form = clone($scope.formData);
-        form.method="get";
+        form.method = "get";
         $http.post('/am/rest', form).success(function (data) {
             $scope.loading = false;
             if (data instanceof Object) {
@@ -96,6 +96,39 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             return value;
     };
 
+    $scope.metadata = function (schema) {
+        var form = clone($scope.formData);
+        var metadata = "";
+        if (schema == 'all') {
+            metadata = "metadata/tables";
+        } else {
+            metadata = "metadata/schema/" + schema;
+            $scope.formData['ref-link'] = "db/" + schema;
+            $scope.query();
+        }
+        form['metadata'] = metadata;
+        $http.post('/am/metadata', form).success(function (data) {
+
+            if (data.Tables) {
+                $scope.metadata["tables"] = [];
+                for (var t in data.Tables.Table) {
+                    $scope.metadata["tables"].push(data.Tables.Table[t]["$"]);
+                }
+
+                console.log("meta data: " + JSON.stringify($scope.metadata["tables"]));
+            } else if (data.table) {
+                console.log("meta data table: " + JSON.stringify(data));
+                $scope.metadata["aTable"] = [];
+//                for (var t in data.Tables.Table){
+//                    $scope.metadata["tables"].push(data.Tables.Table[t]["$"]);
+//                }
+//
+//                console.log("meta data: " + JSON.stringify($scope.metadata["tables"]));
+            }
+
+        });
+    };
+
     $scope.getMeta = function (ref) {
         var words = ref.split('/');
         for (var i in words) {
@@ -108,6 +141,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
     $scope.clearMsg = function () {
         delete $scope.message;
     };
+
+    $scope.metadata("all");
 });
 
 am.filter('startFrom', function () {

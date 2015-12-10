@@ -4,6 +4,7 @@ module.exports = function (app) {
     var client = new Client();
     var loki = require('lokijs');
     var db = new loki('db/config.json');
+    var parseString = require('xml2js').parseString;
 
     // Configuration
     app.get('/cfg/menu', function (req, res) {
@@ -14,7 +15,7 @@ module.exports = function (app) {
 
     app.post('/cfg/menu', function (req, res) {
         var menu = db.getCollection("menu");
-        if (!menu){
+        if (!menu) {
             menu = db.addCollection("menu");
             var data = menu.insert(req.body);
             res.json(data);
@@ -63,6 +64,35 @@ module.exports = function (app) {
             console.log('request error');
         });
 
+    });
+    // AM Metadata ---------------------------------------------------------
+    app.post('/am/metadata', function (req, res) {
+        // all Table = "metadata/tables";
+        // a Table = "metadata/schema/amNews";
+        var url = "http://${server}${context}${metadata}";
+        var auth = 'Basic ' + new Buffer(req.body.user + ':' + req.body.password).toString('base64');
+        var request;
+
+        var args = {
+            path: req.body,
+            headers: {
+                "Content-Type": "text/xml",
+                "Authorization": auth
+            }
+        };
+
+        request = client.get(url, args, function (data, response) {
+            parseString(data, function (err, result) {
+//                console.log("meta data json: " + JSON.stringify(result));
+                res.json(result);
+            });
+        });
+
+        console.log('req.options: ' + JSON.stringify(req.options));
+
+        request.on('error', function (err) {
+            console.log('request error: ' + err);
+        });
     });
 
     // AM REST -------------------------------------------------------------
@@ -143,6 +173,10 @@ module.exports = function (app) {
 
     app.get('/am', function (req, res) {
         res.sendfile('./public/am.html');
+    });
+
+    app.get('/amx', function (req, res) {
+        res.sendfile('./public/amx.html');
     });
 
     app.get('/', function (req, res) {
