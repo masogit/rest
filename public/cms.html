@@ -108,6 +108,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="ci in cis">
+                    <!--<td><a ng-click="setDataIn(ci)">{{ ci.ucmdbid.id }}</a></td>-->
                     <td>{{ ci.ucmdbid.id }}</td>
                     <td ng-repeat="(key, value) in ci.properties" ng-show="key!='timestamp' && key!='id'">{{ value }}
                     </td>

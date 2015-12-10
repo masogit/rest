@@ -25,6 +25,14 @@ angular.module('cmsController', [])
                 $scope.formData = JSON.parse(localStorage.getItem(CMS_FORM_DATA));
         };
 
+        $scope.setDataIn = function (ci) {
+            var form = clone($scope.formData);
+            $scope.formData["data"] = {"cis": [ci], "relations": null};
+            topology.post($scope.formData).success(function (data) {
+                console.log("response data: " + JSON.stringify(data));
+            });
+        };
+
         $scope.getTopology = function () {
             $scope.loading = true;
             $scope.statistics = {};

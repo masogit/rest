@@ -2,6 +2,28 @@ module.exports = function (app) {
     var SSH = require('simple-ssh');
     var Client = require('node-rest-client').Client;
     var client = new Client();
+    var loki = require('lokijs');
+    var db = new loki('db/config.json');
+
+    // Configuration
+    app.get('/cfg/menu', function (req, res) {
+        var menu = db.getCollection("menu");
+        var data = menu.query({});
+        res.json(data[0]);
+    });
+
+    app.post('/cfg/menu', function (req, res) {
+        var menu = db.getCollection("menu");
+        if (!menu){
+            menu = db.addCollection("menu");
+            var data = menu.insert(req.body);
+            res.json(data);
+        } else {
+            var data = menu.update(req.body);
+            res.json(data);
+        }
+        db.saveDatabase();
+    });
 
     // CMS REST -------------------------------------------------------------
     app.post('/cms/get', function (req, res) {
@@ -17,6 +39,26 @@ module.exports = function (app) {
             res.json(data);
         });
 
+        req.on('error', function (err) {
+            console.log('request error');
+        });
+
+    });
+
+    app.post('/cms/post', function (req, res) {
+        var server = "http://" + req.body.server;
+        var args = {
+            data: req.body.data, // UCMDB CIs,
+            headers: {"Content-Type": "application/json"},
+            requestConfig: {timeout: 2000},
+            responseConfig: {timeout: 5000}
+        };
+
+        var req = client.post(server + "/rest/dataIn", args, function (data, response) {
+            console.log('ucmdb create/update data: ' + data);
+            res.send(data);
+        });
+        console.log('req.options: ' + JSON.stringify(req.options));
         req.on('error', function (err) {
             console.log('request error');
         });
@@ -87,6 +129,10 @@ module.exports = function (app) {
     });
 
     // load the single view file
+    app.get('/cfg', function (req, res) {
+        res.sendfile('./public/cfg.html');
+    });
+
     app.get('/ssh', function (req, res) {
         res.sendfile('./public/ssh.html');
     });
