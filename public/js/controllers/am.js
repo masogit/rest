@@ -30,10 +30,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         }
     };
     $scope.addFields = function () {
-        if ($scope.fields.length > 0) {
             $scope.formData.param.fields = $scope.fields;
             $scope.query();
-        }
     };
 
     if (localStorage && localStorage[AM_FORM_DATA]) {

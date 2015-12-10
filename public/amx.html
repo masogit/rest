@@ -30,14 +30,21 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="#" ng-click="query()">Query</a></li>
+                <!--<li><a href="#">Help</a></li>-->
             </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
+            <form class="navbar-form navbar-left">
+                <input type="text" class="form-control" placeholder="Limit" ng-model="formData.server">
+                <input type="text" class="form-control" placeholder="Limit" ng-model="formData.user" size="7">
+                <input type="password" class="form-control" placeholder="Password" ng-model="formData.password" size="7">
             </form>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Limit" ng-model="formData.param.limit" size="1">
+                <input type="text" class="form-control" placeholder="Offset" ng-model="formData.param.offset" size="1">
+                <input type="text" class="form-control" placeholder="AQL Filter..." ng-model="formData.param.filter" size="50">
+                <input type="text" class="form-control" placeholder="Order By..." ng-model="formData.param.orderby" size="30">
+            </form>
+
         </div>
     </div>
 </nav>
@@ -79,7 +86,7 @@
                     <a ng-click="clearMsg()">X</a> {{ message }}
                 </label>
 
-                <h4> AM Table: <strong>{{ tableName }} </strong>
+                <h4><strong>{{ tableName }} </strong>
                     <small>({{ tableData.count }})</small>
                     <small class="pull-right">
                         Search
