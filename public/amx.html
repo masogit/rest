@@ -11,7 +11,19 @@
     <script src="js/controllers/am_modal.js"></script>
 
     <style>
+        @media only screen and (min-height: 700px) {
+            .sidebar {
+                max-height: 600px;
+                overflow-y: auto;
+            }
+        }
 
+        @media only screen and (min-height: 1000px) {
+            .sidebar {
+                max-height: 900px;
+                overflow-y: auto;
+            }
+        }
     </style>
 </head>
 <!-- SET THE CONTROLLER -->
@@ -53,7 +65,7 @@
         <div class="col-md-2">
             <div ng-show="metadata.tables && !metadata.table">
                 <input type="text" class="form-control" placeholder="Search table..." ng-model="tableSearch.id">
-                <ul class="nav" style="max-height: 600px; overflow-y: auto">
+                <ul class="nav sidebar">
                     <li ng-repeat="table in metadata.tables | filter: tableSearch">
                         <a href="#" ng-click="metadata(table.id)">{{ table.id }}</a></li>
                 </ul>
@@ -62,9 +74,8 @@
             <div ng-show="metadata.table">
                 <input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch">
                 <a ng-click="removeOneTable()"><span class="glyphicon glyphicon-arrow-left"></span></a>
-                <a ng-click="addFields()" class="pull-right"><span class="glyphicon glyphicon-eye-open"></span></a>
 
-                <div style="max-height: 600px; overflow-y: auto">
+                <div class="sidebar">
 
                     <span ng-repeat="field in metadata.table.field | filter: fieldSearch">
                         <input type="checkbox" ng-checked="fields.indexOf(field['$']['sqlname']) > -1"

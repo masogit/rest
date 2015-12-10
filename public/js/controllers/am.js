@@ -28,6 +28,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         else {
             $scope.fields.push(field);
         }
+        $scope.addFields();
     };
     $scope.addFields = function () {
             $scope.formData.param.fields = $scope.fields;
