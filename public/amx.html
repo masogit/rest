@@ -19,7 +19,8 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -43,10 +44,32 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
-            <input type="text" class="form-control" placeholder="Search..." ng-model="tableSearch">
-            <ul class="nav" style="max-height: 600px; overflow-y: auto">
-                <li ng-repeat="table in metadata.tables | filter: tableSearch"><a href="#" ng-click="metadata(table.id)">{{ table.id }} <span class="sr-only">(current)</span></a></li>
-            </ul>
+            <div ng-show="metadata.tables && !metadata.table">
+                <input type="text" class="form-control" placeholder="Search table..." ng-model="tableSearch.id">
+                <ul class="nav" style="max-height: 600px; overflow-y: auto">
+                    <li ng-repeat="table in metadata.tables | filter: tableSearch">
+                        <a href="#" ng-click="metadata(table.id)">{{ table.id }}</a></li>
+                </ul>
+            </div>
+
+            <div ng-show="metadata.table">
+                <input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch">
+                <a ng-click="removeOneTable()"><span class="glyphicon glyphicon-arrow-left"></span></a>
+                <a ng-click="addFields()" class="pull-right"><span class="glyphicon glyphicon-eye-open"></span></a>
+
+                <div style="max-height: 600px; overflow-y: auto">
+
+                    <span ng-repeat="field in metadata.table.field | filter: fieldSearch">
+                        <input type="checkbox" ng-checked="fields.indexOf(field['$']['sqlname']) > -1"
+                               ng-click="toggleFilter(field['$']['sqlname'])">
+                        {{ field['$']['sqlname'] }} <br>
+                    </span>
+
+                    <span ng-repeat="link in metadata.table.link | filter: fieldSearch">
+                        <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
+                    </span>
+                </div>
+            </div>
         </div>
         <div class="col-md-10 main">
 
@@ -56,7 +79,7 @@
                     <a ng-click="clearMsg()">X</a> {{ message }}
                 </label>
 
-                <h4> AM Table: <strong>{{ formData.table }} </strong>
+                <h4> AM Table: <strong>{{ tableName }} </strong>
                     <small>({{ tableData.count }})</small>
                     <small class="pull-right">
                         Search
@@ -111,45 +134,45 @@
 </div>
 <!--<div class="container" style="width: 90%">-->
 
-    <!--&lt;!&ndash; HEADER &ndash;&gt;-->
-    <!--<div class="page-header">-->
-        <!--<h2> {{ title }} </h2>-->
-    <!--</div>-->
+<!--&lt;!&ndash; HEADER &ndash;&gt;-->
+<!--<div class="page-header">-->
+<!--<h2> {{ title }} </h2>-->
+<!--</div>-->
 
-    <!--<div class="row">-->
-        <!--<h4>-->
-            <!--<small>Path: <i><u>http://{{formData.server}}{{formData.context}}{{formData['ref-link']}}{{formData.collection}}</u></i>-->
-            <!--</small>-->
-        <!--</h4>-->
+<!--<div class="row">-->
+<!--<h4>-->
+<!--<small>Path: <i><u>http://{{formData.server}}{{formData.context}}{{formData['ref-link']}}{{formData.collection}}</u></i>-->
+<!--</small>-->
+<!--</h4>-->
 
-        <!--<form class="form-inline">-->
-            <!--<div class="form-group" ng-repeat="(key, value) in formData" ng-show="key!='param'">-->
-                <!--<label>{{ key }}</label>-->
-                <!--<input type="text" class="form-control" placeholder="" ng-model="formData[key]">-->
-            <!--</div>-->
-            <!--<h4>-->
-                <!--<small>Parameters:</small>-->
-            <!--</h4>-->
-            <!--<div class="form-group" ng-repeat="(key, value) in formData.param">-->
-                <!--<label>{{ key }}</label>-->
-                <!--<input type="text" class="form-control" placeholder="" ng-model="formData.param[key]">-->
-            <!--</div>-->
-            <!--<button type="submit" ng-click="query()">Query</button>-->
-            <!--<button type="submit" ng-click="metadata('all')">Query</button>-->
-            <!--&lt;!&ndash;<div class="pull-right">&ndash;&gt;-->
-                <!--&lt;!&ndash;<small>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<a href="http://{{formData.server}}{{formData.context}}metadata/tables" target="_blank">&ndash;&gt;-->
-                        <!--&lt;!&ndash;[All tables DEF]&ndash;&gt;-->
-                    <!--&lt;!&ndash;</a>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<a href="http://{{formData.server}}{{formData.context}}{{getMeta(formData['ref-link'])}}"&ndash;&gt;-->
-                       <!--&lt;!&ndash;target="_blank">&ndash;&gt;-->
-                        <!--&lt;!&ndash;[A table DEF]&ndash;&gt;-->
-                    <!--&lt;!&ndash;</a>&ndash;&gt;-->
-                <!--&lt;!&ndash;</small>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-        <!--</form>-->
-    <!--</div>-->
-    <!--<hr>-->
+<!--<form class="form-inline">-->
+<!--<div class="form-group" ng-repeat="(key, value) in formData" ng-show="key!='param'">-->
+<!--<label>{{ key }}</label>-->
+<!--<input type="text" class="form-control" placeholder="" ng-model="formData[key]">-->
+<!--</div>-->
+<!--<h4>-->
+<!--<small>Parameters:</small>-->
+<!--</h4>-->
+<!--<div class="form-group" ng-repeat="(key, value) in formData.param">-->
+<!--<label>{{ key }}</label>-->
+<!--<input type="text" class="form-control" placeholder="" ng-model="formData.param[key]">-->
+<!--</div>-->
+<!--<button type="submit" ng-click="query()">Query</button>-->
+<!--<button type="submit" ng-click="metadata('all')">Query</button>-->
+<!--&lt;!&ndash;<div class="pull-right">&ndash;&gt;-->
+<!--&lt;!&ndash;<small>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="http://{{formData.server}}{{formData.context}}metadata/tables" target="_blank">&ndash;&gt;-->
+<!--&lt;!&ndash;[All tables DEF]&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="http://{{formData.server}}{{formData.context}}{{getMeta(formData['ref-link'])}}"&ndash;&gt;-->
+<!--&lt;!&ndash;target="_blank">&ndash;&gt;-->
+<!--&lt;!&ndash;[A table DEF]&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+<!--&lt;!&ndash;</small>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</form>-->
+<!--</div>-->
+<!--<hr>-->
 
 <!--</div>-->
 </body>

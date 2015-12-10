@@ -88,8 +88,6 @@ module.exports = function (app) {
             });
         });
 
-        console.log('req.options: ' + JSON.stringify(req.options));
-
         request.on('error', function (err) {
             console.log('request error: ' + err);
         });

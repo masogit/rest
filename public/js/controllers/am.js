@@ -5,10 +5,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
     $scope.formData = {
         server: "16.165.217.186:8081",
         context: "/AssetManagerWebService/rs/",
-        "ref-link": "db/amLocation/126874",
-        collection: "EmplDepts",
+        "ref-link": "",     // "db/amLocation/126874",
+        collection: "",     // "EmplDepts",
         param: {
-            limit: "10",
+            limit: "100",
             offset: "1",
             filter: "",
             orderby: "",
@@ -19,9 +19,30 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         password: ""
     };
     $scope.pageSize = 10;
+    $scope.fields = [];
+    $scope.toggleFilter = function toggleSelection(field) {
+        var idx = $scope.fields.indexOf(field);
+        if (idx > -1) {
+            $scope.fields.splice(idx, 1);
+        }
+        else {
+            $scope.fields.push(field);
+        }
+    };
+    $scope.addFields = function () {
+        if ($scope.fields.length > 0) {
+            $scope.formData.param.fields = $scope.fields;
+            $scope.query();
+        }
+    };
 
-    if (localStorage && localStorage[AM_FORM_DATA])
+    if (localStorage && localStorage[AM_FORM_DATA]) {
         $scope.formData = JSON.parse(localStorage.getItem(AM_FORM_DATA));
+        $scope.formData.collection = "";
+        $scope.formData.param.filter = "";
+        $scope.formData.param.orderby = "";
+        $scope.formData.param.fields = [];
+    }
 
     $scope.query = function () {
         $scope.loading = true;
@@ -29,6 +50,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         var form = clone($scope.formData);
         form.method = "get";
         $http.post('/am/rest', form).success(function (data) {
+//            console.log("rest data: " + JSON.stringify(data));
             $scope.loading = false;
             if (data instanceof Object) {
                 if (data.entities instanceof Array)
@@ -103,7 +125,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             metadata = "metadata/tables";
         } else {
             metadata = "metadata/schema/" + schema;
+            $scope.tableName = schema;
             $scope.formData['ref-link'] = "db/" + schema;
+            $scope.formData.param.fields = [];
+            $scope.fields = [];
             $scope.query();
         }
         form['metadata'] = metadata;
@@ -115,10 +140,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
                     $scope.metadata["tables"].push(data.Tables.Table[t]["$"]);
                 }
 
-                console.log("meta data: " + JSON.stringify($scope.metadata["tables"]));
+//                console.log("meta data: " + JSON.stringify($scope.metadata["tables"]));
             } else if (data.table) {
-                console.log("meta data table: " + JSON.stringify(data));
-                $scope.metadata["aTable"] = [];
+//                console.log("meta data table: " + JSON.stringify(data));
+                $scope.metadata["table"] = data.table;
 //                for (var t in data.Tables.Table){
 //                    $scope.metadata["tables"].push(data.Tables.Table[t]["$"]);
 //                }
@@ -127,6 +152,12 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             }
 
         });
+    };
+
+    $scope.removeOneTable = function () {
+        delete $scope.metadata["table"];
+        $scope.formData.param.fields = [];
+        $scope.fields = [];
     };
 
     $scope.getMeta = function (ref) {
