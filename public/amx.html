@@ -42,22 +42,17 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <!--<li><a href="#" ng-click="query()">Query</a></li>-->
-                <!--<li><a href="#">Help</a></li>-->
+                <li><a href="#" ng-click="query()">Change</a></li>
+                <li><a href="#" ng-click="toggleNavbar()">Show NavBar</a></li>
+                <li><a href="#">Help</a></li>
             </ul>
-            <form class="navbar-form navbar-left">
+
+            <form class="navbar-form navbar-right">
                 <input type="text" class="form-control" placeholder="Limit" ng-model="formData.server">
                 <input type="text" class="form-control" placeholder="Limit" ng-model="formData.user" size="7">
-                <input type="password" class="form-control" placeholder="Password" ng-model="formData.password" size="7">
+                <input type="password" class="form-control" placeholder="Password" ng-model="formData.password"
+                       size="7">
             </form>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Limit" ng-model="formData.param.limit" size="1">
-                <input type="text" class="form-control" placeholder="Offset" ng-model="formData.param.offset" size="1">
-                <input type="text" class="form-control" placeholder="AQL Filter..." ng-model="formData.param.filter" size="50">
-                <input type="text" class="form-control" placeholder="Order By..." ng-model="formData.param.orderby" size="30">
-                <button class="btn btn-warning" type="button" ng-click="query()">Query</button>
-            </form>
-
         </div>
     </div>
 </nav>
@@ -75,6 +70,8 @@
             <div ng-show="metadata.table">
                 <input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch">
                 <a ng-click="removeOneTable()"><span class="glyphicon glyphicon-arrow-left"></span></a>
+                <a ng-click="addFields()" class="pull-right" ng-show="fields.length > 0"><span
+                        class="glyphicon glyphicon-eye-open"></span></a>
 
                 <div class="sidebar">
 
@@ -91,7 +88,23 @@
             </div>
         </div>
         <div class="col-md-10 main">
+            <div class="row">
 
+                <ol class="breadcrumb" ng-show="breadcrumb.length > 0">
+                    <li ng-repeat="b in breadcrumb" ng-class="{'active':tableName == b}"><a href="#" ng-click="metadata(b)">{{b}}</a></li>
+                </ol>
+                <form class="navbar-form navbar-left" ng-show="navbar">
+                    <input type="text" class="form-control" placeholder="Limit" ng-model="formData.param.limit"
+                           size="1">
+                    <input type="text" class="form-control" placeholder="Offset" ng-model="formData.param.offset"
+                           size="1">
+                    <input type="text" class="form-control" placeholder="AQL Filter..." ng-model="formData.param.filter"
+                           size="50">
+                    <input type="text" class="form-control" placeholder="Order By..." ng-model="formData.param.orderby"
+                           size="30">
+                    <button class="btn" type="button" ng-click="query()">Query</button>
+                </form>
+            </div>
             <div class="table-responsive" ng-show="tableData">
 
                 <label class="text-danger" ng-show="message">

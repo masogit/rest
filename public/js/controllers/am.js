@@ -20,6 +20,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
     };
     $scope.pageSize = 10;
     $scope.fields = [];
+    $scope.breadcrumb = [];
     $scope.toggleFilter = function toggleSelection(field) {
         var idx = $scope.fields.indexOf(field);
         if (idx > -1) {
@@ -28,11 +29,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         else {
             $scope.fields.push(field);
         }
-        $scope.addFields();
+//        $scope.addFields();
     };
     $scope.addFields = function () {
-            $scope.formData.param.fields = $scope.fields;
-            $scope.query();
+        $scope.formData.param.fields = $scope.fields;
+        $scope.query();
     };
 
     if (localStorage && localStorage[AM_FORM_DATA]) {
@@ -79,7 +80,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
                     return data;
                 },
                 form: function () {
-                    return $scope.formData;
+                    return clone($scope.formData);
                 }
             }
         });
@@ -128,6 +129,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             $scope.formData['ref-link'] = "db/" + schema;
             $scope.formData.param.fields = [];
             $scope.fields = [];
+            if ($scope.breadcrumb.indexOf(schema) < 0)
+                $scope.breadcrumb.push(schema);
             $scope.query();
         }
         form['metadata'] = metadata;
@@ -157,6 +160,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         delete $scope.metadata["table"];
         $scope.formData.param.fields = [];
         $scope.fields = [];
+        $scope.breadcrumb = [];
     };
 
     $scope.getMeta = function (ref) {
@@ -170,6 +174,13 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
 
     $scope.clearMsg = function () {
         delete $scope.message;
+    };
+
+    $scope.toggleNavbar = function () {
+        if ($scope.navbar) {
+            $scope.navbar = !$scope.navbar;
+        } else
+            $scope.navbar = true;
     };
 
     $scope.metadata("all");
@@ -193,3 +204,27 @@ am.filter('range', function () {
         return input;
     };
 });
+
+function clone(obj) {
+    var o;
+    if (typeof obj == "object") {
+        if (obj === null) {
+            o = null;
+        } else {
+            if (obj instanceof Array) {
+                o = [];
+                for (var i = 0, len = obj.length; i < len; i++) {
+                    o.push(clone(obj[i]));
+                }
+            } else {
+                o = {};
+                for (var j in obj) {
+                    o[j] = clone(obj[j]);
+                }
+            }
+        }
+    } else {
+        o = obj;
+    }
+    return o;
+}
