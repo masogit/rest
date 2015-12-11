@@ -183,6 +183,13 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             $scope.navbar = true;
     };
 
+    $scope.toggleServer = function () {
+        if ($scope.serverbar) {
+            $scope.serverbar = !$scope.serverbar;
+        } else
+            $scope.serverbar = true;
+    };
+
     $scope.metadata("all");
 });
 

@@ -40,19 +40,16 @@
             </button>
             <a class="navbar-brand" href="#"> {{ title }} </a>
         </div>
+
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" ng-click="query()">Change</a></li>
-                <li><a href="#" ng-click="toggleNavbar()">Show NavBar</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="#" ng-click="toggleServer()">Connection</a></li>
+                <li><a href="#" ng-click="toggleNavbar()">Condition</a></li>
+                <li><a href="index.html">Help</a></li>
             </ul>
-
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Limit" ng-model="formData.server">
-                <input type="text" class="form-control" placeholder="Limit" ng-model="formData.user" size="7">
-                <input type="password" class="form-control" placeholder="Password" ng-model="formData.password"
-                       size="7">
-            </form>
+            <!--<form class="navbar-form navbar-right">-->
+                <!--<input type="text" class="form-control" placeholder="Search..." ng-model="globalSearch">-->
+            <!--</form>-->
         </div>
     </div>
 </nav>
@@ -89,14 +86,20 @@
         </div>
         <div class="col-md-10 main">
             <div class="row">
-
+                <form class="navbar-form navbar-left" ng-show="serverbar">
+                    <input type="text" class="form-control" placeholder="Limit" ng-model="formData.server">
+                    <input type="text" class="form-control" placeholder="Limit" ng-model="formData.user" size="7">
+                    <input type="password" class="form-control" placeholder="Password" ng-model="formData.password"
+                           size="7">
+                    <button class="btn" type="button" ng-click="store()">Save</button>
+                </form>
                 <ol class="breadcrumb" ng-show="breadcrumb.length > 0">
                     <li ng-repeat="b in breadcrumb" ng-class="{'active':tableName == b}"><a href="#" ng-click="metadata(b)">{{b}}</a></li>
                 </ol>
                 <form class="navbar-form navbar-left" ng-show="navbar">
                     <input type="text" class="form-control" placeholder="Limit" ng-model="formData.param.limit"
                            size="1">
-                    <input type="text" class="form-control" placeholder="Offset" ng-model="formData.param.offset"
+                    <input type="text" class="form-control" placeholder="Pos" ng-model="formData.param.offset"
                            size="1">
                     <input type="text" class="form-control" placeholder="AQL Filter..." ng-model="formData.param.filter"
                            size="50">
