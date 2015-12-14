@@ -86,6 +86,9 @@
         </div>
         <div class="col-md-10 main">
             <div class="row">
+                <ol class="breadcrumb" ng-show="breadcrumb.length > 0">
+                    <li ng-repeat="b in breadcrumb" ng-class="{'active':tableName == b}"><a href="#" ng-click="metadata(b)">{{b}}</a></li>
+                </ol>
                 <form class="navbar-form navbar-left" ng-show="serverbar">
                     <input type="text" class="form-control" placeholder="Limit" ng-model="formData.server">
                     <input type="text" class="form-control" placeholder="Limit" ng-model="formData.user" size="7">
@@ -93,9 +96,6 @@
                            size="7">
                     <button class="btn" type="button" ng-click="store()">Save</button>
                 </form>
-                <ol class="breadcrumb" ng-show="breadcrumb.length > 0">
-                    <li ng-repeat="b in breadcrumb" ng-class="{'active':tableName == b}"><a href="#" ng-click="metadata(b)">{{b}}</a></li>
-                </ol>
                 <form class="navbar-form navbar-left" ng-show="navbar">
                     <input type="text" class="form-control" placeholder="Limit" ng-model="formData.param.limit"
                            size="1">
