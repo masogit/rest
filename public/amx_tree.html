@@ -1,0 +1,9 @@
+<span ng-repeat="field in metadata.table.field | filter: fieldSearch">
+    <input type="checkbox" ng-checked="fields.indexOf(field['$']['sqlname']) > -1"
+           ng-click="toggleFilter(field['$']['sqlname'])">
+    {{ field['$']['sqlname'] }} <br>
+</span>
+
+<span ng-repeat="link in metadata.table.link | filter: fieldSearch">
+    <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
+</span>

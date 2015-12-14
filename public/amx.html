@@ -48,7 +48,7 @@
                 <li><a href="index.html">Help</a></li>
             </ul>
             <!--<form class="navbar-form navbar-right">-->
-                <!--<input type="text" class="form-control" placeholder="Search..." ng-model="globalSearch">-->
+            <!--<input type="text" class="form-control" placeholder="Search..." ng-model="globalSearch">-->
             <!--</form>-->
         </div>
     </div>
@@ -71,23 +71,54 @@
                         class="glyphicon glyphicon-eye-open"></span></a>
 
                 <div class="sidebar">
+                        <span ng-repeat="field in metadata.table.field | filter: fieldSearch">
+                            <input type="checkbox" ng-checked="fields.indexOf(field['$']['sqlname']) > -1"
+                                   ng-click="toggleFilter(field['$']['sqlname'])">
+                            {{ field['$']['sqlname'] }} <br>
+                        </span>
 
-                    <span ng-repeat="field in metadata.table.field | filter: fieldSearch">
-                        <input type="checkbox" ng-checked="fields.indexOf(field['$']['sqlname']) > -1"
-                               ng-click="toggleFilter(field['$']['sqlname'])">
-                        {{ field['$']['sqlname'] }} <br>
-                    </span>
+                        <span ng-repeat="link in metadata.table.link | filter: fieldSearch">
+                            <a ng-click="metadata(link['$']['desttable'], link)" ng-show="!link.table && link['$']['type']=='OwnCopy'">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
 
-                    <span ng-repeat="link in metadata.table.link | filter: fieldSearch">
-                        <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
-                    </span>
+                            <a ng-click="foldChild(link)" ng-show="link.table">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </a>
+
+                            <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
+                            <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
+                        </span>
+
+                    <script type="text/ng-template" id="amTree">
+                        <span ng-repeat="field in link.table.field | filter: fieldSearch">
+                            <input type="checkbox" ng-checked="link.table.parent+'.'+fields.indexOf(field['$']['sqlname']) > -1"
+                                   ng-click="toggleFilter(link.table.parent+'.'+field['$']['sqlname'])">
+                            {{ field['$']['sqlname'] }} <br>
+                        </span>
+
+                        <span ng-repeat="link in link.table.link | filter: fieldSearch">
+                            <a ng-click="metadata(link['$']['desttable'], link)" ng-show="!link.table && link['$']['type']=='OwnCopy'">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
+
+                            <a ng-click="foldChild(link)" ng-show="link.table">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </a>
+
+                            <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
+                            <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
+                        </span>
+                    </script>
                 </div>
             </div>
         </div>
         <div class="col-md-10 main">
             <div class="row">
                 <ol class="breadcrumb" ng-show="breadcrumb.length > 0">
-                    <li ng-repeat="b in breadcrumb" ng-class="{'active':tableName == b}"><a href="#" ng-click="metadata(b)">{{b}}</a></li>
+                    <li ng-repeat="b in breadcrumb" ng-class="{'active':tableName == b}"><a href="#"
+                                                                                            ng-click="metadata(b)">{{b}}</a>
+                    </li>
                 </ol>
                 <form class="navbar-form navbar-left" ng-show="serverbar">
                     <input type="text" class="form-control" placeholder="Limit" ng-model="formData.server">
@@ -109,7 +140,6 @@
                 </form>
             </div>
             <div class="table-responsive" ng-show="tableData">
-
                 <label class="text-danger" ng-show="message">
                     <a ng-click="clearMsg()">X</a> {{ message }}
                 </label>

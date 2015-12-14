@@ -118,20 +118,24 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             return value;
     };
 
-    $scope.metadata = function (schema) {
+    $scope.metadata = function (schema, parent) {
         var form = clone($scope.formData);
         var metadata = "";
         if (schema == 'all') {
             metadata = "metadata/tables";
         } else {
             metadata = "metadata/schema/" + schema;
-            $scope.tableName = schema;
             $scope.formData['ref-link'] = "db/" + schema;
-            $scope.formData.param.fields = [];
-            $scope.fields = [];
-            if ($scope.breadcrumb.indexOf(schema) < 0)
-                $scope.breadcrumb.push(schema);
-            $scope.query();
+
+            if (!parent) {
+                $scope.tableName = schema;
+                $scope.formData.param.fields = [];
+                $scope.fields = [];
+                if ($scope.breadcrumb.indexOf(schema) < 0)
+                    $scope.breadcrumb.push(schema);
+                $scope.query();
+            }
+
         }
         form['metadata'] = metadata;
         $http.post('/am/metadata', form).success(function (data) {
@@ -144,8 +148,14 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
 
 //                console.log("meta data: " + JSON.stringify($scope.metadata["tables"]));
             } else if (data.table) {
-//                console.log("meta data table: " + JSON.stringify(data));
-                $scope.metadata["table"] = data.table;
+                console.log("meta data table: " + JSON.stringify(data));
+                if (parent) {
+                    parent["table"] = data.table;
+                    parent["table"].parent = parent["$"]["sqlname"];
+//                    console.log("parent is: " + parent["table"].parent);
+                }
+                else
+                    $scope.metadata["table"] = data.table;
 //                for (var t in data.Tables.Table){
 //                    $scope.metadata["tables"].push(data.Tables.Table[t]["$"]);
 //                }
@@ -154,6 +164,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             }
 
         });
+    };
+
+    $scope.foldChild = function (link) {
+//        console.log("child: " + JSON.stringify(child));
+        delete link["table"];
     };
 
     $scope.removeOneTable = function () {
