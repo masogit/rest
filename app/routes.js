@@ -115,6 +115,7 @@ module.exports = function (app) {
             request = client.get(url, args, function (data, response) {
                 res.send(data);
             });
+            console.log("request.options: " + JSON.stringify(request.options));
         } else if (req.body.method == "post") {
             request = client.post(url, args, function (data, response) {
                 res.json(data);

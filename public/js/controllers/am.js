@@ -44,10 +44,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         $scope.formData.param.fields = [];
     }
 
-    $scope.query = function () {
+    $scope.query = function (tableName) {
         $scope.loading = true;
         $scope.tableData = {};
         var form = clone($scope.formData);
+
+        // for query metadata
+        if (tableName)
+            form['ref-link'] = "db/" + tableName;
+
         form.method = "get";
         $http.post('/am/rest', form).success(function (data) {
 //            console.log("rest data: " + JSON.stringify(data));
@@ -118,16 +123,17 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             return value;
     };
 
-    $scope.metadata = function (schema, parent) {
+    $scope.metadata = function (schema, parent, upLvl) {
         var form = clone($scope.formData);
         var metadata = "";
         if (schema == 'all') {
             metadata = "metadata/tables";
         } else {
             metadata = "metadata/schema/" + schema;
-            $scope.formData['ref-link'] = "db/" + schema;
 
+            // click query table from tree
             if (!parent) {
+                $scope.formData['ref-link'] = "db/" + schema;
                 $scope.tableName = schema;
                 $scope.formData.param.fields = [];
                 $scope.fields = [];
@@ -148,19 +154,18 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
 
 //                console.log("meta data: " + JSON.stringify($scope.metadata["tables"]));
             } else if (data.table) {
-                console.log("meta data table: " + JSON.stringify(data));
+//                console.log("meta data table: " + JSON.stringify(data));
+                console.log("parent: " + JSON.stringify(parent));
+                console.log("upLvl: " + JSON.stringify(upLvl));
+
                 if (parent) {
                     parent["table"] = data.table;
+
                     parent["table"].parent = parent["$"]["sqlname"];
-//                    console.log("parent is: " + parent["table"].parent);
+//                    console.log("parent's reverse: " + parent["table"].parent);
                 }
                 else
                     $scope.metadata["table"] = data.table;
-//                for (var t in data.Tables.Table){
-//                    $scope.metadata["tables"].push(data.Tables.Table[t]["$"]);
-//                }
-//
-//                console.log("meta data: " + JSON.stringify($scope.metadata["tables"]));
             }
 
         });
@@ -169,6 +174,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
     $scope.foldChild = function (link) {
 //        console.log("child: " + JSON.stringify(child));
         delete link["table"];
+    };
+
+    $scope.isO2O = function (type) {
+        return true;
+//        return type == 'Neutral' || type == 'OwnCopy';
     };
 
     $scope.removeOneTable = function () {
