@@ -8,6 +8,7 @@
 
 <div ng-show="metadata.table">
     <input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch">
+    <!-- action -->
     <a ng-click="removeOneTable()"><span class="glyphicon glyphicon-arrow-left"></span></a>
     <a ng-click="addFields()" class="pull-right" ng-show="fields.length > 0"><span
             class="glyphicon glyphicon-eye-open"></span></a>
@@ -30,18 +31,22 @@
             </a>
 
             <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
-            <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
+            <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px" ng-init="xxx = link.table"></div>
         </span>
 
-        <script type="text/ng-template" id="amTree">
+
+    </div>
+</div>
+
+<script type="text/ng-template" id="amTree">
             <span ng-repeat="field in link.table.field | filter: fieldSearch">
                 <input type="checkbox"
                        ng-checked="fields.indexOf(link.table.parent+'.'+field['$']['sqlname']) > -1"
                        ng-click="toggleFilter(link.table.parent+'.'+field['$']['sqlname'])">
                 {{ field['$']['sqlname'] }}<br>
             </span>
-
-            <span ng-repeat="link in link.table.link | filter: fieldSearch">
+            <span style="display: none">{{xxx = link.table.parent}}</span>
+            <span ng-repeat="link in link.table.link | filter: fieldSearch" ng-init="link['parent']=xxx">
                 <a ng-click="metadata(link['$']['desttable'], link)"
                    ng-show="!link.table && isO2O(link['$']['type'])">
                     <span class="glyphicon glyphicon-plus"></span>
@@ -54,6 +59,4 @@
                 <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
                 <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
             </span>
-        </script>
-    </div>
-</div>
+</script>

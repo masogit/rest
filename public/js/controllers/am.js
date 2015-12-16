@@ -123,7 +123,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             return value;
     };
 
-    $scope.metadata = function (schema, parent, upLvl) {
+    $scope.metadata = function (schema, link) {
         var form = clone($scope.formData);
         var metadata = "";
         if (schema == 'all') {
@@ -132,7 +132,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             metadata = "metadata/schema/" + schema;
 
             // click query table from tree
-            if (!parent) {
+            if (!link) {
                 $scope.formData['ref-link'] = "db/" + schema;
                 $scope.tableName = schema;
                 $scope.formData.param.fields = [];
@@ -155,13 +155,17 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
 //                console.log("meta data: " + JSON.stringify($scope.metadata["tables"]));
             } else if (data.table) {
 //                console.log("meta data table: " + JSON.stringify(data));
-                console.log("parent: " + JSON.stringify(parent));
-                console.log("upLvl: " + JSON.stringify(upLvl));
+//                console.log("parent: " + JSON.stringify(parent));
 
-                if (parent) {
-                    parent["table"] = data.table;
+                if (link) {
+                    link["table"] = data.table;
 
-                    parent["table"].parent = parent["$"]["sqlname"];
+                    console.log("parent name: " + JSON.stringify(link["$"]["sqlname"]));
+                    console.log("parent'parent name: " + JSON.stringify(link.parent));
+                    if (link["parent"])
+                        link["table"].parent = link["parent"] + "." + link["$"]["sqlname"];
+                    else
+                        link["table"].parent = link["$"]["sqlname"];
 //                    console.log("parent's reverse: " + parent["table"].parent);
                 }
                 else
