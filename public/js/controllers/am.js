@@ -44,14 +44,12 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         $scope.formData.param.fields = [];
     }
 
-    $scope.query = function (tableName) {
+    $scope.query = function (form) {
         $scope.loading = true;
         $scope.tableData = {};
-        var form = clone($scope.formData);
 
-        // for query metadata
-        if (tableName)
-            form['ref-link'] = "db/" + tableName;
+        // if param is query form, use it
+        var form = form ? form : clone($scope.formData);
 
         form.method = "get";
         $http.post('/am/rest', form).success(function (data) {
@@ -105,11 +103,20 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
     // list order by and pagination =============================
     $scope.predicate = '';
     $scope.reverse = true;
-    $scope.order = function (predicate) {
+    $scope.order = function (predicate, reQuery) {
         console.log("order: " + predicate);
         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
         $scope.predicate = predicate;
-    };
+//        $scope.formData.param.orderby = predicate + ($scope.reverse) ? " desc" : "";
+        if (reQuery) {
+            var form = clone($scope.formData);
+            form.param.orderby = predicate;
+            if ($scope.reverse)
+                form.param.orderby = form.param.orderby + " desc";
+            $scope.query(form);
+        }
+    }
+    ;
 
     $scope.jump = function (i) {
         var pos = i;
