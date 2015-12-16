@@ -105,12 +105,18 @@
                     <tr ng-repeat="e in tableData.entities" ng-if="$first">
                         <th ng-show="e['ref-link']">
                             <a ng-click="order('ref-link')">ref-link</a>
+                            <a ng-click="order('ref-link')" ng-show="predicate=='ref-link'">
+                                <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
+                                <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                            </a>
                         </th>
                         <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
                             <a ng-click="order(key)">{{ key }}</a>
                             <a ng-click="order(key)" ng-show="predicate==key">
                                 <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
                                 <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                            </a>
+                            <a ng-click="order(key)" ng-show="predicate==key">
                                 <span class="glyphicon glyphicon-refresh" ng-click="order(key, true)"></span>
                             </a>
                         </th>

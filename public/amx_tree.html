@@ -22,7 +22,7 @@
 
         <span ng-repeat="link in metadata.table.link | filter: fieldSearch">
             <a ng-click="metadata(link['$']['desttable'], link)"
-               ng-show="!link.table && isO2O(link['$']['type'])">
+               ng-show="!link.table && link['$']['card11']">
                 <span class="glyphicon glyphicon-plus"></span>
             </a>
 
@@ -48,7 +48,7 @@
             <span style="display: none">{{xxx = link.table.parent}}</span>
             <span ng-repeat="link in link.table.link | filter: fieldSearch" ng-init="link['parent']=xxx">
                 <a ng-click="metadata(link['$']['desttable'], link)"
-                   ng-show="!link.table && isO2O(link['$']['type'])">
+                   ng-show="!link.table && link['$']['card11']">
                     <span class="glyphicon glyphicon-plus"></span>
                 </a>
 

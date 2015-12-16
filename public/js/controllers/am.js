@@ -188,8 +188,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
     };
 
     $scope.isO2O = function (type) {
-        return true;
+//        return true;
 //        return type == 'Neutral' || type == 'OwnCopy';
+        return type == 'Neutral';
     };
 
     $scope.removeOneTable = function () {
