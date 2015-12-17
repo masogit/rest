@@ -1,5 +1,5 @@
 var am = angular.module('am', ['ui.bootstrap']);
-am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
+am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     var AM_FORM_DATA = "amFormData";
     $scope.title = "AM REST DB Client";
     $scope.formData = {
@@ -9,7 +9,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         collection: "",     // "EmplDepts",
         param: {
             limit: "100",
-            offset: "1",
+            offset: "0",
             filter: "",
             orderby: "",
             fields: []
@@ -40,6 +40,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         $scope.formData = JSON.parse(localStorage.getItem(AM_FORM_DATA));
         $scope.formData.collection = "";
         $scope.formData.param.filter = "";
+        $scope.formData.param.offset = 0;
         $scope.formData.param.orderby = "";
         $scope.formData.param.fields = [];
     }
@@ -130,7 +131,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
             return value;
     };
 
-    $scope.metadata = function (schema, link) {
+    $scope.metadata = function (schema, link, callback) {
         var form = clone($scope.formData);
         var metadata = "";
         if (schema == 'all') {
@@ -153,30 +154,32 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         form['metadata'] = metadata;
         $http.post('/am/metadata', form).success(function (data) {
 
-            if (data.Tables) {
-                $scope.metadata["tables"] = [];
-                for (var t in data.Tables.Table) {
-                    $scope.metadata["tables"].push(data.Tables.Table[t]["$"]);
-                }
+            if (callback instanceof Function) {
+                callback(data);
+            } else {
+                if (data.Tables) {
+                    $scope.metadata["tables"] = [];
+                    for (var t in data.Tables.Table) {
+                        $scope.metadata["tables"].push(data.Tables.Table[t]["$"]);
+                    }
 
 //                console.log("meta data: " + JSON.stringify($scope.metadata["tables"]));
-            } else if (data.table) {
+                } else if (data.table) {
 //                console.log("meta data table: " + JSON.stringify(data));
 //                console.log("parent: " + JSON.stringify(parent));
 
-                if (link) {
-                    link["table"] = data.table;
+                    if (link) {
+                        link["table"] = data.table;
 
-                    console.log("parent name: " + JSON.stringify(link["$"]["sqlname"]));
-                    console.log("parent'parent name: " + JSON.stringify(link.parent));
-                    if (link["parent"])
-                        link["table"].parent = link["parent"] + "." + link["$"]["sqlname"];
-                    else
-                        link["table"].parent = link["$"]["sqlname"];
+                        if (link["parent"])
+                            link["table"].parent = link["parent"] + "." + link["$"]["sqlname"];
+                        else
+                            link["table"].parent = link["$"]["sqlname"];
 //                    console.log("parent's reverse: " + parent["table"].parent);
+                    }
+                    else
+                        $scope.metadata["table"] = data.table;
                 }
-                else
-                    $scope.metadata["table"] = data.table;
             }
 
         });
@@ -187,10 +190,118 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         delete link["table"];
     };
 
-    $scope.isO2O = function (type) {
-//        return true;
-//        return type == 'Neutral' || type == 'OwnCopy';
-        return type == 'Neutral';
+    $scope.showRelations = function (record, parent) {
+        if (!parent) {
+            $scope.relations = [];
+            $scope.relations.push({
+                table: $scope.tableName,
+                active: true,
+                records: [record],
+                child: null
+            });
+        } else {
+            parent.child = [];
+            parent.child.push({
+                table: parent.table,
+                active: true,
+                records: [record],
+                child: null
+            });
+        }
+
+        $scope.metadata(record["ref-link"].split("/")[1], null, function (data) {
+            var links = data.table.link;
+            for (var i in links) {
+                var form = clone($scope.formData);
+                var sqlname = links[i]['$']['sqlname'];
+
+                // check 1v1
+                if (links[i]['$']['card11']) {
+                    form["ref-link"] = "db/" + links[i]['$']['desttable'];
+                    form.param.filter = links[i]['$']['reverse'] + ".PK=" + record["ref-link"].split('/')[2];
+                } else {
+                    form["ref-link"] = record["ref-link"];
+                    form["collection"] = "/" + sqlname;
+                }
+
+                form.method = "get";
+                if (!parent) {
+                    $scope.relations.push({
+                        table: sqlname,
+                        records: [],
+                        form: form
+                    });
+                } else {
+                    parent.child.push({
+                        table: sqlname,
+                        records: [],
+                        form: form
+                    });
+                }
+
+
+
+            }
+        });
+//        var links = clone($scope.metadata["table"].link);
+////        console.log("links: " + JSON.stringify(links));
+//        for (var i in links) {
+//            var form = clone($scope.formData);
+//            var sqlname = links[i]['$']['sqlname'];
+//
+//            // check 1v1
+//            if (links[i]['$']['card11']) {
+//                form["ref-link"] = "db/" + links[i]['$']['desttable'];
+//                form.param.filter = links[i]['$']['reverse'] + ".PK=" + record["ref-link"].split('/')[2];
+////                form["ref-link"] = record["ref-link"] + "/" + sqlname;
+////                console.log("composed form: " + JSON.stringify(form));
+//            } else {
+//                form["ref-link"] = record["ref-link"];
+//                form["collection"] = "/" + sqlname;
+//            }
+//
+//            form.method = "get";
+//            $scope.relations.push({
+//                table: sqlname,
+//                records: [],
+//                form: form
+//            });
+//
+//
+//        }
+
+    };
+
+    $scope.getRecords = function (record) {
+        if (record.form) {
+            $http.post('/am/rest', record.form).success(function (data) {
+                console.log("1v1 relation data: " + JSON.stringify(data));
+                record.records = data.entities;
+//                if (data instanceof Object) {
+//                    if (data.entities instanceof Array) {
+//                        record.records = data.entities;
+//                    } else if (data.type == 'Buffer') {
+////                        $scope.tableData.count = 0;
+//                    } else {
+//                        record.records = [data];
+//                    }
+//                } else {
+//                    record.records = [data];
+////                    $scope.message = data;
+//                    $scope.message = ($scope.message)? $scope.message + record.table + ",": record.table + ",";
+//
+//                    console.log("error form: " + JSON.stringify(record.form));
+//                }
+            });
+        }
+    };
+
+    $scope.showRecord = function (record) {
+        record.active = (record.active) ? !record.active : true;
+    };
+
+    $scope.hiddenRelations = function (record) {
+        delete $scope.relations;
     };
 
     $scope.removeOneTable = function () {
@@ -198,6 +309,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log) {
         $scope.formData.param.fields = [];
         $scope.fields = [];
         $scope.breadcrumb = [];
+        $scope.hiddenRelations();
     };
 
     $scope.getMeta = function (ref) {

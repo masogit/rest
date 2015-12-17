@@ -16,10 +16,20 @@
                 max-height: 600px;
                 overflow-y: auto;
             }
+
+            .records {
+                max-height: 600px;
+                overflow-y: auto;
+            }
         }
 
         @media only screen and (min-height: 1000px) {
             .sidebar {
+                max-height: 900px;
+                overflow-y: auto;
+            }
+
+            .records {
                 max-height: 900px;
                 overflow-y: auto;
             }
@@ -56,7 +66,7 @@
         <div class="col-md-2" ng-include="'amx_tree.html'"></div>
 
         <div class="col-md-10 main">
-            <div class="row">
+            <div class="row" role="toolbar">
                 <ol class="breadcrumb" ng-show="breadcrumb.length > 0">
                     <li ng-repeat="b in breadcrumb" ng-class="{'active':tableName == b}"><a href="#"
                                                                                             ng-click="metadata(b)">{{b}}</a>
@@ -80,78 +90,123 @@
                            size="30">
                     <button class="btn" type="button" ng-click="query()">Query</button>
                 </form>
-            </div>
-            <div class="table-responsive" ng-show="tableData">
+
                 <label class="text-danger" ng-show="message">
                     <a ng-click="clearMsg()">X</a> {{ message }}
                 </label>
 
-                <h4><strong>{{ tableName }} </strong>
-                    <small>({{ tableData.count }})</small>
-                    <small class="pull-right">
-                        Search
-                        <input type="text" placeholder="Dynamic Search" ng-model="search"
-                               ng-change="pageSize=(search.trim().length>0)?tableData.entities.length:10">
-                        Page
-                        <select ng-model="pageSize" ng-options="o as o for o in [10, 50, 100]">
-                        </select>
-                    </small>
-                </h4>
+            </div>
 
-                <span class="text-center" ng-show="loading">Loading....</span>
+            <div class="records" role="content">
+                <div class="table-responsive" ng-show="tableData && !relations" ng-include="'amx_records.html'"></div>
+                <div class="table-responsive" ng-show="relations">
+                    <p>
+                        <a ng-click="hiddenRelations()" class="badge"><span
+                                class="glyphicon glyphicon-arrow-left"></span>Back</a>
+                    </p>
 
-                <table class="table table-striped">
-                    <thead>
-                    <tr ng-repeat="e in tableData.entities" ng-if="$first">
-                        <th ng-show="e['ref-link']">
-                            <a ng-click="order('ref-link')">ref-link</a>
-                            <a ng-click="order('ref-link')" ng-show="predicate=='ref-link'">
-                                <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
-                                <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
-                            </a>
-                        </th>
-                        <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
-                            <a ng-click="order(key)">{{ key }}</a>
-                            <a ng-click="order(key)" ng-show="predicate==key">
-                                <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
-                                <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
-                            </a>
-                            <a ng-click="order(key)" ng-show="predicate==key">
-                                <span class="glyphicon glyphicon-refresh" ng-click="order(key, true)"></span>
-                            </a>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="e in tableData.entities|filter:search|orderBy:predicate:reverse|startFrom:currentPage*pageSize|limitTo:pageSize">
-                        <td ng-show="e['ref-link']"><a ng-click="load(e)">{{ e['ref-link'] }}</a></td>
-                        <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <nav class="pull-right">
-                    <ul class="pagination">
-                        <li>
-                            <a aria-label="Previous" ng-click="currentPage=(currentPage-1)<0?0:currentPage-1">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li ng-repeat="i in [] |range:tableData.entities.length/pageSize"
-                            ng-class="{active: currentPage==i}"
-                            ng-click="jump(i)"><a>{{ i + 1 }}</a></li>
-                        <li>
-                            <a aria-label="Next"
-                               ng-click="currentPage=(currentPage+1)>tableData.entities.length/pageSize?currentPage:currentPage+1">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
+                    <ul class="nav nav-pills">
+                        <li role="presentation" ng-repeat="r in relations" ng-class="{active: r.active}"
+                            ng-show="r.records.length>0" ng-init="getRecords(r)">
+                            <a ng-click="showRecord(r)">{{ r.table }}<span class="badge" ng-show="r.records.length>0">{{r.records.length}}</span></a>
                         </li>
                     </ul>
-                </nav>
+                    <!--<a href="#" ng-repeat="r in relations">{{ r.table }} <span class="badge">42</span></a>-->
+
+                    <!--<button class="btn btn-primary" type="button" ng-repeat="r in relations">-->
+                    <!--{{ r.table }} <span class="badge">4</span>-->
+                    <!--</button>-->
+                    <div class="panel panel-default" ng-repeat="r in relations|filter:{active: true}">
+                        <div class="panel-heading">{{ r.table }}</div>
+                        <div class="panel-body">
+                            <div ng-show="r.child" ng-include="'amNexLevel'"></div>
+                            <table class="table table-striped" ng-show="!r.child">
+                                <thead>
+                                <tr ng-repeat="e in r.records" ng-if="$first">
+                                    <th ng-show="e['ref-link']">
+                                        <a ng-click="order('ref-link')">ref-link</a>
+                                        <a ng-click="order('ref-link')" ng-show="predicate=='ref-link'">
+                                            <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
+                                            <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                                        </a>
+                                    </th>
+                                    <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
+                                        <a ng-click="order(key)">{{ key }}</a>
+                                        <a ng-click="order(key)" ng-show="predicate==key">
+                                            <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
+                                            <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                                        </a>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="e in r.records|orderBy:predicate:reverse">
+                                    <td ng-show="e['ref-link']">
+                                        <a ng-click="showRelations(e, r)">{{ e['ref-link'] }}</a>
+                                        <a ng-click="load(e)"><span class="glyphicon glyphicon-edit"></span></a>
+                                    </td>
+                                    <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script type="text/ng-template" id="amNexLevel">
+    <span style="display: none">{{ relations = r.child }}</span>
+    <ul class="nav nav-pills">
+        <li role="presentation" ng-repeat="r in relations" ng-class="{active: r.active}" ng-show="r.records.length>0"
+            ng-init="getRecords(r)">
+            <a ng-click="showRecord(r)">{{ r.table }}<span class="badge" ng-show="r.records.length>0">{{r.records.length}}</span></a>
+        </li>
+    </ul>
+    <!--<a href="#" ng-repeat="r in relations">{{ r.table }} <span class="badge">42</span></a>-->
 
+    <!--<button class="btn btn-primary" type="button" ng-repeat="r in relations">-->
+    <!--{{ r.table }} <span class="badge">4</span>-->
+    <!--</button>-->
+    <div class="panel panel-default" ng-repeat="r in relations|filter:{active: true}">
+        <div class="panel-heading">{{ r.table }}</div>
+        <div class="panel-body">
+            <div ng-show="r.child" ng-include="'amNexLevel'"></div>
+            <table class="table table-striped" ng-show="!r.child">
+                <thead>
+                <tr ng-repeat="e in r.records" ng-if="$first">
+                    <th ng-show="e['ref-link']">
+                        <a ng-click="order('ref-link')">ref-link</a>
+                        <a ng-click="order('ref-link')" ng-show="predicate=='ref-link'">
+                            <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
+                            <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                        </a>
+                    </th>
+                    <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
+                        <a ng-click="order(key)">{{ key }}</a>
+                        <a ng-click="order(key)" ng-show="predicate==key">
+                            <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
+                            <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                        </a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="e in r.records|orderBy:predicate:reverse">
+                    <td ng-show="e['ref-link']">
+                        <a ng-click="showRelations(e, r)">{{ e['ref-link'] }}</a>
+                        <a ng-click="load(e)"><span class="glyphicon glyphicon-edit"></span></a>
+                    </td>
+                    <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
 </body>
 </html>
