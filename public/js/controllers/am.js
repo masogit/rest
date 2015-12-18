@@ -34,6 +34,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     $scope.addFields = function () {
         $scope.formData.param.fields = $scope.fields;
         $scope.query();
+        $scope.hiddenRelations();
     };
 
     if (localStorage && localStorage[AM_FORM_DATA]) {
