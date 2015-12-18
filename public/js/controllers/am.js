@@ -301,7 +301,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
             delete $scope.relations;
             $scope.removeBreadcrumb();
         } else {
-            $scope.removeBreadcrumb(record.form["ref-link"]);
+            $scope.removeBreadcrumb("db/" + record.table + "/dummy");
             delete record.child;
         }
     };
