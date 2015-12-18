@@ -91,7 +91,7 @@
             <div class="row" role="toolbar">
                 <ol class="breadcrumb">
                     <li>Goto:</li>
-                    <li ng-repeat="b in breadcrumb" ng-class="{'active':tableName == b}">
+                    <li ng-repeat="b in breadcrumb">
                         <a href="#" ng-click="useBreadcrumb(b)">{{b.label}}</a>
                     </li>
                 </ol>
