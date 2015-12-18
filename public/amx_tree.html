@@ -45,8 +45,8 @@
                        ng-click="toggleFilter(link.table.parent+'.'+field['$']['sqlname'])">
                 {{ field['$']['sqlname'] }}<br>
             </span>
-            <span style="display: none">{{xxx = link.table.parent}}</span>
-            <span ng-repeat="link in link.table.link | filter: fieldSearch" ng-init="link['parent']=xxx">
+            <span style="display: none">{{parent = link.table.parent}}</span>
+            <span ng-repeat="link in link.table.link | filter: fieldSearch" ng-init="link['parent']=parent">
                 <a ng-click="metadata(link['$']['desttable'], link)"
                    ng-show="!link.table && link['$']['card11']">
                     <span class="glyphicon glyphicon-plus"></span>
