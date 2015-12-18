@@ -149,6 +149,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
                 $scope.formData.param.fields = [];
                 $scope.fields = [];
                 $scope.query();
+                $scope.hiddenRelations();
             }
 
         }
