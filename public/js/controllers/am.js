@@ -66,6 +66,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
                     $scope.tableData.entities = [];
                     $scope.tableData.entities.push(data);
                 }
+                $scope.tableName = $scope.tableData.entities[0]["ref-link"].split("/")[1];
             } else {
                 $scope.message = data;
             }
@@ -140,13 +141,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
             metadata = "metadata/schema/" + schema;
 
             // click query table from tree
-            if (!link) {
+            if (!link && !callback) {
                 $scope.formData['ref-link'] = "db/" + schema;
-                $scope.tableName = schema;
+//                $scope.tableName = schema;
                 $scope.formData.param.fields = [];
                 $scope.fields = [];
-                if ($scope.breadcrumb.indexOf(schema) < 0)
-                    $scope.breadcrumb.push(schema);
                 $scope.query();
             }
 
@@ -190,11 +189,46 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
         delete link["table"];
     };
 
+    $scope.addBreadcrumb = function (refLink) {
+        var bread = {
+            label: refLink.split("/")[1] + "[" + refLink.split("/")[2] + "]",
+            link: refLink
+        };
+
+        if ($scope.breadcrumb.map(function (e) {
+            return e.label;
+        }).indexOf(bread.label) < 0)
+            $scope.breadcrumb.push(bread);
+    };
+
+    $scope.removeBreadcrumb = function (refLink) {
+        if (!refLink)
+            $scope.breadcrumb = [];
+        else {
+            var bread = {
+                label: refLink.split("/")[1] + "[" + refLink.split("/")[2] + "]",
+                link: refLink
+            };
+            var pos = $scope.breadcrumb.map(function (e) {
+                return e.label;
+            }).indexOf(bread.label);
+
+            $scope.breadcrumb.splice(pos, 1);
+        }
+    };
+
+    $scope.useBreadcrumb = function (bread) {
+        var form = clone($scope.formData);
+        form["ref-link"] = bread.link;
+        $scope.query(form);
+        $scope.hiddenRelations();
+    };
+
     $scope.showRelations = function (record, parent) {
         if (!parent) {
             $scope.relations = [];
             $scope.relations.push({
-                table: $scope.tableName,
+                table: record["ref-link"].split("/")[1],
                 active: true,
                 records: [record],
                 child: null
@@ -208,6 +242,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
                 child: null
             });
         }
+
+        $scope.addBreadcrumb(record["ref-link"]);
 
         $scope.metadata(record["ref-link"].split("/")[1], null, function (data) {
             var links = data.table.link;
@@ -240,7 +276,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
                 }
 
 
-
             }
         });
 
@@ -249,7 +284,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     $scope.getRecords = function (record) {
         if (record.form) {
             $http.post('/am/rest', record.form).success(function (data) {
-                console.log("1v1 relation data: " + JSON.stringify(data));
                 record.records = data.entities;
             });
         }
@@ -260,9 +294,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     };
 
     $scope.hiddenRelations = function (record) {
-        if(!record){
+        if (!record) {
             delete $scope.relations;
+            $scope.removeBreadcrumb();
         } else {
+            $scope.removeBreadcrumb(record["ref-link"]);
             delete record.child;
         }
     };

@@ -1,0 +1,100 @@
+<p>
+    <a ng-click="hiddenRelations()" class="badge"><span
+            class="glyphicon glyphicon-arrow-left"></span>Back</a>
+</p>
+
+<ul class="nav nav-pills">
+    <li role="presentation" ng-repeat="r in relations" ng-class="{active: r.active}"
+        ng-show="r.records.length>0" ng-init="getRecords(r)">
+        <a ng-click="showRecord(r)">{{ r.table }}<span class="badge" ng-show="r.records.length>0">{{r.records.length}}</span></a>
+    </li>
+</ul>
+
+<div class="panel panel-default" ng-repeat="r in relations|filter:{active: true}">
+    <div class="panel-heading">{{ r.table }}</div>
+    <div class="panel-body">
+        <div ng-show="r.child" ng-include="'amNexLevel'"></div>
+        <table class="table table-striped" ng-show="!r.child">
+            <thead>
+            <tr ng-repeat="e in r.records" ng-if="$first">
+                <th ng-show="e['ref-link']">
+                    <a ng-click="order('ref-link')">ref-link</a>
+                    <a ng-click="order('ref-link')" ng-show="predicate=='ref-link'">
+                        <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
+                        <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                    </a>
+                </th>
+                <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
+                    <a ng-click="order(key)">{{ key }}</a>
+                    <a ng-click="order(key)" ng-show="predicate==key">
+                        <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
+                        <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                    </a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="e in r.records|orderBy:predicate:reverse">
+                <td ng-show="e['ref-link']">
+                    <a ng-click="showRelations(e, r)">{{ e['ref-link'] }}</a>
+                    <a ng-click="load(e)"><span class="glyphicon glyphicon-edit"></span></a>
+                </td>
+                <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/ng-template" id="amNexLevel">
+    <span style="display: none">{{ relations = r.child }}</span>
+    <p>
+        <a ng-click="hiddenRelations(r)" class="badge"><span
+                class="glyphicon glyphicon-arrow-left"></span>Back</a>
+    </p>
+
+    <ul class="nav nav-pills">
+        <li role="presentation" ng-repeat="r in relations" ng-class="{active: r.active}" ng-show="r.records.length>0"
+            ng-init="getRecords(r)">
+            <a ng-click="showRecord(r)">{{ r.table }}<span class="badge" ng-show="r.records.length>0">{{r.records.length}}</span></a>
+        </li>
+    </ul>
+
+    <div class="panel panel-default" ng-repeat="r in relations|filter:{active: true}">
+        <div class="panel-heading">{{ r.table }}</div>
+        <div class="panel-body">
+            <div ng-show="r.child" ng-include="'amNexLevel'"></div>
+            <table class="table table-striped" ng-show="!r.child">
+                <thead>
+                <tr ng-repeat="e in r.records" ng-if="$first">
+                    <th ng-show="e['ref-link']">
+                        <a ng-click="order('ref-link')">ref-link</a>
+                        <a ng-click="order('ref-link')" ng-show="predicate=='ref-link'">
+                            <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
+                            <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                        </a>
+                    </th>
+                    <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
+                        <a ng-click="order(key)">{{ key }}</a>
+                        <a ng-click="order(key)" ng-show="predicate==key">
+                            <span class="glyphicon glyphicon-arrow-up" ng-show="!reverse"></span>
+                            <span class="glyphicon glyphicon-arrow-down" ng-show="reverse"></span>
+                        </a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="e in r.records|orderBy:predicate:reverse">
+                    <td ng-show="e['ref-link']">
+                        <a ng-click="showRelations(e, r)">{{ e['ref-link'] }}</a>
+                        <a ng-click="load(e)"><span class="glyphicon glyphicon-edit"></span></a>
+                    </td>
+                    <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
