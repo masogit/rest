@@ -58,9 +58,16 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 //            console.log("rest data: " + JSON.stringify(data));
             $scope.loading = false;
             if (data instanceof Object) {
-//                console.log("query data:" + JSON.stringify(data));
+                console.log("query data:" + JSON.stringify(data));
                 if (data.entities instanceof Array)
                     $scope.tableData = data;
+                else if (data.type == 'Buffer') {
+                    $scope.tableData.count = 0;
+                } else {
+                    $scope.tableData.count = 1;
+                    $scope.tableData.entities = [];
+                    $scope.tableData.entities.push(data);
+                }
             } else {
                 $scope.message = data;
             }
