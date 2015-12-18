@@ -34,6 +34,28 @@
                 overflow-y: auto;
             }
         }
+        @media only screen and (min-width: 1400px) {
+            .panel-body{
+                max-width: 1350px;
+                overflow: auto;
+            }
+
+            .table{
+                max-width: 1300px;
+                overflow: auto;
+            }
+        }
+        @media only screen and (min-width: 1920px) {
+            .panel-body{
+                max-width: 1550px;
+                overflow: auto;
+            }
+
+            .table{
+                max-width: 1500px;
+                overflow: auto;
+            }
+        }
     </style>
 </head>
 <!-- SET THE CONTROLLER -->
@@ -67,7 +89,8 @@
 
         <div class="col-md-10 main">
             <div class="row" role="toolbar">
-                <ol class="breadcrumb" ng-show="breadcrumb.length > 0">
+                <ol class="breadcrumb">
+                    <li>Goto:</li>
                     <li ng-repeat="b in breadcrumb" ng-class="{'active':tableName == b}">
                         <a href="#" ng-click="useBreadcrumb(b)">{{b.label}}</a>
                     </li>
