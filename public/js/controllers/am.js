@@ -51,22 +51,16 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
         // if param is query form, use it
         var form = form ? form : clone($scope.formData);
+        $scope.tableName = form["ref-link"].split("/")[1];
 
         form.method = "get";
         $http.post('/am/rest', form).success(function (data) {
 //            console.log("rest data: " + JSON.stringify(data));
             $scope.loading = false;
             if (data instanceof Object) {
+//                console.log("query data:" + JSON.stringify(data));
                 if (data.entities instanceof Array)
                     $scope.tableData = data;
-                else if (data.type == 'Buffer') {
-                    $scope.tableData.count = 0;
-                } else {
-                    $scope.tableData.count = 1;
-                    $scope.tableData.entities = [];
-                    $scope.tableData.entities.push(data);
-                }
-                $scope.tableName = $scope.tableData.entities[0]["ref-link"].split("/")[1];
             } else {
                 $scope.message = data;
             }
@@ -202,6 +196,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     };
 
     $scope.removeBreadcrumb = function (refLink) {
+//        console.log("refLink: " + refLink);
         if (!refLink)
             $scope.breadcrumb = [];
         else {
@@ -294,11 +289,12 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     };
 
     $scope.hiddenRelations = function (record) {
+//        console.log("record: " + JSON.stringify(record));
         if (!record) {
             delete $scope.relations;
             $scope.removeBreadcrumb();
         } else {
-            $scope.removeBreadcrumb(record["ref-link"]);
+            $scope.removeBreadcrumb(record.form["ref-link"]);
             delete record.child;
         }
     };
@@ -309,6 +305,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
         $scope.fields = [];
         $scope.breadcrumb = [];
         $scope.hiddenRelations();
+        delete $scope.tableData;
+        delete $scope.tableName;
     };
 
     $scope.getMeta = function (ref) {
