@@ -21,7 +21,7 @@
             <table ng-show="!r.child" class="table table-striped">
                 <thead>
                 <tr ng-repeat="e in r.records" ng-if="$first">
-                    <th ng-show="e['ref-link']"><label class="label-danger label">{{ r.table }}</label></th>
+                    <th ng-show="e['ref-link']"><label class="badge">{{ r.table }}</label></th>
                     <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
                 </tr>
                 </thead>
@@ -67,7 +67,7 @@
                 <table ng-show="!r.child" class="table table-striped">
                     <thead>
                     <tr ng-repeat="e in r.records" ng-if="$first">
-                        <th ng-show="e['ref-link']"><label class="label label-danger">{{ r.table }}</label></th>
+                        <th ng-show="e['ref-link']"><label class="badge">{{ r.table }}</label></th>
                         <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
                     </tr>
                     </thead>
