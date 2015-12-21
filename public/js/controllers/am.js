@@ -299,12 +299,12 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
     $scope.hiddenRelations = function (record) {
 //        console.log("record: " + JSON.stringify(record));
-        if (!record) {
-            delete $scope.relations;
-            $scope.removeBreadcrumb();
-        } else {
+        if (record && record.table){
             $scope.removeBreadcrumb("db/" + record.table + "/dummy");
             delete record.child;
+        } else {
+            delete $scope.relations;
+            $scope.removeBreadcrumb();
         }
     };
 

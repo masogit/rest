@@ -9,7 +9,7 @@
         <div class="panel-heading">
             <ul class="nav nav-pills">
                 <li role="presentation"><a ng-click="hiddenRelations(r)"><span
-                        class="glyphicon glyphicon-arrow-left"></span>Back</a></li>
+                        class="glyphicon glyphicon-remove"></span>Close</a></li>
                 <li role="presentation" ng-repeat="r in childs" ng-class="{active: r.active}"
                     ng-show="r.records.length>0"
                     ng-init="getRecords(r)">
