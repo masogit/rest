@@ -1,12 +1,18 @@
 <span style="display: none">{{ r.child = relations }}</span>
 <div ng-show="r.child" ng-include="'amNexLevel'"></div>
 
+<div class="checkbox">
+    <label>
+        <input type="checkbox" ng-checked="showCompact" ng-click="showCompact=!showCompact"> Compact View
+    </label>
+</div>
+
 
 <script type="text/ng-template" id="amNexLevel">
     <span style="display: none">{{ childs = r.child }}</span>
 
     <div class="panel panel-default">
-        <div class="panel-heading">
+        <div class="panel-heading" ng-show="!showCompact">
             <ul class="nav nav-pills">
                 <li role="presentation"><a ng-click="hiddenRelations(r)"><span
                         class="glyphicon glyphicon-remove"></span>Close</a></li>
