@@ -1,54 +1,23 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <ul class="nav nav-pills">
-            <li role="presentation"><a ng-click="hiddenRelations()"><span class="glyphicon glyphicon-arrow-left"></span>Back</a>
-            </li>
-            <li role="presentation" ng-repeat="r in relations" ng-class="{active: r.active}"
-                ng-show="r.records.length>0" ng-init="getRecords(r)">
-                <a ng-click="showRecord(r)">{{ r.table }}<span class="badge">{{r.records.length}}</span></a>
-            </li>
-        </ul>
-    </div>
-    <div class="panel-body" ng-repeat="r in relations|filter:{active: true}" ng-init="pos=$index">
-        <div ng-show="r.child" ng-include="'amNexLevel'"></div>
-        <table ng-show="!r.child" class="table table-striped">
-            <thead>
-            <tr ng-repeat="e in r.records" ng-if="$first">
-                <th ng-show="e['ref-link']"><label class="badge">{{ r.table }}</label></th>
-                <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="e in r.records|orderBy:predicate:reverse">
-                <td ng-show="e['ref-link']">
-                    <a ng-click="showRelations(e, r)" ng-if="pos>0">{{ e['ref-link'] }}</a>
-                    <span ng-if="pos==0">{{ e['ref-link'] }}</span>
-                    <a ng-click="load(e)"><span class="glyphicon glyphicon-edit"></span></a>
-                </td>
-                <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+<span style="display: none">{{ r.child = relations }}</span>
+<div ng-show="r.child" ng-include="'amNexLevel'"></div>
+
 
 <script type="text/ng-template" id="amNexLevel">
-    <span style="display: none">{{ relations = r.child }}</span>
+    <span style="display: none">{{ childs = r.child }}</span>
 
     <div class="panel panel-default">
         <div class="panel-heading">
             <ul class="nav nav-pills">
                 <li role="presentation"><a ng-click="hiddenRelations(r)"><span
                         class="glyphicon glyphicon-arrow-left"></span>Back</a></li>
-                <li role="presentation" ng-repeat="r in relations" ng-class="{active: r.active}"
+                <li role="presentation" ng-repeat="r in childs" ng-class="{active: r.active}"
                     ng-show="r.records.length>0"
                     ng-init="getRecords(r)">
                     <a ng-click="showRecord(r)">{{ r.table }}<span class="badge">{{r.records.length}}</span></a>
                 </li>
             </ul>
         </div>
-        <div class="panel-body" ng-repeat="r in relations|filter:{active: true}" ng-init="pos=$index">
+        <div class="panel-body" ng-repeat="r in childs|filter:{active: true}" ng-init="pos=$index">
             <div ng-show="r.child" ng-include="'amNexLevel'"></div>
             <table ng-show="!r.child" class="table table-striped">
                 <thead>

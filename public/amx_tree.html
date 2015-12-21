@@ -14,49 +14,30 @@
         <span class="glyphicon glyphicon-eye-open"></span></a>
 
     <div class="sidebar">
-        <span ng-repeat="field in metadata.table.field | filter: fieldSearch">
-            <input type="checkbox" ng-checked="fields.indexOf(field['$']['sqlname']) > -1"
-                   ng-click="toggleFilter(field['$']['sqlname'])">
-            {{ field['$']['sqlname'] }} <br>
-        </span>
-
-        <span ng-repeat="link in metadata.table.link | filter: fieldSearch">
-            <a ng-click="metadata(link['$']['desttable'], link)"
-               ng-show="!link.table && link['$']['card11']">
-                <span class="glyphicon glyphicon-plus"></span>
-            </a>
-
-            <a ng-click="foldChild(link)" ng-show="link.table">
-                <span class="glyphicon glyphicon-minus"></span>
-            </a>
-
-            <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
-            <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px" ng-init="xxx = link.table"></div>
-        </span>
-
-
+        <span style="display: none">{{link.table = metadata.table}}</span>
+        <div ng-show="link.table" ng-include="'amTree'"></div>
     </div>
 </div>
 
 <script type="text/ng-template" id="amTree">
-            <span ng-repeat="field in link.table.field | filter: fieldSearch">
-                <input type="checkbox"
-                       ng-checked="fields.indexOf(link.table.parent+'.'+field['$']['sqlname']) > -1"
-                       ng-click="toggleFilter(link.table.parent+'.'+field['$']['sqlname'])">
-                {{ field['$']['sqlname'] }}<br>
-            </span>
-            <span style="display: none">{{parent = link.table.parent}}</span>
-            <span ng-repeat="link in link.table.link | filter: fieldSearch" ng-init="link['parent']=parent">
-                <a ng-click="metadata(link['$']['desttable'], link)"
-                   ng-show="!link.table && link['$']['card11']">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </a>
+    <span style="display: none">{{parent = link.table.parent}}</span>
+    <span ng-repeat="field in link.table.field | filter: fieldSearch">
+        <input type="checkbox"
+               ng-checked="fields.indexOf((link.table.parent)?link.table.parent+'.'+field['$']['sqlname']:field['$']['sqlname']) > -1"
+               ng-click="toggleFilter((link.table.parent)?link.table.parent+'.'+field['$']['sqlname']:field['$']['sqlname'])">
+        {{ field['$']['sqlname'] }}<br>
+    </span>
+    <span ng-repeat="link in link.table.link | filter: fieldSearch" ng-init="link['parent']=parent">
+        <a ng-click="metadata(link['$']['desttable'], link)"
+           ng-show="!link.table && link['$']['card11']">
+            <span class="glyphicon glyphicon-plus"></span>
+        </a>
 
-                <a ng-click="foldChild(link)" ng-show="link.table">
-                    <span class="glyphicon glyphicon-minus"></span>
-                </a>
+        <a ng-click="foldChild(link)" ng-show="link.table">
+            <span class="glyphicon glyphicon-minus"></span>
+        </a>
 
-                <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
-                <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
-            </span>
+        <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
+        <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
+    </span>
 </script>
