@@ -21,7 +21,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     $scope.pageSize = 10;
     $scope.fields = [];
     $scope.breadcrumb = [];
-    $scope.toggleCheckbox = function toggleSelection(array, field) {
+    $scope.toggleCheckbox = function (array, field) {
         if (!array)
             array = [];
         var idx = array.indexOf(field);
@@ -235,17 +235,23 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
         if (!parent) {
             $scope.relations = [];
             $scope.relations.push({
-                table: record["ref-link"].split("/")[1],
+                link: record["ref-link"].split("/")[1],
+                'ref-link': record["ref-link"],
+                schema: record["ref-link"].split("/")[1],
                 active: true,
                 records: [record],
+                displayColumns: [],
                 child: null
             });
         } else {
             parent.child = [];
             parent.child.push({
-                table: parent.table,
+                link: parent.link,
+                'ref-link': parent["ref-link"],
+                schema: parent.schema,
                 active: true,
                 records: [record],
+                displayColumns: [],
                 child: null
             });
         }
@@ -258,10 +264,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
             for (var i in links) {
                 var form = clone($scope.formData);
                 var sqlname = links[i]['$']['sqlname'];
+                var schema = links[i]['$']['desttable'];
 
                 // check 1v1
                 if (links[i]['$']['card11']) {
-                    form["ref-link"] = "db/" + links[i]['$']['desttable'];
+                    form["ref-link"] = "db/" + schema;
                     form.param.filter = links[i]['$']['reverse'] + ".PK=" + record["ref-link"].split('/')[2];
                 } else {
                     form["ref-link"] = record["ref-link"];
@@ -273,14 +280,18 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
                 if (!parent) {
                     $scope.relations.push({
-                        table: sqlname,
+                        link: sqlname,
+                        schema: schema,
                         records: [],
+                        displayColumns: [],
                         form: form
                     });
                 } else {
                     parent.child.push({
-                        table: sqlname,
+                        link: sqlname,
+                        schema: schema,
                         records: [],
+                        displayColumns: [],
                         form: form
                     });
                 }
@@ -291,11 +302,34 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
     };
 
+    $scope.getFields = function (record) {
+        $scope.metadata(record.schema, null, function (data) {
+            record["fields"] = data.table.field;
+        });
+    };
+
     $scope.getRecords = function (record) {
         if (record.form) {
+            if (record.displayColumns) {
+                record.form.param.fields = record.displayColumns;
+            }
+
             $http.post('/am/rest', record.form).success(function (data) {
                 record.records = data.entities;
             });
+        } else {
+//            var form = clone($scope.formData);
+//            form.param.fields = "";
+//            form.method = "get";
+//            form["ref-link"] = record["ref-link"];
+//            if (record.displayColumns) {
+//                form.param.fields = record.displayColumns;
+//            }
+//
+//            console.log("form: " + JSON.stringify(form));
+//            $http.post('/am/rest', form).success(function (data) {
+//                record.records = data.entities;
+//            });
         }
     };
 
@@ -305,7 +339,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
     $scope.hiddenRelations = function (record) {
 //        console.log("record: " + JSON.stringify(record));
-        if (record && record.table) {
+        if (record && record.link) {
             $scope.removeBreadcrumb("db/" + record.table + "/dummy");
             delete record.child;
         } else {

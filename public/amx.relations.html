@@ -19,7 +19,7 @@
                 <li role="presentation" ng-repeat="r in childs" ng-class="{active: r.active}"
                     ng-show="r.records.length>0"
                     ng-init="getRecords(r)">
-                    <a ng-click="showRecord(r)">{{ r.table }}<span class="badge">{{r.records.length}}</span></a>
+                    <a ng-click="showRecord(r)">{{ r.link }}<span class="badge">{{r.records.length}}</span></a>
                 </li>
             </ul>
         </div>
@@ -28,25 +28,28 @@
             <table ng-show="!r.child" class="table table-striped">
                 <thead>
                 <tr ng-repeat="e in r.records" ng-if="$first">
-                    <th ng-show="e['ref-link']"><label class="badge">{{ r.table }}</label></th>
+                    <th ng-show="e['ref-link']">
+                        <label class="badge" ng-click="r['showFields']=!r['showFields']">{{ r.link }}
+                        </label>
+                    </th>
                     <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
                 </tr>
-                <!--<tr>-->
-                    <!--<td colspan="{{ length(r.records[0]) }}">-->
-                        <!--<form class="form-inline">-->
-                            <!--<a ng-click="getRecords(r)" class="badge"><span-->
-                                    <!--class="glyphicon glyphicon-eye-close"></span></a>-->
-
-                            <!--<div class="table">-->
-                                <!--<div class="checkbox" ng-repeat="field in r.fields">-->
-                                    <!--<label>-->
-                                        <!--<input type="checkbox" ng-click="toggleCheckbox(r.displayColumns, field['$']['sqlname'])">{{ field['$']['sqlname'] }}-->
-                                    <!--</label>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</form>-->
-                    <!--</td>-->
-                <!--</tr>-->
+                <tr ng-show="r['showFields']">
+                    <td colspan="{{ length(r.records[0]) }}">
+                        <form class="form-inline" ng-init="getFields(r)">
+                            <a ng-click="getRecords(r)"><span
+                                    class="glyphicon glyphicon-eye-close"></span></a>
+                            {{ r.displayColumns }}
+                            <div class="table">
+                                <div class="checkbox" ng-repeat="field in r.fields">
+                                    <label>
+                                        <input type="checkbox" ng-click="toggleCheckbox(r.displayColumns, field['$']['sqlname'])">{{ field['$']['sqlname'] }}
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="e in r.records">
