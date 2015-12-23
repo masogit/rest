@@ -21,13 +21,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     $scope.pageSize = 10;
     $scope.fields = [];
     $scope.breadcrumb = [];
-    $scope.toggleFilter = function toggleSelection(field) {
-        var idx = $scope.fields.indexOf(field);
+    $scope.toggleCheckbox = function toggleSelection(array, field) {
+        if (!array)
+            array = [];
+        var idx = array.indexOf(field);
         if (idx > -1) {
-            $scope.fields.splice(idx, 1);
+            array.splice(idx, 1);
         }
         else {
-            $scope.fields.push(field);
+            array.push(field);
         }
 //        $scope.addFields();
     };
@@ -59,7 +61,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 //            console.log("rest data: " + JSON.stringify(data));
             $scope.loading = false;
             if (data instanceof Object) {
-                console.log("query data:" + JSON.stringify(data));
+//                console.log("query data:" + JSON.stringify(data));
                 if (data.entities instanceof Array)
                     $scope.tableData = data;
                 else if (data.type == 'Buffer') {
@@ -229,6 +231,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     };
 
     $scope.showRelations = function (record, parent) {
+
         if (!parent) {
             $scope.relations = [];
             $scope.relations.push({
@@ -251,6 +254,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
         $scope.metadata(record["ref-link"].split("/")[1], null, function (data) {
             var links = data.table.link;
+
             for (var i in links) {
                 var form = clone($scope.formData);
                 var sqlname = links[i]['$']['sqlname'];
@@ -264,7 +268,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
                     form["collection"] = "/" + sqlname;
                 }
 
+                form.param.fields = "";
                 form.method = "get";
+
                 if (!parent) {
                     $scope.relations.push({
                         table: sqlname,
@@ -278,7 +284,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
                         form: form
                     });
                 }
-
+//                console.log("fields: " + JSON.stringify(fields));
 
             }
         });
@@ -299,7 +305,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
     $scope.hiddenRelations = function (record) {
 //        console.log("record: " + JSON.stringify(record));
-        if (record && record.table){
+        if (record && record.table) {
             $scope.removeBreadcrumb("db/" + record.table + "/dummy");
             delete record.child;
         } else {
@@ -343,6 +349,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
             $scope.serverbar = !$scope.serverbar;
         } else
             $scope.serverbar = true;
+    };
+
+    $scope.length = function (obj) {
+        return Object.keys(obj).length;
     };
 
     $scope.metadata("all");

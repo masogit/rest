@@ -31,9 +31,25 @@
                     <th ng-show="e['ref-link']"><label class="badge">{{ r.table }}</label></th>
                     <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
                 </tr>
+                <!--<tr>-->
+                    <!--<td colspan="{{ length(r.records[0]) }}">-->
+                        <!--<form class="form-inline">-->
+                            <!--<a ng-click="getRecords(r)" class="badge"><span-->
+                                    <!--class="glyphicon glyphicon-eye-close"></span></a>-->
+
+                            <!--<div class="table">-->
+                                <!--<div class="checkbox" ng-repeat="field in r.fields">-->
+                                    <!--<label>-->
+                                        <!--<input type="checkbox" ng-click="toggleCheckbox(r.displayColumns, field['$']['sqlname'])">{{ field['$']['sqlname'] }}-->
+                                    <!--</label>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</form>-->
+                    <!--</td>-->
+                <!--</tr>-->
                 </thead>
                 <tbody>
-                <tr ng-repeat="e in r.records|orderBy:predicate:reverse">
+                <tr ng-repeat="e in r.records">
                     <td ng-show="e['ref-link']">
                         <a ng-click="showRelations(e, r)" ng-if="pos>0">{{ e['ref-link'] }}</a>
                         <span ng-if="pos==0">{{ e['ref-link'] }}</span>

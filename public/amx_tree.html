@@ -24,7 +24,7 @@
     <span ng-repeat="field in link.table.field | filter: fieldSearch">
         <input type="checkbox"
                ng-checked="fields.indexOf((link.table.parent)?link.table.parent+'.'+field['$']['sqlname']:field['$']['sqlname']) > -1"
-               ng-click="toggleFilter((link.table.parent)?link.table.parent+'.'+field['$']['sqlname']:field['$']['sqlname'])">
+               ng-click="toggleCheckbox(fields, (link.table.parent)?link.table.parent+'.'+field['$']['sqlname']:field['$']['sqlname'])">
         {{ field['$']['sqlname'] }}<br>
     </span>
     <span ng-repeat="link in link.table.link | filter: fieldSearch" ng-init="link['parent']=parent">
