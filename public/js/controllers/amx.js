@@ -34,8 +34,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 //        $scope.addFields();
     };
     $scope.addFields = function () {
-        $scope.formData.param.fields = $scope.fields;
-        $scope.query();
+        var form = clone($scope.formData);
+        form.param.fields = $scope.fields;
+        $scope.query(form);
         $scope.hiddenRelations();
     };
 
@@ -95,9 +96,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
         });
 
         modalInstance.result.then(function () {
-            $scope.query();
-        }, function () {
-            $log.info('Modal dismissed at: ' + new Date());
+
         });
     };
 
