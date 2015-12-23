@@ -29,17 +29,16 @@
                 <thead>
                 <tr ng-repeat="e in r.records" ng-if="$first">
                     <th ng-show="e['ref-link']">
-                        <label class="badge" ng-click="r['showFields']=!r['showFields']">{{ r.link }}
-                        </label>
+                        <label class="badge">{{ r.link }}</label>
+                        <label class="glyphicon glyphicon-resize-full" ng-if="pos>0 && r['showFields']" ng-click="r['showFields']=!r['showFields']"></label>
+                        <label class="glyphicon glyphicon-resize-small" ng-if="pos>0 && !r['showFields']" ng-click="r['showFields']=!r['showFields']"></label>
                     </th>
                     <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
                 </tr>
                 <tr ng-show="r['showFields']">
                     <td colspan="{{ length(r.records[0]) }}">
                         <form class="form-inline" ng-init="getFields(r)">
-                            <a ng-click="getRecords(r)"><span
-                                    class="glyphicon glyphicon-eye-close"></span></a>
-                            {{ r.displayColumns }}
+                            <a ng-click="getRecords(r)">Filter</a>
                             <div class="table">
                                 <div class="checkbox" ng-repeat="field in r.fields">
                                     <label>
