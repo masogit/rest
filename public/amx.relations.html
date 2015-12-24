@@ -32,8 +32,10 @@
                 <tr ng-repeat="e in r.records" ng-if="$first">
                     <th ng-show="e['ref-link']">
                         <label class="badge">{{ r.link }}</label>
-                        <label class="glyphicon glyphicon-resize-full" ng-if="pos>0 && r['showFields']" ng-click="r['showFields']=!r['showFields']"></label>
-                        <label class="glyphicon glyphicon-resize-small" ng-if="pos>0 && !r['showFields']" ng-click="r['showFields']=!r['showFields']"></label>
+                        <label class="glyphicon glyphicon-resize-full" ng-if="pos>0 && r['showFields']"
+                               ng-click="r['showFields']=!r['showFields']"></label>
+                        <label class="glyphicon glyphicon-resize-small" ng-if="pos>0 && !r['showFields']"
+                               ng-click="r['showFields']=!r['showFields']"></label>
                     </th>
                     <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
                 </tr>
@@ -42,11 +44,17 @@
                 <tr ng-show="r['showFields']">
                     <td colspan="{{ length(r.records[0]) }}">
                         <form class="form-inline" ng-init="getFields(r)">
-                            <a ng-click="getRecords(r)">Filter</a>
+
+                            <input type="text" class="form-control" placeholder="Search fields..."
+                                   ng-model="r.fieldSearch">
+                            <button ng-click="getRecords(r)">Filter</button>
+
                             <div class="table">
-                                <div class="checkbox" ng-repeat="field in r.fields">
+                                <div class="checkbox" ng-repeat="field in r.fields|filter:r.fieldSearch">
                                     <label>
-                                        <input type="checkbox" ng-click="toggleCheckbox(r.displayColumns, field['$']['sqlname'])">{{ field['$']['sqlname'] }}
+                                        <input type="checkbox"
+                                               ng-click="toggleCheckbox(r.displayColumns, field['sqlname'])">{{
+                                        field['sqlname'] }}
                                     </label>
                                 </div>
                             </div>

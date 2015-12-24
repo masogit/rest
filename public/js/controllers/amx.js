@@ -145,11 +145,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
             // click query table from tree
             if (!link && !callback) {
-                $scope.formData['ref-link'] = "db/" + schema;
+                form['ref-link'] = "db/" + schema;
 //                $scope.tableName = schema;
-                $scope.formData.param.fields = [];
+                form.param.fields = [];
                 $scope.fields = [];
-                $scope.query();
+                $scope.query(form);
                 $scope.hiddenRelations();
             }
 
@@ -303,7 +303,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
     $scope.getFields = function (record) {
         $scope.metadata(record.schema, null, function (data) {
-            record["fields"] = data.table.field;
+            record["fields"] = [];
+            for (var i in data.table.field)
+                record["fields"].push(data.table.field[i]['$']);
         });
     };
 
