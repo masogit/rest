@@ -180,8 +180,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
                             link["table"].parent = link["$"]["sqlname"];
 //                    console.log("parent's reverse: " + parent["table"].parent);
                     }
-                    else
+                    else {
                         $scope.metadata["table"] = data.table;
+                        $scope.metadata["table"]["name"] = schema;
+                    }
+
                 }
             }
 

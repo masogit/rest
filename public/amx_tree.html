@@ -9,9 +9,9 @@
 <div ng-show="metadata.table">
     <input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch">
     <!-- action -->
-    <a ng-click="removeOneTable()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span></a>
+    <a ng-click="removeOneTable()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span> {{ metadata.table.name }}</a>
     <a ng-click="addFields()" class="badge pull-right" ng-show="fields.length > 0">
-        <span class="glyphicon glyphicon-eye-open"></span></a>
+        Filter <span class="glyphicon glyphicon-eye-open"></span></a>
 
     <div class="sidebar">
         <span style="display: none">{{link.table = metadata.table}}</span>
