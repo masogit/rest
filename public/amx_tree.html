@@ -7,7 +7,7 @@
 </div>
 
 <div ng-show="metadata.table">
-    <!--<input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch">-->
+    <input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch">
     <!-- action -->
     <a ng-click="removeOneTable()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span></a>
     <a ng-click="addFields()" class="badge pull-right" ng-show="fields.length > 0">
@@ -21,13 +21,13 @@
 
 <script type="text/ng-template" id="amTree">
     <span style="display: none">{{parent = link.table.parent}}</span>
-    <span ng-repeat="field in link.table.field | filter: fieldSearch">
+    <span ng-repeat="field in link.table.field | filter: filterFields(fieldSearch)">
         <input type="checkbox"
                ng-checked="fields.indexOf((link.table.parent)?link.table.parent+'.'+field['$']['sqlname']:field['$']['sqlname']) > -1"
                ng-click="toggleCheckbox(fields, (link.table.parent)?link.table.parent+'.'+field['$']['sqlname']:field['$']['sqlname'])">
         {{ field['$']['sqlname'] }}<br>
     </span>
-    <span ng-repeat="link in link.table.link | filter: fieldSearch" ng-init="link['parent']=parent">
+    <span ng-repeat="link in link.table.link | filter: filterFields(fieldSearch)" ng-init="link['parent']=parent">
         <a ng-click="metadata(link['$']['desttable'], link)"
            ng-show="!link.table && link['$']['card11']">
             <span class="glyphicon glyphicon-plus"></span>

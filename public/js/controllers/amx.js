@@ -222,6 +222,13 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
         }
     };
 
+    $scope.filterFields = function (query) {
+        if (query)
+            return function (item) {
+                return item['$']['sqlname'].toLowerCase().indexOf(query.toLowerCase()) > -1;
+            };
+    };
+
     $scope.useBreadcrumb = function (bread) {
         var form = clone($scope.formData);
         form["ref-link"] = bread.link;
