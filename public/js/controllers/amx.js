@@ -16,9 +16,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
         },
 
         user: "admin",
-        password: ""
+        password: "",
+
+        pageSize: 10
     };
-    $scope.pageSize = 10;
+
     $scope.fields = [];
     $scope.breadcrumb = [];
     $scope.toggleCheckbox = function (array, field) {
