@@ -1,4 +1,4 @@
-<div ng-show="metadata.tables && !metadata.table">
+<div ng-show="metadata.tables && !metadata.table" ng-init="metadata('all')">
     <input type="text" class="form-control" placeholder="Search table..." ng-model="tableSearch.id">
     <ul class="nav sidebar">
         <li ng-repeat="table in metadata.tables | filter: tableSearch">

@@ -1,5 +1,5 @@
 var am = angular.module('am', ['ui.bootstrap']);
-am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
+am.controller('amCtl', function ($scope, $http, $uibModal) {
     var AM_FORM_DATA = "amFormData";
     $scope.title = "AM REST DB Client";
     $scope.formData = {
@@ -399,7 +399,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
         return Object.keys(obj).length;
     };
 
-    $scope.metadata("all");
+//    $scope.metadata("all");
 });
 
 am.filter('startFrom', function () {
