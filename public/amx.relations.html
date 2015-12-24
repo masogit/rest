@@ -12,6 +12,8 @@
     <span style="display: none">{{ childs = r.child }}</span>
 
     <div class="panel panel-default">
+
+        <!-- Display links -->
         <div class="panel-heading" ng-show="!showCompact">
             <ul class="nav nav-pills">
                 <li role="presentation"><a ng-click="hiddenRelations(r)"><span
@@ -35,6 +37,8 @@
                     </th>
                     <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
                 </tr>
+
+                <!-- Fields select area -->
                 <tr ng-show="r['showFields']">
                     <td colspan="{{ length(r.records[0]) }}">
                         <form class="form-inline" ng-init="getFields(r)">
