@@ -364,6 +364,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
         $scope.hiddenRelations();
         delete $scope.tableData;
         delete $scope.tableName;
+        delete $scope.fieldSearch;
+        delete $scope.linkSearch;
     };
 
     $scope.getMeta = function (ref) {
