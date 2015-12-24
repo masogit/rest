@@ -116,6 +116,9 @@ module.exports = function (app) {
                 res.send(data);
             });
             console.log("request.options: " + JSON.stringify(request.options));
+            request.on('error', function (err) {
+                console.log('request error: ' + err);
+            });
         } else if (req.body.method == "post") {
             request = client.post(url, args, function (data, response) {
                 res.json(data);
@@ -130,9 +133,7 @@ module.exports = function (app) {
             });
         }
 
-        request.on('error', function (err) {
-            console.log('request error: ' + err);
-        });
+
     });
 
     // SSH CMD -------------------------------------------------------------

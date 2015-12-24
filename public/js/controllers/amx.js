@@ -15,6 +15,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
             fields: []
         },
 
+        method: "get",
         user: "admin",
         password: "",
 
@@ -242,7 +243,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
     };
 
     $scope.showRelations = function (record, parent) {
-
+        var form = clone($scope.formData);
+        form["ref-link"] = record["ref-link"];
+        form.method = "get";
         if (!parent) {
             $scope.relations = [];
             $scope.relations.push({
@@ -250,6 +253,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
                 'ref-link': record["ref-link"],
                 schema: record["ref-link"].split("/")[1],
                 active: true,
+                form: form,
                 records: [record],
                 displayColumns: [],
                 child: null
@@ -260,6 +264,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
                 link: parent.link,
                 'ref-link': parent["ref-link"],
                 schema: parent.schema,
+                form: parent.form,
                 active: true,
                 records: [record],
                 displayColumns: [],
@@ -323,26 +328,16 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 
     $scope.getRecords = function (record) {
         if (record.form) {
-            if (record.displayColumns) {
+            if (record.displayColumns.length > 0) {
                 record.form.param.fields = record.displayColumns;
             }
 
             $http.post('/am/rest', record.form).success(function (data) {
-                record.records = data.entities;
+                if (data.entities)
+                    record.records = data.entities;
+                else if (data)
+                    record.records = [data];
             });
-        } else {
-//            var form = clone($scope.formData);
-//            form.param.fields = "";
-//            form.method = "get";
-//            form["ref-link"] = record["ref-link"];
-//            if (record.displayColumns) {
-//                form.param.fields = record.displayColumns;
-//            }
-//
-//            console.log("form: " + JSON.stringify(form));
-//            $http.post('/am/rest', form).success(function (data) {
-//                record.records = data.entities;
-//            });
         }
     };
 

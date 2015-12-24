@@ -32,9 +32,9 @@
                 <tr ng-repeat="e in r.records" ng-if="$first">
                     <th ng-show="e['ref-link']">
                         <label class="badge">{{ r.link }}</label>
-                        <label class="glyphicon glyphicon-resize-full" ng-if="pos>0 && r['showFields']"
+                        <label class="glyphicon glyphicon-resize-full" ng-if="r['showFields']"
                                ng-click="r['showFields']=!r['showFields']"></label>
-                        <label class="glyphicon glyphicon-resize-small" ng-if="pos>0 && !r['showFields']"
+                        <label class="glyphicon glyphicon-resize-small" ng-if="!r['showFields']"
                                ng-click="r['showFields']=!r['showFields']"></label>
                     </th>
                     <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
@@ -44,7 +44,6 @@
                 <tr ng-show="r['showFields']">
                     <td colspan="{{ length(r.records[0]) }}">
                         <form class="form-inline" ng-init="getFields(r)">
-
                             <input type="text" class="form-control" placeholder="Search fields..."
                                    ng-model="r.fieldSearch.sqlname">
                             <button ng-click="getRecords(r)">Filter</button>
