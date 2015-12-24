@@ -36,9 +36,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $log, $q) {
 //        $scope.addFields();
     };
     $scope.addFields = function () {
-        var form = clone($scope.formData);
-        form.param.fields = $scope.fields;
-        $scope.query(form);
+//        var form = clone($scope.formData);
+        $scope.formData.param.fields = $scope.fields;
+        $scope.query();
         $scope.hiddenRelations();
     };
 
