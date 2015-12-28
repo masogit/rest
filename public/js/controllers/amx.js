@@ -239,6 +239,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     $scope.useBreadcrumb = function (bread) {
         var form = clone($scope.formData);
         form["ref-link"] = bread.link;
+        form.param.fields = [];
         $scope.query(form);
         $scope.hiddenRelations();
     };
