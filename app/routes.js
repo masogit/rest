@@ -3,24 +3,24 @@ module.exports = function (app) {
     var Client = require('node-rest-client').Client;
     var client = new Client();
     var loki = require('lokijs');
-    var db = new loki('db/config.json');
+    var db = new loki('db/template.json');
     var parseString = require('xml2js').parseString;
 
     // Configuration
-    app.get('/cfg/menu', function (req, res) {
-        var menu = db.getCollection("menu");
-        var data = menu.query({});
+    app.get('/json/template', function (req, res) {
+        var temp = db.getCollection("template");
+        var data = temp.query({});
         res.json(data[0]);
     });
 
-    app.post('/cfg/menu', function (req, res) {
-        var menu = db.getCollection("menu");
-        if (!menu) {
-            menu = db.addCollection("menu");
-            var data = menu.insert(req.body);
+    app.post('/json/template', function (req, res) {
+        var temp = db.getCollection("template");
+        if (!temp) {
+            temp = db.addCollection("template");
+            var data = temp.insert(req.body);
             res.json(data);
         } else {
-            var data = menu.update(req.body);
+            var data = temp.update(req.body);
             res.json(data);
         }
         db.saveDatabase();
