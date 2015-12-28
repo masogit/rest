@@ -365,7 +365,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         }
     };
 
-    $scope.removeOneTable = function () {
+    $scope.backTableList = function () {
         delete $scope.metadata["table"];
         $scope.formData.param.fields = [];
         $scope.fields = [];
@@ -409,6 +409,23 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
 //    $scope.metadata("all");
+});
+
+am.directive('fullHeight', function ($window) {
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+            console.log("element: " + element);
+            var headerAndFooter = 154;
+            scope.initializeWindowSize = function () {
+                element.css('max-height', $window.innerHeight - headerAndFooter);
+            };
+            scope.initializeWindowSize();
+            angular.element($window).bind('resize', function () {
+                scope.initializeWindowSize();
+            });
+        }
+    };
 });
 
 am.filter('startFrom', function () {
