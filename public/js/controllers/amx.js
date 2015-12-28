@@ -320,6 +320,13 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
     };
 
+    $scope.saveTemplate = function (obj) {
+
+        $http.post('/json/template', obj).success(function (data) {
+            console.log("saveTemplate: " + data);
+        });
+    };
+
     $scope.getFields = function (record) {
         $scope.metadata(record.schema, null, function (data) {
             record["fields"] = [];

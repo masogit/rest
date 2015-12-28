@@ -10,17 +10,37 @@ module.exports = function (app) {
     app.get('/json/template', function (req, res) {
         var temp = db.getCollection("template");
         var data = temp.query({});
-        res.json(data[0]);
+        res.json(data);
     });
 
     app.post('/json/template', function (req, res) {
         var temp = db.getCollection("template");
         if (!temp) {
             temp = db.addCollection("template");
+        } else {
             var data = temp.insert(req.body);
             res.json(data);
+        }
+        db.saveDatabase();
+    });
+
+    app.put('/json/template', function (req, res) {
+        var temp = db.getCollection("template");
+        if (!temp) {
+            temp = db.addCollection("template");
         } else {
             var data = temp.update(req.body);
+            res.json(data);
+        }
+        db.saveDatabase();
+    });
+
+    app.delete('/json/template', function (req, res) {
+        var temp = db.getCollection("template");
+        if (!temp) {
+            temp = db.addCollection("template");
+        } else {
+            var data = temp.remove(req.body);
             res.json(data);
         }
         db.saveDatabase();
