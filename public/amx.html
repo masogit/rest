@@ -134,9 +134,7 @@
                     <button class="btn" type="button" ng-click="query()">Query</button>
                 </form>
 
-                <label class="text-danger" ng-show="message">
-                    <a ng-click="clearMsg()">X</a> {{ message }}
-                </label>
+                <pre ng-show="message"><label class="text-danger"><a ng-click="clearMsg()">X</a> {{ message }}</label></pre>
 
             </div>
 

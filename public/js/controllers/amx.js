@@ -76,7 +76,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     $scope.tableData.entities.push(data);
                 }
             } else {
-                $scope.message = data;
+                $scope.message = JSON.stringify(form) + "<br>" + data;
             }
         });
         $scope.store();
@@ -200,6 +200,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         delete link["table"];
     };
 
+    // Breadcrumb feature ----------------------------------
     $scope.addBreadcrumb = function (refLink) {
         var bread = {
             label: refLink.split("/")[1] + "[" + refLink.split("/")[2] + "]",
@@ -210,6 +211,14 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             return e.label;
         }).indexOf(bread.label) < 0)
             $scope.breadcrumb.push(bread);
+    };
+
+    $scope.useBreadcrumb = function (bread) {
+        var form = clone($scope.formData);
+        form["ref-link"] = bread.link;
+        form.param.fields = [];
+        $scope.query(form);
+        $scope.hiddenRelations();
     };
 
     $scope.removeBreadcrumb = function (refLink) {
@@ -229,6 +238,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         }
     };
 
+    // advanced filter condition for ng-repeat
     $scope.filterFields = function (query) {
         if (query)
             return function (item) {
@@ -236,12 +246,13 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             };
     };
 
-    $scope.useBreadcrumb = function (bread) {
-        var form = clone($scope.formData);
-        form["ref-link"] = bread.link;
-        form.param.fields = [];
-        $scope.query(form);
-        $scope.hiddenRelations();
+    // amTree fields checking
+    $scope.checkTreeFields = function (field, fields, parent) {
+        $scope.toggleCheckbox(fields, (parent) ? parent + '.' + field['$']['sqlname'] : field['$']['sqlname'])
+    };
+
+    $scope.ifTreeFieldsChecked = function (field, fields, parent) {
+        return fields.indexOf((parent) ? parent + '.' + field['$']['sqlname'] : field['$']['sqlname']) > -1;
     };
 
     $scope.showRelations = function (record, parent) {
@@ -348,10 +359,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     record.records = [data];
             });
         }
-    };
-
-    $scope.showRecord = function (record) {
-        record.active = (record.active) ? !record.active : true;
     };
 
     $scope.hiddenRelations = function (record) {
