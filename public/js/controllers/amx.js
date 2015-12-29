@@ -22,8 +22,29 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         pageSize: 10
     };
 
-    $scope.fields = [];
     $scope.breadcrumb = [];
+
+    $scope.store = function () {
+        if (localStorage) {
+            var form = {
+                server: $scope.formData.server,
+                user: $scope.formData.user,
+                password: $scope.formData.password,
+                pageSize: $scope.formData.pageSize
+            };
+            localStorage.setItem(AM_FORM_DATA, JSON.stringify(form));
+        }
+
+    };
+
+    if (localStorage && localStorage[AM_FORM_DATA]) {
+        var form = JSON.parse(localStorage.getItem(AM_FORM_DATA));
+        $scope.formData.server = form.server;
+        $scope.formData.user = form.user;
+        $scope.formData.password = form.password;
+        $scope.formData.pageSize = form.pageSize;
+    }
+
     $scope.toggleCheckbox = function (array, field) {
         if (!array)
             array = [];
@@ -34,24 +55,16 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         else {
             array.push(field);
         }
-//        $scope.addFields();
     };
-    $scope.addFields = function () {
+
+    $scope.addFields = function (fields) {
 //        var form = clone($scope.formData);
-        $scope.formData.param.fields = $scope.fields;
+        $scope.formData.param.fields = fields;
         $scope.query();
         $scope.hiddenRelations();
     };
 
-    if (localStorage && localStorage[AM_FORM_DATA]) {
-        $scope.formData = JSON.parse(localStorage.getItem(AM_FORM_DATA));
-        $scope.formData.collection = "";
-        $scope.formData.param.filter = "";
-        $scope.formData.param.offset = 0;
-        $scope.formData.param.orderby = "";
-        $scope.formData.param.fields = [];
-    }
-
+    // amx_record query
     $scope.query = function (form) {
         $scope.loading = true;
         $scope.tableData = {};
@@ -82,6 +95,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.store();
     };
 
+    // load modal for CRUD
     $scope.load = function (data) {
         var modalInstance = $uibModal.open({
             animation: true,
@@ -103,41 +117,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         });
     };
 
-    $scope.store = function () {
-        if (localStorage)
-            localStorage.setItem(AM_FORM_DATA, JSON.stringify($scope.formData));
-    };
-
-    // list order by and pagination =============================
-    $scope.predicate = '';
-    $scope.reverse = true;
-    $scope.order = function (predicate, reQuery) {
-        console.log("order: " + predicate);
-        $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-        $scope.predicate = predicate;
-//        $scope.formData.param.orderby = predicate + ($scope.reverse) ? " desc" : "";
-        if (reQuery) {
-            var form = clone($scope.formData);
-            form.param.orderby = predicate;
-            if ($scope.reverse)
-                form.param.orderby = form.param.orderby + " desc";
-            $scope.query(form);
-        }
-    }
-    ;
-
-    $scope.jump = function (i) {
-        var pos = i;
-        $scope.currentPage = pos;
-    };
-
-    $scope.showValue = function (value) {
-        if (value instanceof Object)
-            return value[Object.keys(value)[0]];
-        else
-            return value;
-    };
-
+    // retrieve amTree via AM metadata REST API
     $scope.metadata = function (schema, link, callback) {
         var form = clone($scope.formData);
         var metadata = "";
@@ -151,7 +131,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 $scope.formData['ref-link'] = "db/" + schema;
 //                $scope.tableName = schema;
                 $scope.formData.param.fields = [];
-                $scope.fields = [];
                 $scope.query();
                 $scope.hiddenRelations();
             }
@@ -187,6 +166,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     else {
                         $scope.metadata["table"] = data.table;
                         $scope.metadata["table"]["name"] = schema;
+                        $scope.metadata["table"]["fields"] = [];
                     }
 
                 }
@@ -375,7 +355,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     $scope.backTableList = function () {
         delete $scope.metadata["table"];
         $scope.formData.param.fields = [];
-        $scope.fields = [];
         $scope.breadcrumb = [];
         $scope.hiddenRelations();
         delete $scope.tableData;
@@ -401,7 +380,35 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         return Object.keys(obj).length;
     };
 
-//    $scope.metadata("all");
+    // list order by and pagination =============================
+    $scope.predicate = '';
+    $scope.reverse = true;
+    $scope.order = function (predicate, reQuery) {
+        console.log("order: " + predicate);
+        $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+        $scope.predicate = predicate;
+//        $scope.formData.param.orderby = predicate + ($scope.reverse) ? " desc" : "";
+        if (reQuery) {
+            var form = clone($scope.formData);
+            form.param.orderby = predicate;
+            if ($scope.reverse)
+                form.param.orderby = form.param.orderby + " desc";
+            $scope.query(form);
+        }
+    }
+    ;
+
+    $scope.jump = function (i) {
+        var pos = i;
+        $scope.currentPage = pos;
+    };
+
+    $scope.showValue = function (value) {
+        if (value instanceof Object)
+            return value[Object.keys(value)[0]];
+        else
+            return value;
+    };
 });
 
 am.directive('fullHeight', function ($window) {
