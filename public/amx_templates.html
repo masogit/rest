@@ -1,0 +1,36 @@
+<h4>
+    Template for {{tempTable['$']['sqlname']}}
+    </h4>
+<form class="form-horizontal">
+    <!--<div class="form-group">
+        <label for="exampleInputEmail1" class="col-md-2">Table Name</label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" ng-model="tempTable['$']['sqlname']" placeholder="Input a Template Name">
+        </div>
+    </div>-->
+    <div class="form-group">
+        <label for="exampleInputPassword1" class="col-md-2">Template Name</label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" ng-model="tempTable.name" placeholder="Input a Template Name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1" class="col-md-2">AQL Condition</label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" ng-model="tempTable.AQL" placeholder="AQL...">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputFile" class="col-md-2">Template</label>
+        <div class="col-md-10">
+            <p class="help-block">{{ tempTable }}</p>
+        </div>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox"> Check me out
+        </label>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+
+</form>
