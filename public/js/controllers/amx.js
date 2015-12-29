@@ -129,10 +129,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             // click query table from tree
             if (!link && !callback) {
                 $scope.formData['ref-link'] = "db/" + schema;
-//                $scope.tableName = schema;
-                $scope.formData.param.fields = [];
-                $scope.query();
-                $scope.hiddenRelations();
+////                $scope.tableName = schema;
+//                $scope.formData.param.fields = [];
+//                $scope.query();
+//                $scope.hiddenRelations();
             }
 
         }
