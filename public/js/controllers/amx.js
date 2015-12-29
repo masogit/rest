@@ -58,10 +58,21 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.addFields = function (fields) {
+//        console.log("metadata table: " + JSON.stringify($scope.metadata.table));
 //        var form = clone($scope.formData);
         $scope.formData.param.fields = fields;
         $scope.query();
         $scope.hiddenRelations();
+    };
+
+    $scope.toNewTemp = function (table) {
+        var tempTable = clone(table);
+
+        table2template(tempTable);
+    };
+
+    function table2template (table){
+         delete table['index'];
     };
 
     // amx_record query
@@ -138,7 +149,21 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         }
         form['metadata'] = metadata;
         $http.post('/am/metadata', form).success(function (data) {
-
+            /*
+             metadata = {
+             tables: [],
+             table: {
+             fields: [],
+             name: "",
+             table: {
+             $: {sqlname..},
+             field: [{$:{sqlname..}},{..}],
+             link: [],
+             index: []
+             }
+             }
+             }
+             */
             if (callback instanceof Function) {
                 callback(data);
             } else {
@@ -165,7 +190,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     }
                     else {
                         $scope.metadata["table"] = data.table;
-                        $scope.metadata["table"]["name"] = schema;
                         $scope.metadata["table"]["fields"] = [];
                     }
 
