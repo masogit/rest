@@ -390,20 +390,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         delete $scope.message;
     };
 
-    $scope.toggleNavbar = function () {
-        if ($scope.navbar) {
-            $scope.navbar = !$scope.navbar;
-        } else
-            $scope.navbar = true;
-    };
-
-    $scope.toggleServer = function () {
-        if ($scope.serverbar) {
-            $scope.serverbar = !$scope.serverbar;
-        } else
-            $scope.serverbar = true;
-    };
-
     $scope.length = function (obj) {
         return Object.keys(obj).length;
     };
