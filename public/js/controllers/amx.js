@@ -180,7 +180,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
                     if (link) {
                         link["table"] = data.table;
-                        link["table"]["name"] = schema;
+                        // link["table"]["name"] = schema;
 
                         if (link["parent"])
                             link["table"].parent = link["parent"] + "." + link["$"]["sqlname"];
