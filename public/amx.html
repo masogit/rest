@@ -110,7 +110,7 @@
         <div class="col-md-9 main" ng-init="loadTemplates()">
             <div class="row" role="toolbar" ng-include="'amx_toolbar.html'"> </div>
             <div class="records" role="content">
-                <div class="table-responsive" ng-include="'amx_templates.html'"></div>
+                <div class="table-responsive" ng-show="!tableData && !relations" ng-include="'amx_templates.html'"></div>
                 <div class="table-responsive" ng-show="tableData && !relations" ng-include="'amx_records.html'"></div>
                 <div class="table-responsive" ng-show="relations" ng-include="'amx.relations.html'"></div>
             </div>

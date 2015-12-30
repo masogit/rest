@@ -1,63 +1,59 @@
-<div>
-    <div>
-        <div class="col-md-4">
-            <h4 class="page-header">
-                All Templates
-            </h4>
-            <table class="table table-striped" ng-show="templates">
-                <thead>
-                <tr>
-                    <th>Template Name</th>
-                    <th>Table Name</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="temp in templates">
-                    <td><a ng-click="loadOneTemp(temp)">{{ temp.name }}</a></td>
-                    <td>{{ temp['$']['sqlname'] }}</td>
-                    <td>
-                        <a ng-click="queryByTemp(temp)" class="badge"><span class="glyphicon glyphicon-eye-open"></span> Query</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+<div class="col-md-5">
+    <h4 class="page-header">
+        All Templates
+    </h4>
+    <table class="table table-striped" ng-show="templates">
+        <thead>
+        <tr>
+            <th>Template Name</th>
+            <th>Table Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="temp in templates">
+            <td><a ng-click="loadOneTemp(temp)">{{ temp.name }}</a></td>
+            <td>{{ temp['$']['sqlname'] }}</td>
+            <td>
+                <a ng-click="queryByTemp(temp)" class="badge"><span class="glyphicon glyphicon-eye-open"></span>
+                    Query</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="col-md-7" ng-show="tempTable">
+    <h4 class="page-header">
+        Create a template for [{{tempTable['$']['sqlname']}}]
+    </h4>
+
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2">Name</label>
+
+            <div class="col-md-10">
+                <input type="text" ng-model="tempTable.name" placeholder="Input a Template Name" style="width: 60%">
+                <button type="submit" ng-click="saveTemplate(tempTable)">Save</button>
+                <button type="submit" ng-click="removeTemplate(tempTable)" class="pull-right">Delete</button>
+            </div>
         </div>
-        <div class="col-md-8" ng-show="tempTable">
-            <h4 class="page-header">
-                Create a template for [{{tempTable['$']['sqlname']}}]
-            </h4>
+        <div class="form-group">
+            <label class="col-md-2">Structure</label>
 
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-md-2">Name</label>
-
-                    <div class="col-md-10">
-                        <input type="text" ng-model="tempTable.name" placeholder="Input a Template Name" style="width: 80%">
-                        <button type="submit" ng-click="saveTemplate(tempTable)">Save</button>
-                        <button type="submit" ng-click="removeTemplate(tempTable)" class="pull-right">Delete</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2">Structure</label>
-
-                    <div class="col-md-10">
-                        <div ng-show="tempTable" ng-include="'amTemp'"></div>
-                    </div>
-                </div>
-            </form>
-            <form>
-                <div class="form-group" ng-repeat="aql in tempTable.AQLs">
-                    <label>AQL Condition [{{aql.tableName}}]</label>
-
-                    <div>
-                        <textarea class="form-control" ng-model="aql.AQL" placeholder="AQL..."></textarea>
-                    </div>
-                </div>
-            </form>
+            <div class="col-md-10">
+                <div ng-show="tempTable" ng-include="'amTemp'"></div>
+            </div>
         </div>
-    </div>
+    </form>
+    <form>
+        <div class="form-group" ng-repeat="aql in tempTable.AQLs">
+            <label>AQL Condition [{{aql.tableName}}]</label>
 
+            <div>
+                <textarea class="form-control" ng-model="aql.AQL" placeholder="AQL..."></textarea>
+            </div>
+        </div>
+    </form>
 </div>
 
 

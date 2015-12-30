@@ -386,6 +386,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     $scope.loadOneTemp = function (temp) {
 
         $scope.tempTable = temp;
+        $scope.metadata(temp['$']['sqlname']);
+        $scope.metadata.table.fields = temp.fields;
     };
 
     $scope.removeTemplate = function (temp) {
