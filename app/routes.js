@@ -12,6 +12,7 @@ module.exports = function (app) {
             var temp = db.getCollection('template');
             if (!temp) {
                 temp = db.addCollection("template");
+                db.saveDatabase();
             } else {
                 console.log(temp.data);
                 res.json(temp.data);
