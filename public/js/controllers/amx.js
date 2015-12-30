@@ -65,43 +65,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.hiddenRelations();
     };
 
-    $scope.toNewTemp = function (table) {
-        var tempTable = clone(table);
-        $scope.tempTable = table2template(tempTable);
-        
-        // console.log("table2template table: " + JSON.stringify(tempTable));
-    };
-
-    function table2template(table) {
-        delete table['index'];
-        // delete table['$'];
-        // console.log("raw table: " + JSON.stringify(table));
-        
-        // remove all not selected fields
-        var selectedFields = table.field.filter(function (obj) {
-            return obj.selected;
-        });
-        table.field = selectedFields;
-        
-        // remove all linked without child table
-        var expandLinks = table.link.filter(function (obj) {
-            // call self to check child table
-            if (obj.table)
-                obj.table = table2template(obj.table);
-            // console.log("obj.table: " + obj.table);    
-            return (obj.table === undefined) ? false : true;
-        });
-        table.link = expandLinks;
-            
-        // When both filed and link empty, set null
-        if (table.field.length == 0 && table.link.length == 0)
-            table = undefined;
-
-        // console.log("template table: " + JSON.stringify(table));
-        
-        return table;
-    };
-
     // amx_record query
     $scope.query = function (form) {
         $scope.loading = true;
@@ -363,11 +326,90 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
     };
 
-    $scope.saveTemplate = function (obj) {
+    // template module---------------------------------------------------------
+    $scope.toNewTemp = function (table) {
+        var tempTable = clone(table);
+        $scope.tempTable = table2template(tempTable);
+        $scope.tempTable["AQLs"] = [];
 
-        $http.post('/json/template', obj).success(function (data) {
-            console.log("saveTemplate: " + data);
+        delete $scope.tableData;
+        delete $scope.relations;
+        // console.log("table2template table: " + JSON.stringify(tempTable));
+    };
+
+    function table2template(table) {
+        delete table['index'];
+        // delete table['$'];
+        // console.log("raw table: " + JSON.stringify(table));
+
+        // remove all not selected fields
+        var selectedFields = table.field.filter(function (obj) {
+            return obj.selected;
         });
+        table.field = selectedFields;
+
+        // remove all linked without child table
+        var expandLinks = table.link.filter(function (obj) {
+            // call self to check child table
+            if (obj.table)
+                obj.table = table2template(obj.table);
+            // console.log("obj.table: " + obj.table);
+            return (obj.table === undefined) ? false : true;
+        });
+        table.link = expandLinks;
+
+        // When both filed and link empty, set null
+        if (table.field.length == 0 && table.link.length == 0)
+            table = undefined;
+
+        // console.log("template table: " + JSON.stringify(table));
+
+        return table;
+    };
+
+    $scope.setAQL = function (table) {
+        table["AQL"] = {
+            tableName: table['$']['sqlname'],
+            AQL: ""
+        };
+        $scope.tempTable.AQLs.push(table["AQL"]);
+//        $scope.tempTable.AQLs.push(table["AQL"]);
+    };
+
+    $scope.loadTemplates = function () {
+
+        $http.get('/json/template').success(function (data) {
+            $scope.templates = data;
+        });
+    };
+
+    $scope.loadOneTemp = function (temp) {
+
+        $scope.tempTable = temp;
+    };
+
+    $scope.removeTemplate = function (temp) {
+
+        if (temp.$loki)
+            $http.post('/json/template/delete', temp).success(function (data) {
+                $scope.loadTemplates();
+            });
+
+        delete $scope.tempTable;
+    };
+
+    $scope.saveTemplate = function (temp) {
+        console.log("saveTemplate: " + JSON.stringify(temp));
+        $http.post('/json/template', temp).success(function (data) {
+//            console.log("saveTemplate: " + JSON.stringify(data));
+            temp = data;
+        });
+
+        $scope.loadTemplates();
+    };
+
+    $scope.queryByTemp = function (template) {
+
     };
 
     $scope.getFields = function (record) {

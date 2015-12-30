@@ -8,9 +8,17 @@ module.exports = function (app) {
 
     // Configuration
     app.get('/json/template', function (req, res) {
-        var temp = db.getCollection("template");
-        var data = temp.query({});
-        res.json(data);
+        db.loadDatabase({}, function () {
+            var temp = db.getCollection('template')
+            console.log(temp.data);
+            res.json(temp.data);
+        });
+//        var temp = db.getCollection("template");
+//        if (!temp) {
+//            temp = db.addCollection("template");
+//        }
+//        var data = temp.query({});
+
     });
 
     app.post('/json/template', function (req, res) {
@@ -18,7 +26,13 @@ module.exports = function (app) {
         if (!temp) {
             temp = db.addCollection("template");
         } else {
-            var data = temp.insert(req.body);
+            var obj = req.body;
+            console.log("template insert or update: " + JSON.stringify(obj));
+            var data;
+            if (obj.$loki)
+                data = temp.update(obj);
+            else
+                data = temp.insert(obj);
             res.json(data);
         }
         db.saveDatabase();
@@ -35,14 +49,12 @@ module.exports = function (app) {
         db.saveDatabase();
     });
 
-    app.delete('/json/template', function (req, res) {
+    app.post('/json/template/delete', function (req, res) {
         var temp = db.getCollection("template");
-        if (!temp) {
-            temp = db.addCollection("template");
-        } else {
-            var data = temp.remove(req.body);
-            res.json(data);
-        }
+        console.log("template delete: " + JSON.stringify(req.body));
+        var data = temp.remove(req.body);
+        res.json(data);
+
         db.saveDatabase();
     });
 

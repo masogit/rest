@@ -13,12 +13,14 @@
                class="pull-right">
     </form>
     <!-- action -->
-    <a ng-click="backTableList()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span> {{
-        metadata.table['$']['sqlname'] }}</a>
-    <a ng-click="toNewTemp(metadata.table)" class="badge pull-right"><span
-            class="glyphicon glyphicon-floppy-disk"></span> New Template</a>
-    <a ng-click="addFields(metadata.table.fields)" class="badge pull-right"
-       ng-show="metadata.table.fields.length > 0"><span class="glyphicon glyphicon-eye-open"></span> Filter</a>
+    <form>
+        <a ng-click="backTableList()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span> {{
+            metadata.table['$']['sqlname'] }}</a>
+        <a ng-click="toNewTemp(metadata.table)" class="badge pull-right"><span
+                class="glyphicon glyphicon-floppy-disk"></span> Create Template</a>
+        <a ng-click="addFields(metadata.table.fields)" class="badge pull-right"
+           ng-show="metadata.table.fields.length > 0"><span class="glyphicon glyphicon-eye-open"></span> Query Directly</a>
+    </form>
 
     <div class="sidebar">
         <span style="display: none">{{link.table = metadata.table}}</span>
