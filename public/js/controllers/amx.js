@@ -373,7 +373,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             AQL: ""
         };
         $scope.tempTable.AQLs.push(table["AQL"]);
-//        $scope.tempTable.AQLs.push(table["AQL"]);
+        //        $scope.tempTable.AQLs.push(table["AQL"]);
     };
 
     $scope.loadTemplates = function () {
@@ -388,6 +388,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.tempTable = temp;
         $scope.metadata(temp['$']['sqlname']);
         $scope.metadata.table.fields = temp.fields;
+        console.log("$scope.metadata.table.fields: " + $scope.metadata.table.fields);
     };
 
     $scope.removeTemplate = function (temp) {
@@ -403,7 +404,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     $scope.saveTemplate = function (temp) {
         console.log("saveTemplate: " + JSON.stringify(temp));
         $http.post('/json/template', temp).success(function (data) {
-//            console.log("saveTemplate: " + JSON.stringify(data));
+            //            console.log("saveTemplate: " + JSON.stringify(data));
             temp = data;
         });
 

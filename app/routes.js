@@ -9,15 +9,20 @@ module.exports = function (app) {
     // Configuration
     app.get('/json/template', function (req, res) {
         db.loadDatabase({}, function () {
-            var temp = db.getCollection('template')
-            console.log(temp.data);
-            res.json(temp.data);
+            var temp = db.getCollection('template');
+            if (!temp) {
+                temp = db.addCollection("template");
+            } else {
+                console.log(temp.data);
+                res.json(temp.data);
+            }
+
         });
-//        var temp = db.getCollection("template");
-//        if (!temp) {
-//            temp = db.addCollection("template");
-//        }
-//        var data = temp.query({});
+        //        var temp = db.getCollection("template");
+        //        if (!temp) {
+        //            temp = db.addCollection("template");
+        //        }
+        //        var data = temp.query({});
 
     });
 
@@ -63,9 +68,9 @@ module.exports = function (app) {
         var server = "http://" + req.body.server;
         var args = {
             data: req.body.view, // TQL Name,
-            headers: {"Content-Type": "text/plain"},
-            requestConfig: {timeout: 2000},
-            responseConfig: {timeout: 5000}
+            headers: { "Content-Type": "text/plain" },
+            requestConfig: { timeout: 2000 },
+            responseConfig: { timeout: 5000 }
         };
 
         var req = client.post(server + "/rest/topology/", args, function (data, response) {
@@ -82,9 +87,9 @@ module.exports = function (app) {
         var server = "http://" + req.body.server;
         var args = {
             data: req.body.data, // UCMDB CIs,
-            headers: {"Content-Type": "application/json"},
-            requestConfig: {timeout: 2000},
-            responseConfig: {timeout: 5000}
+            headers: { "Content-Type": "application/json" },
+            requestConfig: { timeout: 2000 },
+            responseConfig: { timeout: 5000 }
         };
 
         var req = client.post(server + "/rest/dataIn", args, function (data, response) {
@@ -115,7 +120,7 @@ module.exports = function (app) {
 
         request = client.get(url, args, function (data, response) {
             parseString(data, function (err, result) {
-//                console.log("meta data json: " + JSON.stringify(result));
+                //                console.log("meta data json: " + JSON.stringify(result));
                 res.json(result);
             });
         });
