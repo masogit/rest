@@ -246,10 +246,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.toggleCheckbox(fields, (parent) ? parent + '.' + field['$']['sqlname'] : field['$']['sqlname'])
     };
 
-    $scope.ifTreeFieldsChecked = function (field, fields, parent) {
-        return fields.indexOf((parent) ? parent + '.' + field['$']['sqlname'] : field['$']['sqlname']) > -1;
-    };
-
     $scope.showRelations = function (record, parent) {
         var form = clone($scope.formData);
         form["ref-link"] = record["ref-link"];
@@ -329,8 +325,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     // template module---------------------------------------------------------
     $scope.toNewTemp = function (table) {
         var tempTable = clone(table);
+        tempTable["AQLs"] = [];
         $scope.tempTable = table2template(tempTable);
-        $scope.tempTable["AQLs"] = [];
 
         delete $scope.tableData;
         delete $scope.relations;
@@ -387,8 +383,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
         $scope.tempTable = temp;
         $scope.metadata(temp['$']['sqlname']);
-        $scope.metadata.table.fields = temp.fields;
-        console.log("$scope.metadata.table.fields: " + $scope.metadata.table.fields);
+        // $scope.metadata.table.fields = temp.fields;
+        // console.log("$scope.metadata.table.fields: " + $scope.metadata.table.fields);
     };
 
     $scope.removeTemplate = function (temp) {
@@ -411,8 +407,16 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.loadTemplates();
     };
 
-    $scope.queryByTemp = function (template) {
-
+    $scope.queryRootByTemp = function (template) {
+        var form = clone($scope.formData);
+        form["ref-link"] = "db/" + template["$"]["sqlname"];
+        for (var i in template.field) {
+            form.param.fields.push(template.field[i]["$"]["sqlname"]);
+        }
+        if(template.AQL)
+            form.param.filter = template.AQL.AQL;
+        
+        $scope.query(form);
     };
 
     $scope.getFields = function (record) {

@@ -12,12 +12,11 @@ module.exports = function (app) {
             var temp = db.getCollection('template');
             if (!temp) {
                 temp = db.addCollection("template");
-                db.saveDatabase();
             } else {
                 console.log(temp.data);
                 res.json(temp.data);
             }
-
+            db.saveDatabase();
         });
         //        var temp = db.getCollection("template");
         //        if (!temp) {
@@ -31,16 +30,16 @@ module.exports = function (app) {
         var temp = db.getCollection("template");
         if (!temp) {
             temp = db.addCollection("template");
-        } else {
-            var obj = req.body;
-            console.log("template insert or update: " + JSON.stringify(obj));
-            var data;
-            if (obj.$loki)
-                data = temp.update(obj);
-            else
-                data = temp.insert(obj);
-            res.json(data);
         }
+        var obj = req.body;
+        console.log("template insert or update: " + JSON.stringify(obj));
+        var data;
+        if (obj.$loki)
+            data = temp.update(obj);
+        else
+            data = temp.insert(obj);
+        res.json(data);
+
         db.saveDatabase();
     });
 

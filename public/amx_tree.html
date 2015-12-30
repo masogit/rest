@@ -9,17 +9,16 @@
 <div ng-show="metadata.table">
     <form class="form-inline">
         <input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch" size=10>
-        <input type="text" class="form-control" placeholder="Search link..." ng-model="linkSearch" size=10
-               class="pull-right">
+        <input type="text" class="form-control" placeholder="Search link..." ng-model="linkSearch" size=10 class="pull-right">
     </form>
     <!-- action -->
     <form>
         <a ng-click="backTableList()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span> {{
             metadata.table['$']['sqlname'] }}</a>
         <a ng-click="toNewTemp(metadata.table)" class="badge pull-right"><span
-                class="glyphicon glyphicon-floppy-disk"></span> Create Template</a>
-        <a ng-click="addFields(metadata.table.fields)" class="badge pull-right"
-           ng-show="metadata.table.fields.length > 0"><span class="glyphicon glyphicon-eye-open"></span> Query</a>
+                class="glyphicon glyphicon-floppy-disk"></span> Template</a>
+        <a ng-click="addFields(metadata.table.fields)" class="badge pull-right">
+            <span class="glyphicon glyphicon-eye-open"></span> Query</a>
     </form>
 
     <div class="sidebar">
@@ -32,21 +31,20 @@
 <script type="text/ng-template" id="amTree">
     <span style="display: none">{{parent = link.table.parent}}</span>
     <span ng-repeat="field in link.table.field | filter: filterFields(fieldSearch)">
-        <input type="checkbox"
-               ng-checked="ifTreeFieldsChecked(field, metadata.table.fields, link.table.parent)"
-               ng-click="checkTreeFields(field, metadata.table.fields, link.table.parent)">
+        <input type="checkbox" ng-click="checkTreeFields(field, metadata.table.fields, link.table.parent)">
         {{ field['$']['sqlname'] }}<br>
     </span>
     <span ng-repeat="link in link.table.link | filter: filterFields(linkSearch)" ng-init="link['parent']=parent">
         <a ng-click="metadata(link['$']['desttable'], link)" ng-show="!link.table ">
             <span class="glyphicon glyphicon-plus"></span>
-        </a>
+    </a>
 
-        <a ng-click="foldChild(link)" ng-show="link.table">
-            <span class="glyphicon glyphicon-minus"></span>
-        </a>
+    <a ng-click="foldChild(link)" ng-show="link.table">
+        <span class="glyphicon glyphicon-minus"></span>
+    </a>
 
-        <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a> <br>
-        <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
+    <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a>
+    <br>
+    <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
     </span>
 </script>
