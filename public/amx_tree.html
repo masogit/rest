@@ -1,5 +1,5 @@
-<div ng-show="metadata.tables && !metadata.table" ng-init="metadata('all')">
-    <input type="text" class="form-control" placeholder="Search table..." ng-model="tableSearch.id">
+<div ng-show="metadata.tables && !metadata.table">
+    <input type="text" placeholder="Search table..." ng-model="tableSearch.id">
     <ul class="nav sidebar">
         <li ng-repeat="table in metadata.tables | filter: tableSearch">
             <a href="#" ng-click="metadata(table.id)">{{ table.id }}</a></li>
@@ -8,16 +8,16 @@
 
 <div ng-show="metadata.table">
     <form class="form-inline">
-        <input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch" size=10>
-        <input type="text" class="form-control" placeholder="Search link..." ng-model="linkSearch" size=10 class="pull-right">
+        <input type="text" placeholder="Search field..." ng-model="fieldSearch">
+        <input type="text" placeholder="Search link..." ng-model="linkSearch">
     </form>
     <!-- action -->
     <form>
         <a ng-click="backTableList()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span> {{
             metadata.table['$']['sqlname'] }}</a>
-        <a ng-click="toNewTemp(metadata.table)" class="badge pull-right"><span
+        <a ng-click="toNewTemp(metadata.table)" class="badge"><span
                 class="glyphicon glyphicon-floppy-disk"></span> Template</a>
-        <a ng-click="addFields(metadata.table.fields)" class="badge pull-right">
+        <a ng-click="addFields(metadata.table.fields)" class="badge">
             <span class="glyphicon glyphicon-eye-open"></span> Query</a>
     </form>
 

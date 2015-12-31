@@ -208,16 +208,16 @@ module.exports = function (app) {
         res.sendfile('./public/cms.html');
     });
 
-    app.get('/am', function (req, res) {
-        res.sendfile('./public/am.html');
-    });
+//    app.get('/am', function (req, res) {
+//        res.sendfile('./public/am.html');
+//    });
 
     app.get('/amx', function (req, res) {
         res.sendfile('./public/amx.html');
     });
 
     app.get('/', function (req, res) {
-        res.sendfile('./public/index.html');
+        res.sendfile('./public/amx.html');
     });
 
 };

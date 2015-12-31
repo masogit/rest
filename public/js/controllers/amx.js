@@ -325,7 +325,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     // template module---------------------------------------------------------
     $scope.toNewTemp = function (table) {
         var tempTable = clone(table);
-        tempTable["AQLs"] = [];
         $scope.tempTable = table2template(tempTable);
 
         delete $scope.tableData;
@@ -363,15 +362,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         return table;
     };
 
-    $scope.setAQL = function (table) {
-        table["AQL"] = {
-            tableName: table['$']['sqlname'],
-            AQL: ""
-        };
-        $scope.tempTable.AQLs.push(table["AQL"]);
-        //        $scope.tempTable.AQLs.push(table["AQL"]);
-    };
-
     $scope.loadTemplates = function () {
 
         $http.get('/json/template').success(function (data) {
@@ -405,6 +395,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         });
 
         $scope.loadTemplates();
+        delete $scope.tempTable;
     };
 
     $scope.queryRootByTemp = function (template) {
