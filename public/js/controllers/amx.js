@@ -182,6 +182,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     else {
                         $scope.metadata["table"] = data.table;
                         $scope.metadata["table"]["fields"] = [];
+                        if ($scope.tempTable)
+                            $scope.metadata["table"]["fields"] = $scope.tempTable.fields;
                     }
 
                 }
@@ -244,7 +246,23 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     // amTree fields checking
     $scope.checkTreeFields = function (field, fields, parent) {
         field.selected = !field.selected; // for generate template
-        $scope.toggleCheckbox(fields, (parent) ? parent + '.' + field['$']['sqlname'] : field['$']['sqlname'])
+        $scope.toggleCheckbox(fields, (parent) ? parent + '.' + field['$']['sqlname'] : field['$']['sqlname']);
+    };
+
+    $scope.ifChecked = function (field, fields, parent) {
+        if (field.selected)
+            return field.selected;
+        else {
+            var path = (parent) ? parent + '.' + field['$']['sqlname'] : field['$']['sqlname'];
+
+            for (var i in fields) {
+                if (fields[i] == path) {
+                    field.selected = true;
+                    return true;
+                }
+            }
+        }
+
     };
 
     $scope.showRelations = function (record, parent) {
@@ -371,12 +389,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.loadOneTemp = function (temp) {
-
-        $scope.tempTable = temp;
+        $scope.tempTable = clone(temp);
         $scope.metadata(temp['$']['sqlname']);
 
         $scope.tab = "tables";
-        // $scope.metadata.table.fields = temp.fields;
+//        $scope.metadata.table.fields = temp.fields;
         // console.log("$scope.metadata.table.fields: " + $scope.metadata.table.fields);
     };
 
@@ -391,14 +408,16 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.saveTemplate = function (temp) {
-        console.log("saveTemplate: " + JSON.stringify(temp));
-        $http.post('/json/template', temp).success(function (data) {
-            //            console.log("saveTemplate: " + JSON.stringify(data));
-            temp = data;
-        });
+            console.log("saveTemplate: " + JSON.stringify(temp));
+            $http.post('/json/template', temp).success(function (data) {
+                //            console.log("saveTemplate: " + JSON.stringify(data));
+                temp = data;
+            });
 
-        $scope.loadTemplates();
-        delete $scope.tempTable;
+            $scope.loadTemplates();
+            $scope.tab = "templates";
+            delete $scope.tempTable;
+
     };
 
     $scope.closeTemplate = function () {
