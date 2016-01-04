@@ -408,15 +408,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.saveTemplate = function (temp) {
-            console.log("saveTemplate: " + JSON.stringify(temp));
-            $http.post('/json/template', temp).success(function (data) {
-                //            console.log("saveTemplate: " + JSON.stringify(data));
-                temp = data;
-            });
+        console.log("saveTemplate: " + JSON.stringify(temp));
+        $http.post('/json/template', temp).success(function (data) {
+            //            console.log("saveTemplate: " + JSON.stringify(data));
+            temp = data;
+        });
 
-            $scope.loadTemplates();
-            $scope.tab = "templates";
-            delete $scope.tempTable;
+        $scope.loadTemplates();
+        $scope.tab = "templates";
+        delete $scope.tempTable;
 
     };
 
@@ -425,6 +425,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.queryRootByTemp = function (template) {
+//        $scope.loadOneTemp(template);
+
         var form = clone($scope.formData);
         form["ref-link"] = "db/" + template["$"]["sqlname"];
 
@@ -437,6 +439,65 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             form.param.filter = template.AQL.AQL;
 
         $scope.query(form);
+        $scope.globalTemplate = clone(template);
+    };
+
+    $scope.getRecordByTemp = function (data, template, root) {
+
+        var tempRecord = clone(template);
+        for (var i in tempRecord.field) {
+            var sqlname = tempRecord.field[i]["$"]["sqlname"];
+            tempRecord.field[i].data = data[sqlname];
+        }
+
+        for (var i in tempRecord.link) {
+            var form = clone($scope.formData);
+            var link = tempRecord.link[i];
+            if (link['$']['card11'] == 'yes') {
+                form["ref-link"] = "db/" + link['$']['desttable'];
+                form.param.filter = link['$']['reverse'] + ".PK=" + data["ref-link"].split('/')[2];
+            } else {
+                form["ref-link"] = data["ref-link"];
+                form["collection"] = "/" + link['$']['sqlname'];
+                if (link.table.AQL)
+                    form.param.filter = link.table.AQL;
+            }
+
+            for (var j in link.table.field)
+                form.param.fields.push(link.table.field[j]['$']['sqlname']);
+
+            link.form = form;
+        }
+        if (root)
+            $scope.tempRecord = tempRecord;
+    };
+
+    $scope.queryLinkData = function (link) {
+        if (link.form)
+            $http.post('/am/rest', link.form).success(function (data) {
+                if (link['$']['card11'] == 'yes' && data.entities) {
+                    $scope.getRecordByTemp(data.entities[0], link.table);
+                } else {
+                    for(var i in data.entities){
+                        data.entities[i]
+                    }
+                }
+//                if (data instanceof Object) {
+//                    //                console.log("query data:" + JSON.stringify(data));
+//                    if (data.entities instanceof Array)
+//                        $scope.tableData = data;
+//                    else if (data.type == 'Buffer') {
+//                        $scope.tableData.count = 0;
+//                    } else {
+//                        $scope.tableData.count = 1;
+//                        $scope.tableData.entities = [];
+//                        $scope.tableData.entities.push(data);
+//                    }
+//                } else {
+//                    $scope.message = JSON.stringify(form) + "<br>" + data;
+//                }
+            });
+
     };
 
     $scope.getFields = function (record) {
@@ -480,6 +541,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.hiddenRelations();
         delete $scope.tableData;
         delete $scope.tableName;
+        delete $scope.tempTable;
         delete $scope.fieldSearch;
         delete $scope.linkSearch;
     };
