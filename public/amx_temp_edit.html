@@ -2,8 +2,9 @@
     <h4>
         Template of [{{tempTable['$']['sqlname']}}]
         <span class="pull-right">
-            <a ng-click="saveTemplate(tempTable)"><span class="glyphicon glyphicon-floppy-save"></span> </a>
-            <a ng-click="removeTemplate(tempTable)"><span class="glyphicon glyphicon-floppy-remove"></span> </a>
+            <a ng-click="closeTemplate()" class="badge"><span class="glyphicon glyphicon-remove"></span> Close</a>
+            <a ng-click="saveTemplate(tempTable)" class="badge"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
+            <a ng-click="removeTemplate(tempTable)" class="badge"><span class="glyphicon glyphicon-floppy-remove"></span> Delete</a>
         </span>
     </h4>
     <hr>
