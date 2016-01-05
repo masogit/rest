@@ -12,7 +12,7 @@
     <!--<div ng-repeat="record in table.records">-->
     <!--{{ record }}-->
     <ul>
-        <li ng-repeat="f in table.field"><strong>{{f['$']['sqlname']}}:</strong> {{ showValue(f.data) }}</li>
+        <li ng-repeat="f in table.field"><strong>{{f['$']['sqlname']}}:</strong> {{ showValue(f.data) | date }}</li>
     </ul>
     <!--<dl class="dl-horizontal" ng-repeat="f in table.field">-->
         <!--<dt>{{f['$']['sqlname']}}</dt>-->
