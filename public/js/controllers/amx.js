@@ -614,11 +614,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 am.directive('fullHeight', function ($window) {
     return {
         restrict: 'A',
+        scope: {
+            fullHeight: '&'
+        },
         link: function (scope, element) {
             console.log("element: " + element);
             var headerAndFooter = 154;
             scope.initializeWindowSize = function () {
-                element.css('max-height', $window.innerHeight - headerAndFooter);
+                console.log("$window.clientHeight: " + $window.clientHeight);
+                element.css('max-height', ($window.clientHeight - headerAndFooter)+'px');
             };
             scope.initializeWindowSize();
             angular.element($window).bind('resize', function () {
@@ -646,6 +650,10 @@ am.filter('range', function () {
         return input;
     };
 });
+
+//am.config(function($logProvider){
+//    $logProvider.debugEnabled(true);
+//});
 
 function clone(obj) {
     var o;
