@@ -39,7 +39,6 @@
         <td ng-show="e['ref-link']">
             <a ng-click="showRelations(e)">{{ e['ref-link'] }}</a>
             <a ng-click="load(e)"><span class="glyphicon glyphicon-edit"></span></a>
-            <a ng-click="getRecordByTemp(e, globalTemplate, true)" ng-show="globalTemplate"><span class="glyphicon glyphicon-align-left"></span></a>
         </td>
         <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}</td>
     </tr>
@@ -64,17 +63,3 @@
         </li>
     </ul>
 </nav>
-
-<div ng-show="tempRecord" ng-include="'amTempRecord'"></div>
-
-<script type="text/ng-template" id="amTempRecord">
-    <span style="display: none">{{table = (l.table)?l.table:tempRecord}}</span>
-    <span style="display: none">{{isCard11 = (l['$']['card11'])?true:false}}</span>
-    <h4>{{l['$']['sqlname']}} [{{table['$']['sqlname']}}]</h4>
-    <ul>
-        <li ng-repeat="f in table.field">{{f['$']['sqlname']}}: {{f.data}}</li>
-    </ul>
-    <span ng-repeat="l in table.link">
-        <div ng-show="l.table" ng-include="'amTempRecord'" style="padding-left: 20px" ng-init="queryLinkData(l)"></div>
-    </span>
-</script>

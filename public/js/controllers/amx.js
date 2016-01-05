@@ -77,7 +77,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
         form.method = "get";
         $http.post('/am/rest', form).success(function (data) {
-            //            console.log("rest data: " + JSON.stringify(data));
             $scope.loading = false;
             if (data instanceof Object) {
                 //                console.log("query data:" + JSON.stringify(data));
@@ -389,12 +388,12 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.loadOneTemp = function (temp) {
+        $scope.queryRootByTemp(temp);
         $scope.tempTable = clone(temp);
         $scope.metadata(temp['$']['sqlname']);
 
         $scope.tab = "tables";
-//        $scope.metadata.table.fields = temp.fields;
-        // console.log("$scope.metadata.table.fields: " + $scope.metadata.table.fields);
+//        $scope.queryRootByTemp(temp);
     };
 
     $scope.removeTemplate = function (temp) {
@@ -425,8 +424,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.queryRootByTemp = function (template) {
-//        $scope.loadOneTemp(template);
-
+        $scope.backTableList();
+        var template = clone(template);
         var form = clone($scope.formData);
         form["ref-link"] = "db/" + template["$"]["sqlname"];
 
@@ -436,15 +435,21 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             form.param.fields.push(template.field[i]["$"]["sqlname"]);
         }
         if (template.AQL)
-            form.param.filter = template.AQL.AQL;
+            form.param.filter = template.AQL;
 
-        $scope.query(form);
-        $scope.globalTemplate = clone(template);
+        $scope.tempRecords = template;
+
+        $http.post('/am/rest', form).success(function (data) {
+            $scope.tempRecords.records = data.entities;
+        });
+
     };
 
     $scope.getRecordByTemp = function (data, template, root) {
 
-        var tempRecord = clone(template);
+        var tempRecord = template;
+
+
         for (var i in tempRecord.field) {
             var sqlname = tempRecord.field[i]["$"]["sqlname"];
             tempRecord.field[i].data = data[sqlname];
@@ -467,6 +472,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 form.param.fields.push(link.table.field[j]['$']['sqlname']);
 
             link.form = form;
+
+            $scope.queryLinkData(link);
         }
         if (root)
             $scope.tempRecord = tempRecord;
@@ -475,13 +482,21 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     $scope.queryLinkData = function (link) {
         if (link.form)
             $http.post('/am/rest', link.form).success(function (data) {
-                if (link['$']['card11'] == 'yes' && data.entities) {
-                    $scope.getRecordByTemp(data.entities[0], link.table);
-                } else {
-                    for(var i in data.entities){
-                        data.entities[i]
+                if (data.entities) {
+//                    link.records = data.entities;
+
+                    if (link['$']['card11'] == 'yes' && data.entities[0]) {
+                        $scope.getRecordByTemp(data.entities[0], link.table);
+                    } else {
+                        link.tables=[];
+                        for (var i in data.entities) {
+                            var table = clone((link.table)?link.table:link);
+                            $scope.getRecordByTemp(data.entities[i], table);
+                            link.tables.push(table);
+                        }
                     }
                 }
+
 //                if (data instanceof Object) {
 //                    //                console.log("query data:" + JSON.stringify(data));
 //                    if (data.entities instanceof Array)
