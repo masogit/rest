@@ -22,7 +22,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         pageSize: 10
     };
 
-//    $scope.breadcrumb = [];
+    //    $scope.breadcrumb = [];
 
     $scope.store = function () {
         if (localStorage) {
@@ -30,7 +30,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 server: $scope.formData.server,
                 user: $scope.formData.user,
                 password: $scope.formData.password,
-                pageSize: $scope.formData.pageSize
+                pageSize: $scope.formData.pageSize,
+                limit: $scope.formData.param.limit,
+                offset: $scope.formData.param.offset
             };
             localStorage.setItem(AM_FORM_DATA, JSON.stringify(form));
         }
@@ -43,6 +45,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.formData.user = form.user;
         $scope.formData.password = form.password;
         $scope.formData.pageSize = form.pageSize;
+        $scope.formData.param.limit = form.limit;
+        $scope.formData.param.offset = form.offset;
     }
 
     $scope.toggleCheckbox = function (array, field) {
@@ -61,7 +65,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         //        console.log("metadata table: " + JSON.stringify($scope.metadata.table));
         var form = clone($scope.formData);
         form.param.fields = fields;
-//        $scope.formData.param.fields = fields;
+        //        $scope.formData.param.fields = fields;
         $scope.query(form);
         $scope.hiddenRelations();
     };
@@ -89,6 +93,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     $scope.tableData.entities = [];
                     $scope.tableData.entities.push(data);
                 }
+                $scope.tableData.form = form;
             } else {
                 $scope.message = JSON.stringify(form) + "<br>" + data;
             }
@@ -121,43 +126,35 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     // retrieve amTree via AM metadata REST API
     $scope.metadata = function (schema, link, callback) {
         var form = clone($scope.formData);
+        var org_schema = clone(schema);
         var metadata = "";
         if (schema == 'all') {
             metadata = "metadata/tables";
+            $scope.metadata.loading = true;
         } else {
             metadata = "metadata/schema/" + schema;
 
-            // click query table from tree
             if (!link && !callback) {
                 $scope.formData['ref-link'] = "db/" + schema;
-                ////                $scope.tableName = schema;
-                //                $scope.formData.param.fields = [];
-                //                $scope.query();
-                //                $scope.hiddenRelations();
             }
 
         }
+        
+        // loading
+        if (link)
+            link.loading = true;
+        
         form['metadata'] = metadata;
         $http.post('/am/metadata', form).success(function (data) {
-            /*
-             metadata = {
-             tables: [],
-             table: {
-             fields: [],
-             name: "",
-             table: {
-             $: {sqlname..},
-             field: [{$:{sqlname..}},{..}],
-             link: [],
-             index: []
-             }
-             }
-             }
-             */
+            // loading
+            if (link)
+                link.loading = false;
+
             if (callback instanceof Function) {
                 callback(data);
             } else {
                 if (data.Tables) {
+                    $scope.metadata.loading = false;
                     $scope.metadata["tables"] = [];
                     for (var t in data.Tables.Table) {
                         $scope.metadata["tables"].push(data.Tables.Table[t]["$"]);
@@ -169,6 +166,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     //                console.log("parent: " + JSON.stringify(parent));
 
                     if (link) {
+                        link.loading = false;
                         link["table"] = data.table;
                         // link["table"]["name"] = schema;
 
@@ -179,6 +177,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                         //                    console.log("parent's reverse: " + parent["table"].parent);
                     }
                     else {
+                        // schema.loading = false;
                         $scope.metadata["table"] = data.table;
                         $scope.metadata["table"]["fields"] = [];
                         if ($scope.tempTable)
@@ -197,42 +196,42 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     // Breadcrumb feature ----------------------------------
-//    $scope.addBreadcrumb = function (refLink) {
-//        var bread = {
-//            label: refLink.split("/")[1] + "[" + refLink.split("/")[2] + "]",
-//            link: refLink
-//        };
-//
-//        if ($scope.breadcrumb.map(function (e) {
-//            return e.label;
-//        }).indexOf(bread.label) < 0)
-//            $scope.breadcrumb.push(bread);
-//    };
-//
-//    $scope.useBreadcrumb = function (bread) {
-//        var form = clone($scope.formData);
-//        form["ref-link"] = bread.link;
-//        form.param.fields = [];
-//        $scope.query(form);
-//        $scope.hiddenRelations();
-//    };
-//
-//    $scope.removeBreadcrumb = function (refLink) {
-//        //        console.log("refLink: " + refLink);
-//        if (!refLink)
-//            $scope.breadcrumb = [];
-//        else {
-//            var bread = {
-//                label: refLink.split("/")[1] + "[" + refLink.split("/")[2] + "]",
-//                link: refLink
-//            };
-//            var pos = $scope.breadcrumb.map(function (e) {
-//                return e.label;
-//            }).indexOf(bread.label);
-//
-//            $scope.breadcrumb.splice(pos, 1);
-//        }
-//    };
+    //    $scope.addBreadcrumb = function (refLink) {
+    //        var bread = {
+    //            label: refLink.split("/")[1] + "[" + refLink.split("/")[2] + "]",
+    //            link: refLink
+    //        };
+    //
+    //        if ($scope.breadcrumb.map(function (e) {
+    //            return e.label;
+    //        }).indexOf(bread.label) < 0)
+    //            $scope.breadcrumb.push(bread);
+    //    };
+    //
+    //    $scope.useBreadcrumb = function (bread) {
+    //        var form = clone($scope.formData);
+    //        form["ref-link"] = bread.link;
+    //        form.param.fields = [];
+    //        $scope.query(form);
+    //        $scope.hiddenRelations();
+    //    };
+    //
+    //    $scope.removeBreadcrumb = function (refLink) {
+    //        //        console.log("refLink: " + refLink);
+    //        if (!refLink)
+    //            $scope.breadcrumb = [];
+    //        else {
+    //            var bread = {
+    //                label: refLink.split("/")[1] + "[" + refLink.split("/")[2] + "]",
+    //                link: refLink
+    //            };
+    //            var pos = $scope.breadcrumb.map(function (e) {
+    //                return e.label;
+    //            }).indexOf(bread.label);
+    //
+    //            $scope.breadcrumb.splice(pos, 1);
+    //        }
+    //    };
 
     // advanced filter condition for ng-repeat
     $scope.filterFields = function (query) {
@@ -294,7 +293,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             });
         }
 
-//        $scope.addBreadcrumb(record["ref-link"]);
+        //        $scope.addBreadcrumb(record["ref-link"]);
 
         $scope.metadata(record["ref-link"].split("/")[1], null, function (data) {
             var links = data.table.link;
@@ -393,7 +392,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.metadata(temp['$']['sqlname']);
 
         $scope.tab = "tables";
-//        $scope.queryRootByTemp(temp);
+        //        $scope.queryRootByTemp(temp);
     };
 
     $scope.removeTemplate = function (temp) {
@@ -441,7 +440,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
         $http.post('/am/rest', form).success(function (data) {
             $scope.tempRecords.records = data.entities;
-            if(data.entities[0])
+            if (data.entities[0])
                 $scope.getRecordByTemp(data.entities[0], template, true);
         });
 
@@ -485,34 +484,34 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         if (link.form)
             $http.post('/am/rest', link.form).success(function (data) {
                 if (data.entities) {
-//                    link.records = data.entities;
+                    //                    link.records = data.entities;
 
                     if (link['$']['card11'] == 'yes' && data.entities[0]) {
                         $scope.getRecordByTemp(data.entities[0], link.table);
                     } else {
-                        link.tables=[];
+                        link.tables = [];
                         for (var i in data.entities) {
-                            var table = clone((link.table)?link.table:link);
+                            var table = clone((link.table) ? link.table : link);
                             $scope.getRecordByTemp(data.entities[i], table);
                             link.tables.push(table);
                         }
                     }
                 }
 
-//                if (data instanceof Object) {
-//                    //                console.log("query data:" + JSON.stringify(data));
-//                    if (data.entities instanceof Array)
-//                        $scope.tableData = data;
-//                    else if (data.type == 'Buffer') {
-//                        $scope.tableData.count = 0;
-//                    } else {
-//                        $scope.tableData.count = 1;
-//                        $scope.tableData.entities = [];
-//                        $scope.tableData.entities.push(data);
-//                    }
-//                } else {
-//                    $scope.message = JSON.stringify(form) + "<br>" + data;
-//                }
+                //                if (data instanceof Object) {
+                //                    //                console.log("query data:" + JSON.stringify(data));
+                //                    if (data.entities instanceof Array)
+                //                        $scope.tableData = data;
+                //                    else if (data.type == 'Buffer') {
+                //                        $scope.tableData.count = 0;
+                //                    } else {
+                //                        $scope.tableData.count = 1;
+                //                        $scope.tableData.entities = [];
+                //                        $scope.tableData.entities.push(data);
+                //                    }
+                //                } else {
+                //                    $scope.message = JSON.stringify(form) + "<br>" + data;
+                //                }
             });
 
     };
@@ -543,18 +542,18 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     $scope.hiddenRelations = function (record) {
         //        console.log("record: " + JSON.stringify(record));
         if (record && record.link) {
-//            $scope.removeBreadcrumb("db/" + record.table + "/dummy");
+            //            $scope.removeBreadcrumb("db/" + record.table + "/dummy");
             delete record.child;
         } else {
             delete $scope.relations;
-//            $scope.removeBreadcrumb();
+            //            $scope.removeBreadcrumb();
         }
     };
 
     $scope.backTableList = function () {
         delete $scope.metadata["table"];
         $scope.formData.param.fields = [];
-//        $scope.breadcrumb = [];
+        //        $scope.breadcrumb = [];
         $scope.hiddenRelations();
         delete $scope.tableData;
         delete $scope.tableName;
@@ -583,20 +582,20 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     // list order by and pagination =============================
     $scope.predicate = '';
     $scope.reverse = true;
-    $scope.order = function (predicate, reQuery) {
+    $scope.order = function (predicate) {
         console.log("order: " + predicate);
         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
         $scope.predicate = predicate;
         //        $scope.formData.param.orderby = predicate + ($scope.reverse) ? " desc" : "";
-        if (reQuery) {
-            var form = clone($scope.formData);
+        if (predicate != 'ref-link') {
+            var form = $scope.tableData.form;
             form.param.orderby = predicate;
             if ($scope.reverse)
                 form.param.orderby = form.param.orderby + " desc";
-            $scope.query(form);
+        } else {
+            $scope.tableData.form.param.orderby = "";
         }
-    }
-    ;
+    };
 
     $scope.jump = function (i) {
         var pos = i;
@@ -622,7 +621,7 @@ am.directive('fullHeight', function ($window) {
             var headerAndFooter = 154;
             scope.initializeWindowSize = function () {
                 console.log("$window.clientHeight: " + $window.clientHeight);
-                element.css('max-height', ($window.clientHeight - headerAndFooter)+'px');
+                element.css('max-height', ($window.clientHeight - headerAndFooter) + 'px');
             };
             scope.initializeWindowSize();
             angular.element($window).bind('resize', function () {

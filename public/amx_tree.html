@@ -1,8 +1,11 @@
+<span class="text-center" ng-show="metadata.loading">Loading....</span>
+
 <div ng-show="metadata.tables && !metadata.table">
     <input type="text" placeholder="Search table..." class="form-control" ng-model="tableSearch.id">
     <ul class="nav sidebar">
         <li ng-repeat="table in metadata.tables | filter: tableSearch">
-            <a href="#" ng-click="metadata(table.id)">{{ table.id }}</a></li>
+            <a href="#" ng-click="metadata(table.id)">{{ table.id }} </a>
+        </li>
     </ul>
 </div>
 
@@ -35,6 +38,7 @@
 </div>
 
 <script type="text/ng-template" id="amTree">
+
     <span style="display: none">{{parent = link.table.parent}}</span>
     <span ng-repeat="field in link.table.field | filter: filterFields(fieldSearch)">
         <input type="checkbox"
@@ -52,6 +56,9 @@
     </a>
 
     <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a>
+    <!--loading-->
+    <span class="text-center" ng-show="link.loading">Loading....</span>
+    
     <br>
     <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
     </span>

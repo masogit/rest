@@ -1,5 +1,6 @@
 <!doctype html>
 <html ng-app="am">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -79,59 +80,69 @@
     <!--</style>-->
 </head>
 <!-- SET THE CONTROLLER -->
+
 <body ng-controller="amCtl">
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#"> {{ title }} </a>
-        </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"> {{ title }} </a>
+            </div>
 
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" ng-click="serverbar=!serverbar">Connection</a></li>
-                <li><a href="#" ng-click="navbar=!navbar">Condition</a></li>
-                <li><a href="index.html">Help</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<div class="container-fluid">
-    <div class="row">
-        <!--   nav bar -->
-        <div class="row" role="toolbar" ng-include="'amx_toolbar.html'"></div>
-
-        <div class="col-md-3">
-            <ul class="nav nav-pills nav-justified" ng-init="tab='templates'">
-                <li ng-class="{active: tab=='templates'}"><a ng-click="tab='templates'">Templates</a></li>
-                <li ng-class="{active: tab=='tables'}"><a ng-click="tab='tables'">Tables</a></li>
-            </ul>
-            <br>
-
-            <div ng-include="'amx_templates.html'" ng-init="loadTemplates()" ng-show="tab=='templates'"></div>
-            <div ng-include="'amx_tree.html'" ng-init="metadata('all')" ng-show="tab=='tables'"></div>
-        </div>
-        <!--<div class="col-md-3"></div>-->
-        <div class="col-md-3" ng-show="tempTable && !tableData" ng-include="'amx_temp_edit.html'"></div>
-        <div class="col-md-3" ng-show="tempRecords && !tableData" ng-include="'amx_temp_records.html'"></div>
-        <div class="col-md-3" ng-show="tempRecord && !tableData" ng-include="'amx_temp_record.html'"></div>
-        <div class="col-md-9 main">
-
-            <div class="records" role="content">
-                <div ng-show="tableData && !relations" ng-include="'amx_records.html'"></div>
-                <div ng-show="relations" ng-include="'amx.relations.html'"></div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <form class="navbar-form navbar-right" ng-show="serverbar">
+                    <input type="text" class="form-control" placeholder="Limit" ng-model="formData.server">
+                    <input type="text" class="form-control" placeholder="Limit" ng-model="formData.user" size="7">
+                    <input type="password" class="form-control" placeholder="Password" ng-model="formData.password" size="7">
+                    <input type="text" class="form-control" placeholder="Limit" ng-model="formData.param.limit" size="1">
+                    <input type="text" class="form-control" placeholder="Pos" ng-model="formData.param.offset" size="1">
+                    <button class="btn" type="button" ng-click="store()">Save</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" ng-click="serverbar=!serverbar">Configuration</a></li>
+                    <!--<li><a href="#" ng-click="navbar=!navbar">Condition</a></li>
+                    <li><a href="index.html">Help</a></li>-->
+                </ul>
             </div>
         </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <!--   nav bar -->
+            <!--<div class="row" role="toolbar" ng-include="'amx_toolbar.html'"></div>-->
+
+            <div class="col-md-3">
+                <ul class="nav nav-pills nav-justified" ng-init="tab='templates'">
+                    <li ng-class="{active: tab=='templates'}"><a ng-click="tab='templates'">Templates</a></li>
+                    <li ng-class="{active: tab=='tables'}"><a ng-click="tab='tables'">Tables</a></li>
+                </ul>
+                <br>
+
+                <div ng-include="'amx_templates.html'" ng-init="loadTemplates()" ng-show="tab=='templates'"></div>
+                <div ng-include="'amx_tree.html'" ng-init="metadata('all')" ng-show="tab=='tables'"></div>
+            </div>
+            <!--<div class="col-md-3"></div>-->
+            <div class="col-md-3" ng-show="tempTable && !tableData" ng-include="'amx_temp_edit.html'"></div>
+            <div class="col-md-3" ng-show="tempRecords && !tableData" ng-include="'amx_temp_records.html'"></div>
+            <div class="col-md-3" ng-show="tempRecord && !tableData" ng-include="'amx_temp_record.html'"></div>
+            <div class="col-md-9 main">
+
+                <div class="records" role="content">
+                    <div ng-show="tableData && !relations" ng-include="'amx_records.html'"></div>
+                    <div ng-show="relations" ng-include="'amx.relations.html'"></div>
+                </div>
+            </div>
 
 
+        </div>
     </div>
-</div>
 
 </body>
+
 </html>
