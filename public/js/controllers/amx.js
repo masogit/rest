@@ -441,6 +441,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
         $http.post('/am/rest', form).success(function (data) {
             $scope.tempRecords.records = data.entities;
+            if(data.entities[0])
+                $scope.getRecordByTemp(data.entities[0], template, true);
         });
 
     };

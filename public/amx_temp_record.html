@@ -1,21 +1,33 @@
+
+<h4><strong>{{tempRecord['$']['sqlname']}} </strong>
+    <small>Fields: {{ tempRecord.field.length }} Links: {{ tempRecord.link.length }}</small>
+</h4>
+<hr>
 <div ng-show="tempRecord" ng-include="'amTempRecord'"></div>
 
 <script type="text/ng-template" id="amTempRecord">
 
     <span style="display: none">{{table = (t)?t:((l.table)?l.table:tempRecord)}}</span>
-    <h4>{{l['$']['sqlname']}} [{{table['$']['sqlname']}}]</h4>
+    <h5>{{l['$']['sqlname']}} [{{table['$']['sqlname']}}]</h5>
     <!--<div ng-repeat="record in table.records">-->
     <!--{{ record }}-->
     <ul>
-        <li ng-repeat="f in table.field">{{f['$']['sqlname']}}: {{ showValue(f.data) }}</li>
+        <li ng-repeat="f in table.field"><strong>{{f['$']['sqlname']}}:</strong> {{ showValue(f.data) }}</li>
     </ul>
+    <!--<dl class="dl-horizontal" ng-repeat="f in table.field">-->
+        <!--<dt>{{f['$']['sqlname']}}</dt>-->
+        <!--<dd>{{ showValue(f.data) }}</dd>-->
+    <!--</dl>-->
     <!--</div>-->
 
     <span ng-repeat="l in table.link">
     <!--{{l.form}}-->
         <div ng-show="l.table && l['$']['card11']=='yes'" ng-include="'amTempRecord'" style="padding-left: 20px"></div>
-        <div ng-show="l.tables && !l['$']['card11']" ng-repeat="t in l.tables">
-            <div ng-include="'amTempRecord'" style="padding-left: 20px"></div>
+        <div ng-show="l.tables && !l['$']['card11']" style="padding-left: 20px">
+            <a ng-click="l.showChild=!l.showChild" ng-show="!l.showChild"><span class="glyphicon glyphicon-plus"></span></a>
+            <a ng-click="l.showChild=!l.showChild" ng-show="l.showChild"><span class="glyphicon glyphicon-minus"></span></a>
+            {{l['$']['sqlname']}} ({{l.tables.length}})
+            <div ng-show="l.showChild" ng-repeat="t in l.tables" ng-include="'amTempRecord'" style="padding-left: 18px"></div>
         </div>
     </span>
 </script>

@@ -5,19 +5,17 @@
         <tr>
             <th>Template Name</th>
             <th>Table Name</th>
-            <th>Actions</th>
+            <!--<th>Actions</th>-->
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="temp in templates">
             <td><a ng-click="loadOneTemp(temp)">{{ temp.name }}</a></td>
             <td>{{ temp['$']['sqlname'] }}</td>
-            <td>
-                <a ng-click="queryRootByTemp(temp)" class="badge"><span class="glyphicon glyphicon-eye-open"></span>
-                    Query</a>
-                <!--<a ng-click="removeTemplate(temp)" class="badge"><span class="glyphicon glyphicon-floppy-remove"></span>-->
-                    <!--Remove</a>-->
-            </td>
+            <!--<td>-->
+                <!--<a ng-click="queryRootByTemp(temp)" class="badge"><span class="glyphicon glyphicon-eye-open"></span>-->
+                    <!--Query</a>-->
+            <!--</td>-->
         </tr>
         </tbody>
     </table>
