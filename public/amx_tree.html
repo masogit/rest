@@ -1,5 +1,5 @@
 <div ng-show="metadata.tables && !metadata.table">
-    <input type="text" placeholder="Search table..." ng-model="tableSearch.id">
+    <input type="text" placeholder="Search table..." class="form-control" ng-model="tableSearch.id">
     <ul class="nav sidebar">
         <li ng-repeat="table in metadata.tables | filter: tableSearch">
             <a href="#" ng-click="metadata(table.id)">{{ table.id }}</a></li>
@@ -7,25 +7,34 @@
 </div>
 
 <div ng-show="metadata.table">
-    <form class="form-inline">
-        <input type="text" placeholder="Search field..." ng-model="fieldSearch">
-        <input type="text" placeholder="Search link..." ng-model="linkSearch">
-    </form>
-    <!-- action -->
-    <form>
-        <a ng-click="backTableList()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span> {{
-            metadata.table['$']['sqlname'] }}</a>
-        <a ng-click="toNewTemp(metadata.table)" class="badge"><span
-                class="glyphicon glyphicon-floppy-disk"></span> Template</a>
-        <a ng-click="addFields(metadata.table.fields)" class="badge">
-            <span class="glyphicon glyphicon-eye-open"></span> Query</a>
-    </form>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {{ metadata.table['$']['sqlname'] }}
+            <span class="pull-right">
+                <a ng-click="backTableList()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
+                <a ng-click="toNewTemp(metadata.table)" class="badge" ng-show="metadata.table.fields.length > 0"><span
+                        class="glyphicon glyphicon-floppy-disk"></span> Save</a>
+                <a ng-click="addFields(metadata.table.fields)" class="badge">
+                    <span class="glyphicon glyphicon-eye-open"></span> Query</a>
+            </span>
+        </div>
+        <div class="panel-body">
+            <form class="form-inline">
+                <input type="text" placeholder="Search field..." ng-model="fieldSearch">
+                <input type="text" placeholder="Search link..." ng-model="linkSearch">
+            </form>
 
-    <div class="sidebar">
-        <span style="display: none">{{link.table = metadata.table}}</span>
+            <div class="sidebar">
+                <span style="display: none">{{link.table = metadata.table}}</span>
 
-        <div ng-show="link.table" ng-include="'amTree'"></div>
+                <div ng-show="link.table" ng-include="'amTree'"></div>
+            </div>
+        </div>
     </div>
+<!-- action -->
+
+
+
 </div>
 
 <script type="text/ng-template" id="amTree">

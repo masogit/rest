@@ -1,34 +1,47 @@
 <div ng-show="tempTable">
     <h4>
         Template of [{{tempTable['$']['sqlname']}}]
-        <span class="pull-right">
-            <a ng-click="closeTemplate()" class="badge"><span class="glyphicon glyphicon-remove"></span> Close</a>
-            <a ng-click="saveTemplate(tempTable)" class="badge" ng-show="tempForm.$valid"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
-            <a ng-click="removeTemplate(tempTable)" class="badge"><span class="glyphicon glyphicon-floppy-remove"></span> Delete</a>
-        </span>
     </h4>
     <hr>
 
-    <form name="tempForm">
+    <form name="tempForm" class="form-horizontal">
         <div class="form-group" ng-class="{'has-error': !tempForm.tempName.$valid}">
-            <label>Name</label>
-            <div>
-                <input type="text" class="form-control" name="tempName" ng-model="tempTable.name" placeholder="Input a Template Name" ng-required="true">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Description</label>
-            <div>
-                <input type="text" class="form-control" ng-model="tempTable.description" placeholder="Input description">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Structure</label>
+            <label class="col-md-4">Name</label>
 
-            <div>
+            <div class="col-md-8">
+                <input type="text" class="form-control" name="tempName" ng-model="tempTable.name"
+                       placeholder="Input a Template Name" ng-required="true">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4">Description</label>
+
+            <div class="col-md-8">
+                <input type="text" class="form-control" ng-model="tempTable.description"
+                       placeholder="Input description">
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Structure
+        <span class="pull-right">
+            <a ng-click="closeTemplate()" class="badge"><span class="glyphicon glyphicon-remove"></span> Close</a>
+            <a ng-click="saveTemplate(tempTable)" class="badge" ng-show="tempForm.$valid"><span
+                    class="glyphicon glyphicon-floppy-save"></span> Save</a>
+            <a ng-click="removeTemplate(tempTable)" class="badge"><span
+                    class="glyphicon glyphicon-floppy-remove"></span> Delete</a>
+        </span>
+            </div>
+            <div class="panel-body">
                 <div ng-show="tempTable" ng-include="'amTemp'"></div>
             </div>
         </div>
+        <!--<div class="form-group">-->
+        <!--<label>Structure</label>-->
+
+        <!--<div>-->
+        <!--<div ng-show="tempTable" ng-include="'amTemp'"></div>-->
+        <!--</div>-->
+        <!--</div>-->
     </form>
 </div>
 

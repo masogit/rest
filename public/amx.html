@@ -11,71 +11,71 @@
     <script src="js/controllers/am_modal.js"></script>
 
     <!--<style>-->
-        <!--@media only screen and (min-height: 700px) {-->
-            <!--.sidebar {-->
-                <!--max-height: 600px;-->
-                <!--overflow-y: auto;-->
-            <!--}-->
+    <!--@media only screen and (min-height: 700px) {-->
+    <!--.sidebar {-->
+    <!--max-height: 600px;-->
+    <!--overflow-y: auto;-->
+    <!--}-->
 
-            <!--.records {-->
-                <!--max-height: 600px;-->
-                <!--overflow-y: auto;-->
-            <!--}-->
+    <!--.records {-->
+    <!--max-height: 600px;-->
+    <!--overflow-y: auto;-->
+    <!--}-->
 
-            <!--.table{-->
-                <!--max-height: 600px;-->
-                <!--overflow: auto;-->
-            <!--}-->
-        <!--}-->
+    <!--.table{-->
+    <!--max-height: 600px;-->
+    <!--overflow: auto;-->
+    <!--}-->
+    <!--}-->
 
-        <!--@media only screen and (min-height: 1000px) {-->
-            <!--.sidebar {-->
-                <!--max-height: 900px;-->
-                <!--overflow-y: auto;-->
-            <!--}-->
+    <!--@media only screen and (min-height: 1000px) {-->
+    <!--.sidebar {-->
+    <!--max-height: 900px;-->
+    <!--overflow-y: auto;-->
+    <!--}-->
 
-            <!--.records {-->
-                <!--max-height: 900px;-->
-                <!--overflow-y: auto;-->
-            <!--}-->
+    <!--.records {-->
+    <!--max-height: 900px;-->
+    <!--overflow-y: auto;-->
+    <!--}-->
 
-            <!--.table{-->
-                <!--max-height: 900px;-->
-                <!--overflow: auto;-->
-            <!--}-->
-        <!--}-->
-        <!--@media only screen and (min-width: 1400px) {-->
-            <!--.panel-body{-->
-                <!--max-width: 1350px;-->
-                <!--overflow: auto;-->
-            <!--}-->
+    <!--.table{-->
+    <!--max-height: 900px;-->
+    <!--overflow: auto;-->
+    <!--}-->
+    <!--}-->
+    <!--@media only screen and (min-width: 1400px) {-->
+    <!--.panel-body{-->
+    <!--max-width: 1350px;-->
+    <!--overflow: auto;-->
+    <!--}-->
 
-            <!--.table{-->
-                <!--max-width: 1300px;-->
-                <!--overflow: auto;-->
-            <!--}-->
+    <!--.table{-->
+    <!--max-width: 1300px;-->
+    <!--overflow: auto;-->
+    <!--}-->
 
-            <!--/*.records {*/-->
-                <!--/*max-width: 1400px;*/-->
-                <!--/*overflow-x: auto;*/-->
-            <!--/*}*/-->
-        <!--}-->
-        <!--@media only screen and (min-width: 1920px) {-->
-            <!--.panel-body{-->
-                <!--max-width: 1550px;-->
-                <!--overflow: auto;-->
-            <!--}-->
+    <!--/*.records {*/-->
+    <!--/*max-width: 1400px;*/-->
+    <!--/*overflow-x: auto;*/-->
+    <!--/*}*/-->
+    <!--}-->
+    <!--@media only screen and (min-width: 1920px) {-->
+    <!--.panel-body{-->
+    <!--max-width: 1550px;-->
+    <!--overflow: auto;-->
+    <!--}-->
 
-            <!--.table{-->
-                <!--max-width: 1500px;-->
-                <!--overflow: auto;-->
-            <!--}-->
+    <!--.table{-->
+    <!--max-width: 1500px;-->
+    <!--overflow: auto;-->
+    <!--}-->
 
-            <!--/*.records {*/-->
-                <!--/*max-width: 1600px;*/-->
-                <!--/*overflow-x: auto;*/-->
-            <!--/*}*/-->
-        <!--}-->
+    <!--/*.records {*/-->
+    <!--/*max-width: 1600px;*/-->
+    <!--/*overflow-x: auto;*/-->
+    <!--/*}*/-->
+    <!--}-->
     <!--</style>-->
 </head>
 <!-- SET THE CONTROLLER -->
@@ -105,14 +105,15 @@
 <div class="container-fluid">
     <div class="row">
         <!--   nav bar -->
-        <div class="row" role="toolbar" ng-include="'amx_toolbar.html'"> </div>
+        <div class="row" role="toolbar" ng-include="'amx_toolbar.html'"></div>
 
         <div class="col-md-3">
-            <ul class="nav nav-tabs" ng-init="tab='templates'">
+            <ul class="nav nav-pills nav-justified" ng-init="tab='templates'">
                 <li ng-class="{active: tab=='templates'}"><a ng-click="tab='templates'">Templates</a></li>
                 <li ng-class="{active: tab=='tables'}"><a ng-click="tab='tables'">Tables</a></li>
             </ul>
             <br>
+
             <div ng-include="'amx_templates.html'" ng-init="loadTemplates()" ng-show="tab=='templates'"></div>
             <div ng-include="'amx_tree.html'" ng-init="metadata('all')" ng-show="tab=='tables'"></div>
         </div>
