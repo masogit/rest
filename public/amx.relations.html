@@ -46,7 +46,7 @@
                         <form class="form-inline" ng-init="getFields(r)">
                             <input type="text" class="form-control" placeholder="Search fields..."
                                    ng-model="r.fieldSearch.sqlname">
-                            <button ng-click="getRecords(r)">Filter</button>
+                            <button class="btn" ng-click="getRecords(r)">Filter</button>
 
                             <div class="table">
                                 <div class="checkbox" ng-repeat="field in r.fields|filter:r.fieldSearch">
