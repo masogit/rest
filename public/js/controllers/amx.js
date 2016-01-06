@@ -98,7 +98,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 $scope.message = JSON.stringify(form) + "<br>" + data;
             }
         });
-        $scope.store();
+//        $scope.store();
     };
 
     // load modal for CRUD

@@ -16,6 +16,8 @@
 
 <div ng-show="tableData.aqlEdit">
     <form class="form-inline">
+        <input type="text" class="form-control" placeholder="Limit" ng-model="tableData.form.param.limit" size="1">
+        <input type="text" class="form-control" placeholder="Pos" ng-model="tableData.form.param.offset" size="1">
         <input type="text" class="form-control" placeholder="AQL Filter..." ng-model="tableData.form.param.filter" size="30">
         <input type="text" class="form-control" placeholder="Order By..." ng-model="tableData.form.param.orderby" size="20">
         <button class="btn" ng-click="query(tableData.form)">Query</button>
