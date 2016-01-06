@@ -36,7 +36,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             };
             localStorage.setItem(AM_FORM_DATA, JSON.stringify(form));
         }
-
+        delete $scope.serverbar;
     };
 
     if (localStorage && localStorage[AM_FORM_DATA]) {
@@ -139,11 +139,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             }
 
         }
-        
+
         // loading
         if (link)
             link.loading = true;
-        
+
         form['metadata'] = metadata;
         $http.post('/am/metadata', form).success(function (data) {
             // loading
@@ -618,22 +618,22 @@ am.directive('fullHeight', function ($window) {
         scope: {
             fullHeight: '&'
         },
-        link: function (scope, element) {
+        link: function (scope, element, attrs) {
 //            var obj = element.prop('offsetTop');;
-//            console.log("element.offsetHeight: " + JSON.stringify(obj));
+//            console.log("attrs.fullHeight: " + attrs.fullHeight);
 
             scope.initializeWindowSize = function () {
 
-                console.log("$window.innerHeight: " + $window.innerHeight);
-                console.log("$window.innerWidth: " + $window.innerWidth);
-                console.log("offsetTop: " + element.prop('offsetTop'));
-                console.log("clientTop: " + element.prop('clientTop'));
-                console.log("scrollTop: " + element.prop('scrollTop'));
-                console.log("offsetLeft: " + element.prop('offsetLeft'));
-                console.log("document.documentElement.clientWidth: " + document.documentElement.clientWidth);
-                console.log("document.documentElement.clientHeight: " + document.documentElement.clientHeight);
+//                console.log("$window.innerHeight: " + $window.innerHeight);
+//                console.log("$window.innerWidth: " + $window.innerWidth);
+//                console.log("offsetTop: " + element.prop('offsetTop'));
+//                console.log("clientTop: " + element.prop('clientTop'));
+//                console.log("scrollTop: " + element.prop('scrollTop'));
+//                console.log("offsetLeft: " + element.prop('offsetLeft'));
+//                console.log("document.documentElement.clientWidth: " + document.documentElement.clientWidth);
+//                console.log("document.documentElement.clientHeight: " + document.documentElement.clientHeight);
 
-                var elementTop = element.prop('offsetTop');
+                var elementTop = (attrs.fullHeight) ? attrs.fullHeight : element.prop('offsetTop');
                 element.css('max-height', ($window.innerHeight - elementTop - 10) + 'px');
                 element.css('overflow-y', 'auto');
             };

@@ -1,12 +1,16 @@
 <span class="text-center" ng-show="metadata.loading">Loading....</span>
 
-<div ng-show="metadata.tables && !metadata.table">
-    <input type="text" placeholder="Search table..." class="form-control" ng-model="tableSearch.id">
-    <ul class="nav sidebar">
-        <li ng-repeat="table in metadata.tables | filter: tableSearch">
-            <a href="#" ng-click="metadata(table.id)">{{ table.id }} </a>
-        </li>
-    </ul>
+<div ng-show="metadata.tables && !metadata.table" class="panel panel-default">
+    <div class="panel-heading">
+        <input type="text" placeholder="Search table..." class="form-control" ng-model="tableSearch.id">
+    </div>
+    <div class="panel-body" full-height="200">
+        <ul class="nav sidebar">
+            <li ng-repeat="table in metadata.tables | filter: tableSearch">
+                <a href="#" ng-click="metadata(table.id)">{{ table.id }} </a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <div ng-show="metadata.table">
@@ -14,24 +18,31 @@
         <div class="panel-heading">
             {{ metadata.table['$']['sqlname'] }}
             <span class="pull-right">
-                <a ng-click="backTableList()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span> Back</a>
+                <a ng-click="backTableList()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span>
+                    Back</a>
                 <a ng-click="toNewTemp(metadata.table)" class="badge" ng-show="metadata.table.fields.length > 0"><span
                         class="glyphicon glyphicon-floppy-disk"></span> Save</a>
                 <a ng-click="addFields(metadata.table.fields)" class="badge">
                     <span class="glyphicon glyphicon-eye-open"></span> Query</a>
             </span>
         </div>
-        <div class="panel-body">
-            <form class="form-inline">
-                <input type="text" placeholder="Search field..." ng-model="fieldSearch">
-                <input type="text" placeholder="Search link..." ng-model="linkSearch">
-            </form>
+        <div class="panel-body" full-height="240">
+            <!--<form class="form-inline">-->
+            <!--<input type="text" placeholder="Search field..." ng-model="fieldSearch" width="30%">-->
+            <!--<input type="text" placeholder="Search link..." ng-model="linkSearch" width="30%">-->
+            <!--</form>-->
 
             <div class="sidebar">
                 <span style="display: none">{{link.table = metadata.table}}</span>
 
                 <div ng-show="link.table" ng-include="'amTree'"></div>
             </div>
+        </div>
+        <div class="panel-footer">
+            <form class="form-inline">
+                <input type="text" class="form-control" placeholder="Search field..." ng-model="fieldSearch" style="width: 50%">
+                <input type="text" class="form-control pull-right" placeholder="Search link..." ng-model="linkSearch" style="width: 50%">
+            </form>
         </div>
     </div>
 
@@ -42,14 +53,14 @@
     <span style="display: none">{{parent = link.table.parent}}</span>
     <span ng-repeat="field in link.table.field | filter: filterFields(fieldSearch)">
         <input type="checkbox"
-                 ng-checked="ifChecked(field, metadata.table.fields, link.table.parent)"
-                 ng-click="checkTreeFields(field, metadata.table.fields, link.table.parent)">
+               ng-checked="ifChecked(field, metadata.table.fields, link.table.parent)"
+               ng-click="checkTreeFields(field, metadata.table.fields, link.table.parent)">
         {{ field['$']['sqlname'] }}<br>
     </span>
     <span ng-repeat="link in link.table.link | filter: filterFields(linkSearch)" ng-init="link['parent']=parent">
         <a ng-click="metadata(link['$']['desttable'], link)" ng-show="!link.table ">
             <span class="glyphicon glyphicon-plus"></span>
-    </a>
+        </a>
 
     <a ng-click="foldChild(link)" ng-show="link.table">
         <span class="glyphicon glyphicon-minus"></span>

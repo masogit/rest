@@ -117,7 +117,7 @@
             <!--   nav bar -->
             <!--<div class="row" role="toolbar" ng-include="'amx_toolbar.html'"></div>-->
 
-            <div class="col-md-3" full-height>
+            <div class="col-md-3">
                 <ul class="nav nav-pills nav-justified" ng-init="tab='templates'">
                     <li ng-class="{active: tab=='templates'}"><a ng-click="tab='templates'">Templates</a></li>
                     <li ng-class="{active: tab=='tables'}"><a ng-click="tab='tables'">Tables</a></li>
@@ -128,9 +128,9 @@
                 <div ng-include="'amx_tree.html'" ng-init="metadata('all')" ng-show="tab=='tables'"></div>
             </div>
             <!--<div class="col-md-3"></div>-->
-            <div class="col-md-3" ng-show="tempTable && !tableData" ng-include="'amx_temp_edit.html'" full-height></div>
-            <div class="col-md-3" ng-show="tempRecords && !tableData" ng-include="'amx_temp_records.html'" full-height></div>
-            <div class="col-md-3" ng-show="tempRecord && !tableData" ng-include="'amx_temp_record.html'" full-height></div>
+            <div class="col-md-3" ng-show="tempTable && !tableData" ng-include="'amx_temp_edit.html'"></div>
+            <div class="col-md-3" ng-show="tempRecords && !tableData" ng-include="'amx_temp_records.html'"></div>
+            <div class="col-md-3" ng-show="tempRecord && !tableData" ng-include="'amx_temp_record.html'"></div>
             <div class="col-md-9 main" full-height>
 
                 <div class="records" role="content">

@@ -1,21 +1,24 @@
 <div ng-show="tempRecords">
-    <h4><strong>{{tempRecords['$']['sqlname']}} </strong>
-        <small>({{ tempRecords.records.length }})</small>
+    <h4><strong>{{tempRecords.name}} </strong>
+        <small>{{tempRecords['$']['sqlname']}} ({{ tempRecords.records.length }})</small>
     </h4>
     <hr>
-    <table class="table table-striped" ng-show="tempRecords">
-        <thead>
-        <tr>
-            <th>Ref-Link</th>
-            <th>Self</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="record in tempRecords.records">
-            <td>
-                <a ng-click="getRecordByTemp(record, tempRecords, true)">{{ record['ref-link'] }}</a>
-            <td>{{ record['self'] }}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div full-height="155">
+        <table class="table table-striped" ng-show="tempRecords">
+            <thead>
+            <tr>
+                <th>Ref-Link</th>
+                <th>Self</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="record in tempRecords.records">
+                <td>
+                    <a ng-click="getRecordByTemp(record, tempRecords, true)">{{ record['ref-link'] }}</a>
+                <td>{{ record['self'] }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>

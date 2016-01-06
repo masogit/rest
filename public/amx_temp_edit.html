@@ -1,6 +1,6 @@
 <div ng-show="tempTable">
     <h4>
-        Template of [{{tempTable['$']['sqlname']}}]
+        Template of [<strong>{{tempTable['$']['sqlname']}}</strong>]
     </h4>
     <hr>
 
@@ -31,7 +31,7 @@
                     class="glyphicon glyphicon-floppy-remove"></span> Delete</a>
         </span>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" full-height="294">
                 <div ng-show="tempTable" ng-include="'amTemp'"></div>
             </div>
         </div>
