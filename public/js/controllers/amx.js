@@ -610,6 +610,13 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         else
             return value;
     };
+
+    $scope.checkDateType = function (type) {
+        if (type == 'Date+Time' || type == 'Date' || type == 'Time')
+            return true;
+        else
+            return false;
+    };
 });
 
 am.directive('fullHeight', function ($window) {

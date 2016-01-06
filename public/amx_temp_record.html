@@ -12,13 +12,11 @@
     <!--<div ng-repeat="record in table.records">-->
     <!--{{ record }}-->
     <ul>
-        <li ng-repeat="f in table.field"><strong>{{f['$']['sqlname']}}:</strong> {{ showValue(f.data) | date }}</li>
+        <li ng-repeat="f in table.field"><strong>{{f['$']['sqlname']}}:</strong>
+            <span ng-show="checkDateType(f['$']['type'])">{{ showValue(f.data) | date }}</span>
+            <span ng-show="!checkDateType(f['$']['type'])">{{ showValue(f.data) }}</span>
+        </li>
     </ul>
-    <!--<dl class="dl-horizontal" ng-repeat="f in table.field">-->
-        <!--<dt>{{f['$']['sqlname']}}</dt>-->
-        <!--<dd>{{ showValue(f.data) }}</dd>-->
-    <!--</dl>-->
-    <!--</div>-->
 
     <span ng-repeat="l in table.link">
     <!--{{l.form}}-->

@@ -68,7 +68,7 @@
                         <span ng-if="pos==0">{{ e['ref-link'] }}</span>
                         <a ng-click="load(e)"><span class="glyphicon glyphicon-edit"></span></a>
                     </td>
-                    <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) | date }}
+                    <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}
                     </td>
                 </tr>
                 </tbody>
