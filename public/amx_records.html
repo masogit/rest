@@ -51,7 +51,10 @@
                 <a ng-click="showRelations(e)">{{ e['ref-link'] }}</a>
                 <a ng-click="load(e)"><span class="glyphicon glyphicon-edit"></span></a>
             </td>
-            <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ showValue(value) }}</td>
+            <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
+                <span ng-show="checkDateType(getType(key))">{{ showValue(value) | date }}</span>
+                <span ng-show="!checkDateType(getType(key))">{{ showValue(value) }}</span>
+            </td>
         </tr>
     </tbody>
 </table>

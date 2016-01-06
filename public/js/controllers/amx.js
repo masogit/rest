@@ -95,12 +95,33 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 }
                 $scope.tableData.form = form;
             } else {
-                $scope.message = JSON.stringify(form) + "<br>" + data;
+                $scope.message = JSON.stringify(form) + "--------" + data;
             }
         });
-//        $scope.store();
+        //        $scope.store();
     };
 
+    $scope.getType = function (key) {
+        var links = key.split('.');
+        var table = $scope.metadata.table;
+        var def = findDef(table, links);
+        return (def) ? def['$']['type'] : def;
+    };
+
+    function findDef(table, links) {
+        if (links.length > 1) {
+            var link = table.link.filter(function (obj) {
+                return obj['$']['sqlname'] == links[0];
+            })[0];
+            links.shift();
+            return (link.table) ? findDef(link.table, links) : link.table;
+        } else {
+            return table.field.filter(function (obj) {
+                return obj['$']['sqlname'] == links[0];
+            })[0];
+        }
+    };
+    
     // load modal for CRUD
     $scope.load = function (data) {
         var modalInstance = $uibModal.open({
@@ -132,12 +153,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             $scope.metadata.loading = true;
         } else {
             metadata = "metadata/schema/" + schema;
-            var table = $scope.metadata.tables.filter(function(obj){
-                return obj.id == schema;
-            })[0];
-            
-            table.loading = true;
-            
+            if ($scope.metadata.tables) {
+                var table = $scope.metadata.tables.filter(function (obj) {
+                    return obj.id == schema;
+                })[0];
+
+                if (table)
+                    table.loading = true;
+            }
+
             if (!link && !callback) {
                 $scope.formData['ref-link'] = "db/" + schema;
             }
@@ -153,6 +177,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             // loading
             if (link)
                 link.loading = false;
+            if (table)
+                table.loading = false;
 
             if (callback instanceof Function) {
                 callback(data);
@@ -170,7 +196,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     //                console.log("parent: " + JSON.stringify(parent));
 
                     if (link) {
-                        link.loading = false;
                         link["table"] = data.table;
                         // link["table"]["name"] = schema;
 
@@ -181,17 +206,51 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                         //                    console.log("parent's reverse: " + parent["table"].parent);
                     }
                     else {
-                        table.loading = false;
                         $scope.metadata["table"] = data.table;
                         $scope.metadata["table"]["fields"] = [];
-                        if ($scope.tempTable)
+                        
+                        // amTree will check fields and expand related link
+                        if ($scope.tempTable) {
                             $scope.metadata["table"]["fields"] = $scope.tempTable.fields;
+                            var fields = $scope.metadata["table"]["fields"];
+
+                            for (var i in fields) {
+                                var links = fields[i].split('.');
+                                expandChild($scope.metadata["table"], links);
+                            }
+                        }
+
                     }
 
                 }
             }
 
         });
+    };
+
+    function expandChild(table, links) {
+        if (links.length > 1) {
+            var linkName = links.shift();
+            var link = table.link.filter(function (obj) {
+                return obj['$']['sqlname'] == linkName;
+            })[0];
+
+            if (link.table)
+                expandChild(link.table, links);
+            else {
+                $scope.metadata(link['$']['desttable'], link, function (data) {
+                    link["table"] = data.table;
+
+                    if (link["parent"])
+                        link["table"].parent = link["parent"] + "." + link["$"]["sqlname"];
+                    else
+                        link["table"].parent = link["$"]["sqlname"];
+
+                    expandChild(link.table, links);
+                });
+            }
+
+        }
     };
 
     $scope.foldChild = function (link) {
@@ -630,19 +689,19 @@ am.directive('fullHeight', function ($window) {
             fullHeight: '&'
         },
         link: function (scope, element, attrs) {
-//            var obj = element.prop('offsetTop');;
-//            console.log("attrs.fullHeight: " + attrs.fullHeight);
+            //            var obj = element.prop('offsetTop');;
+            //            console.log("attrs.fullHeight: " + attrs.fullHeight);
 
             scope.initializeWindowSize = function () {
 
-//                console.log("$window.innerHeight: " + $window.innerHeight);
-//                console.log("$window.innerWidth: " + $window.innerWidth);
-//                console.log("offsetTop: " + element.prop('offsetTop'));
-//                console.log("clientTop: " + element.prop('clientTop'));
-//                console.log("scrollTop: " + element.prop('scrollTop'));
-//                console.log("offsetLeft: " + element.prop('offsetLeft'));
-//                console.log("document.documentElement.clientWidth: " + document.documentElement.clientWidth);
-//                console.log("document.documentElement.clientHeight: " + document.documentElement.clientHeight);
+                //                console.log("$window.innerHeight: " + $window.innerHeight);
+                //                console.log("$window.innerWidth: " + $window.innerWidth);
+                //                console.log("offsetTop: " + element.prop('offsetTop'));
+                //                console.log("clientTop: " + element.prop('clientTop'));
+                //                console.log("scrollTop: " + element.prop('scrollTop'));
+                //                console.log("offsetLeft: " + element.prop('offsetLeft'));
+                //                console.log("document.documentElement.clientWidth: " + document.documentElement.clientWidth);
+                //                console.log("document.documentElement.clientHeight: " + document.documentElement.clientHeight);
 
                 var elementTop = (attrs.fullHeight) ? attrs.fullHeight : element.prop('offsetTop');
                 element.css('max-height', ($window.innerHeight - elementTop - 10) + 'px');
