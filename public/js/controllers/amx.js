@@ -558,6 +558,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         delete $scope.tableData;
         delete $scope.tableName;
         delete $scope.tempTable;
+        delete $scope.tempRecord;
+        delete $scope.tempRecords;
         delete $scope.fieldSearch;
         delete $scope.linkSearch;
     };
@@ -617,11 +619,23 @@ am.directive('fullHeight', function ($window) {
             fullHeight: '&'
         },
         link: function (scope, element) {
-            console.log("element: " + element);
-            var headerAndFooter = 154;
+//            var obj = element.prop('offsetTop');;
+//            console.log("element.offsetHeight: " + JSON.stringify(obj));
+
             scope.initializeWindowSize = function () {
-                console.log("$window.clientHeight: " + $window.clientHeight);
-                element.css('max-height', ($window.clientHeight - headerAndFooter) + 'px');
+
+                console.log("$window.innerHeight: " + $window.innerHeight);
+                console.log("$window.innerWidth: " + $window.innerWidth);
+                console.log("offsetTop: " + element.prop('offsetTop'));
+                console.log("clientTop: " + element.prop('clientTop'));
+                console.log("scrollTop: " + element.prop('scrollTop'));
+                console.log("offsetLeft: " + element.prop('offsetLeft'));
+                console.log("document.documentElement.clientWidth: " + document.documentElement.clientWidth);
+                console.log("document.documentElement.clientHeight: " + document.documentElement.clientHeight);
+
+                var elementTop = element.prop('offsetTop');
+                element.css('max-height', ($window.innerHeight - elementTop - 10) + 'px');
+                element.css('overflow-y', 'auto');
             };
             scope.initializeWindowSize();
             angular.element($window).bind('resize', function () {
@@ -630,6 +644,7 @@ am.directive('fullHeight', function ($window) {
         }
     };
 });
+
 
 am.filter('startFrom', function () {
     return function (input, start) {
@@ -649,10 +664,6 @@ am.filter('range', function () {
         return input;
     };
 });
-
-//am.config(function($logProvider){
-//    $logProvider.debugEnabled(true);
-//});
 
 function clone(obj) {
     var o;
