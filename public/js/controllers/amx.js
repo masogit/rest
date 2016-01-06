@@ -126,14 +126,18 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     // retrieve amTree via AM metadata REST API
     $scope.metadata = function (schema, link, callback) {
         var form = clone($scope.formData);
-        var org_schema = clone(schema);
         var metadata = "";
         if (schema == 'all') {
             metadata = "metadata/tables";
             $scope.metadata.loading = true;
         } else {
             metadata = "metadata/schema/" + schema;
-
+            var table = $scope.metadata.tables.filter(function(obj){
+                return obj.id == schema;
+            })[0];
+            
+            table.loading = true;
+            
             if (!link && !callback) {
                 $scope.formData['ref-link'] = "db/" + schema;
             }
@@ -177,7 +181,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                         //                    console.log("parent's reverse: " + parent["table"].parent);
                     }
                     else {
-                        // schema.loading = false;
+                        table.loading = false;
                         $scope.metadata["table"] = data.table;
                         $scope.metadata["table"]["fields"] = [];
                         if ($scope.tempTable)
