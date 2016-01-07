@@ -14,7 +14,7 @@ module.exports = function (app) {
             if (!temp) {
                 temp = db.addCollection("template");
             } else {
-                console.log(temp.data);
+                // console.log(temp.data);
                 res.json(temp.data);
             }
             db.saveDatabase();
@@ -47,21 +47,24 @@ module.exports = function (app) {
         db.saveDatabase();
     });
 
-    function getMetadata(url) {
-//        db2.loadDatabase({}, function () {
+    function getMetadata(url, callback) {
+        db2.loadDatabase({}, function () {
             var metadata = db2.getCollection('metadata');
             if (metadata) {
-                console.log("db.find Collection: ");
+                console.log("db found Collection: ");
+                console.log("url: " + url);
+                // console.log("metadata json: " + JSON.stringify(metadata.data));
 
-                var metalist = metadata.find({'url': {'$eq': url}});
-
+                // var metalist = metadata.find({'url': url});
+                var metalist = metadata.find({ 'url': { '$eq': url } });
+                // console.log("metalist: " + JSON.stringify(metalist[0].url));
                 if (metalist && metalist.length > 0)
-                    return  metalist[0];
+                    callback(metalist[0]);
                 else
-                    return null
+                    callback(null);
             }
-//            db2.saveDatabase();
-//        });
+            db2.saveDatabase();
+        });
     }
 
     function saveMetadata(url, data) {
@@ -72,8 +75,8 @@ module.exports = function (app) {
             metadata = db2.addCollection("metadata");
         }
         console.log("ready to insert: " + data);
-        var temp = {url: url, data: data};
-//        console.log("temp: " + JSON.stringify(temp));
+        var temp = { url: url, data: data };
+        //        console.log("temp: " + JSON.stringify(temp));
         metadata.insert(temp);
 
         db2.saveDatabase();
@@ -136,25 +139,42 @@ module.exports = function (app) {
         };
 
         var url_str = "http://" + req.body.server + req.body.context + req.body.metadata;
-        var metadata = getMetadata(url_str);
-
-        if (metadata) {
-            console.log('get metadata: ' + metadata.url);
-            res.json(metadata.data);
-        } else {
-            request = client.get(url, args, function (data, response) {
-                parseString(data, function (err, result) {
-                    //                console.log("meta data json: " + JSON.stringify(result));
-                    res.json(result);
-                    metadata = result;
-                    saveMetadata(url_str, metadata);
+        getMetadata(url_str, function (metadata) {
+            if (metadata)
+                res.json(metadata.data);
+            else {
+                request = client.get(url, args, function (data, response) {
+                    parseString(data, function (err, result) {
+                        //                console.log("meta data json: " + JSON.stringify(result));
+                        res.json(result);
+                        metadata = result;
+                        saveMetadata(url_str, metadata);
+                    });
                 });
-            });
 
-            request.on('error', function (err) {
-                console.log('request error: ' + err);
-            });
-        }
+                request.on('error', function (err) {
+                    console.log('request error: ' + err);
+                });
+            }
+        });
+
+        // if (metadata) {
+        //     console.log('get metadata: ' + metadata.url);
+        //     res.json(metadata.data);
+        // } else {
+        //     request = client.get(url, args, function (data, response) {
+        //         parseString(data, function (err, result) {
+        //             //                console.log("meta data json: " + JSON.stringify(result));
+        //             res.json(result);
+        //             metadata = result;
+        //             saveMetadata(url_str, metadata);
+        //         });
+        //     });
+
+        //     request.on('error', function (err) {
+        //         console.log('request error: ' + err);
+        //     });
+        // }
 
 
     });
@@ -237,9 +257,9 @@ module.exports = function (app) {
         res.sendfile('./public/cms.html');
     });
 
-//    app.get('/am', function (req, res) {
-//        res.sendfile('./public/am.html');
-//    });
+    //    app.get('/am', function (req, res) {
+    //        res.sendfile('./public/am.html');
+    //    });
 
     app.get('/amx', function (req, res) {
         res.sendfile('./public/amx.html');
