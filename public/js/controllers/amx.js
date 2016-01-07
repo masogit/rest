@@ -101,10 +101,38 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         //        $scope.store();
     };
 
-    $scope.getTypeFromFields = function(key, fields){
-        return fields.filter(function(obj){
+    $scope.formatValue = function (key, value, fields) {
+
+        var isDate = false;
+        if (fields) {
+            isDate = $scope.checkDateType($scope.getTypeFromFields(key, fields));
+        } else {
+            isDate = $scope.checkDateType($scope.getType(key));
+        }
+
+        if (isDate) {
+            if (value) {
+                var d = new Date(value);
+                return d.toLocaleString();
+            }
+            return value;
+        } else {
+            if (value instanceof Object)
+                return value[Object.keys(value)[0]];
+            else
+                return value;
+        }
+    };
+
+    $scope.getTypeFromFields = function (key, fields) {
+        var field = fields.filter(function (obj) {
             return obj['sqlname'] == key;
-        })[0]['type'];
+        })[0];
+
+        if (field && field['type'])
+            return field['type']
+        else
+            return "";
     };
 
     $scope.getType = function (key) {
@@ -127,7 +155,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             })[0];
         }
     };
-    
+
     // load modal for CRUD
     $scope.load = function (data) {
         var modalInstance = $uibModal.open({
@@ -214,7 +242,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     else {
                         $scope.metadata["table"] = data.table;
                         $scope.metadata["table"]["fields"] = [];
-                        
+
                         // amTree will check fields and expand related link
                         if ($scope.tempTable) {
                             $scope.metadata["table"]["fields"] = $scope.tempTable.fields;

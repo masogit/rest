@@ -69,8 +69,7 @@
                         <a ng-click="load(e)"><span class="glyphicon glyphicon-edit"></span></a>
                     </td>
                     <td ng-repeat="(key, value) in e" ng-show="key!='ref-link'">
-                        <span ng-show="checkDateType(getTypeFromFields(key, r.fields))">{{ showValue(value) | date }}</span>
-                        <span ng-show="!checkDateType(getTypeFromFields(key, r.fields))">{{ showValue(value) }}</span>
+                        {{ formatValue(key, value, r.fields) }}
                     </td>
                 </tr>
                 </tbody>
