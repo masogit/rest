@@ -9,7 +9,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         collection: "",     // "EmplDepts",
         param: {
             limit: "100",
-            offset: "0",
+            offset: "1",
             filter: "",
             orderby: "",
             fields: []
