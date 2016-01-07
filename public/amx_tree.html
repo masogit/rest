@@ -1,12 +1,11 @@
+<span class="text-center" ng-show="metadata.loading">Loading....</span>
 
-<div class="panel panel-default">
+<div ng-show="metadata.tables && !metadata.table" class="panel panel-default">
     <div class="panel-heading">
         <input type="text" placeholder="Search table..." class="form-control" ng-model="tableSearch.id">
     </div>
     <div class="panel-body" full-height="200">
-        <span class="text-center" ng-show="metadata.loading">Loading....</span>
-
-        <ul class="nav sidebar" ng-show="metadata.tables && !metadata.table">
+        <ul class="nav sidebar">
             <li ng-repeat="table in metadata.tables | filter: tableSearch">
                 <a href="#" ng-click="metadata(table.id)">{{ table.id }} 
                     <span ng-show="table.loading" class="pull-right">loading...</span>

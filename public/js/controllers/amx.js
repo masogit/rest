@@ -489,6 +489,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.loadOneTemp = function (temp) {
+
+        $scope.templates['selected'] = temp['$loki'];
+
         $scope.queryRootByTemp(temp);
         $scope.tempTable = clone(temp);
         $scope.metadata(temp['$']['sqlname']);
@@ -552,6 +555,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
         var tempRecord = template;
 
+        tempRecord['selected'] = data["ref-link"];
 
         for (var i in tempRecord.field) {
             var sqlname = tempRecord.field[i]["$"]["sqlname"];

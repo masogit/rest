@@ -4,6 +4,7 @@ module.exports = function (app) {
     var client = new Client();
     var loki = require('lokijs');
     var db = new loki('db/template.json');
+    var db2 = new loki('db/metadata.json');
     var parseString = require('xml2js').parseString;
 
     // Configuration
@@ -18,12 +19,6 @@ module.exports = function (app) {
             }
             db.saveDatabase();
         });
-        //        var temp = db.getCollection("template");
-        //        if (!temp) {
-        //            temp = db.addCollection("template");
-        //        }
-        //        var data = temp.query({});
-
     });
 
     app.post('/json/template', function (req, res) {
@@ -43,17 +38,6 @@ module.exports = function (app) {
         db.saveDatabase();
     });
 
-    app.put('/json/template', function (req, res) {
-        var temp = db.getCollection("template");
-        if (!temp) {
-            temp = db.addCollection("template");
-        } else {
-            var data = temp.update(req.body);
-            res.json(data);
-        }
-        db.saveDatabase();
-    });
-
     app.post('/json/template/delete', function (req, res) {
         var temp = db.getCollection("template");
         console.log("template delete: " + JSON.stringify(req.body));
@@ -62,6 +46,39 @@ module.exports = function (app) {
 
         db.saveDatabase();
     });
+
+    function getMetadata(url) {
+//        db2.loadDatabase({}, function () {
+            var metadata = db2.getCollection('metadata');
+            if (metadata) {
+                console.log("db.find Collection: ");
+
+                var metalist = metadata.find({'url': {'$eq': url}});
+
+                if (metalist && metalist.length > 0)
+                    return  metalist[0];
+                else
+                    return null
+            }
+//            db2.saveDatabase();
+//        });
+    }
+
+    function saveMetadata(url, data) {
+        console.log("saveMetadata: ");
+        var metadata = db2.getCollection('metadata');
+        if (!metadata) {
+            console.log("db not get collection: ");
+            metadata = db2.addCollection("metadata");
+        }
+        console.log("ready to insert: " + data);
+        var temp = {url: url, data: data};
+//        console.log("temp: " + JSON.stringify(temp));
+        metadata.insert(temp);
+
+        db2.saveDatabase();
+
+    }
 
     // CMS REST -------------------------------------------------------------
     app.post('/cms/get', function (req, res) {
@@ -118,16 +135,28 @@ module.exports = function (app) {
             }
         };
 
-        request = client.get(url, args, function (data, response) {
-            parseString(data, function (err, result) {
-                //                console.log("meta data json: " + JSON.stringify(result));
-                res.json(result);
-            });
-        });
+        var url_str = "http://" + req.body.server + req.body.context + req.body.metadata;
+        var metadata = getMetadata(url_str);
 
-        request.on('error', function (err) {
-            console.log('request error: ' + err);
-        });
+        if (metadata) {
+            console.log('get metadata: ' + metadata.url);
+            res.json(metadata.data);
+        } else {
+            request = client.get(url, args, function (data, response) {
+                parseString(data, function (err, result) {
+                    //                console.log("meta data json: " + JSON.stringify(result));
+                    res.json(result);
+                    metadata = result;
+                    saveMetadata(url_str, metadata);
+                });
+            });
+
+            request.on('error', function (err) {
+                console.log('request error: ' + err);
+            });
+        }
+
+
     });
 
     // AM REST -------------------------------------------------------------

@@ -9,7 +9,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="temp in templates">
+        <tr ng-repeat="temp in templates" ng-class="{selected: templates['selected']==temp['$loki']}">
             <td><a ng-click="loadOneTemp(temp)">{{ temp.name }}</a></td>
             <td>{{ temp['$']['sqlname'] }}</td>
             <!--<td>-->

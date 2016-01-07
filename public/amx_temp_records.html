@@ -12,7 +12,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="record in tempRecords.records">
+            <tr ng-repeat="record in tempRecords.records" ng-class="{selected: tempRecords['selected']==record['ref-link']}">
                 <td>
                     <a ng-click="getRecordByTemp(record, tempRecords, true)">{{ record['ref-link'] }}</a>
                 <td>{{ record['self'] }}</td>
