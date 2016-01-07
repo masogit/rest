@@ -101,6 +101,12 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         //        $scope.store();
     };
 
+    $scope.getTypeFromFields = function(key, fields){
+        return fields.filter(function(obj){
+            return obj['sqlname'] == key;
+        })[0]['type'];
+    };
+
     $scope.getType = function (key) {
         var links = key.split('.');
         var table = $scope.metadata.table;
@@ -214,6 +220,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                             $scope.metadata["table"]["fields"] = $scope.tempTable.fields;
                             var fields = $scope.metadata["table"]["fields"];
 
+                            // todo: expand all links defined in template
                             for (var i in fields) {
                                 var links = fields[i].split('.');
                                 expandChild($scope.metadata["table"], links);
