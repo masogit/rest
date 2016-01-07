@@ -1,10 +1,17 @@
 <h4><strong>{{ tableName }} </strong>
     <small>({{ tableData.count }})
         <a ng-click="query(tableData.form)"><span class="glyphicon glyphicon-refresh"></span></a>
-        
         <a ng-click="tableData.aqlEdit=!tableData.aqlEdit"><span class="glyphicon glyphicon-pencil"></span></a>
     </small>
-    <small class="pull-right">       
+    <small class="pull-right">
+        <input ng-show="tableData.aqlEdit" type="text" placeholder="Limit" ng-model="tableData.form.param.limit" size="1">
+        <input ng-show="tableData.aqlEdit" type="text" placeholder="Pos" ng-model="tableData.form.param.offset" size="1">
+        <input ng-show="tableData.aqlEdit" type="text" placeholder="AQL Filter..." ng-model="tableData.form.param.filter"
+               size="30">
+        <input ng-show="tableData.aqlEdit" type="text" placeholder="Order By..." ng-model="tableData.form.param.orderby"
+               size="20">
+        <button ng-show="tableData.aqlEdit" ng-click="query(tableData.form)">Query</button>
+
         Search
         <input type="text" placeholder="Dynamic Search" ng-model="search"
                ng-change="formData.pageSize=(search.trim().length>0)?tableData.entities.length:10">
@@ -14,20 +21,11 @@
     </small>
 </h4>
 
-<div ng-show="tableData.aqlEdit">
-    <form class="form-inline">
-        <input type="text" class="form-control" placeholder="Limit" ng-model="tableData.form.param.limit" size="1">
-        <input type="text" class="form-control" placeholder="Pos" ng-model="tableData.form.param.offset" size="1">
-        <input type="text" class="form-control" placeholder="AQL Filter..." ng-model="tableData.form.param.filter" size="30">
-        <input type="text" class="form-control" placeholder="Order By..." ng-model="tableData.form.param.orderby" size="20">
-        <button class="btn" ng-click="query(tableData.form)">Query</button>
-    </form>
-</div>
-
 <span class="text-center" ng-show="loading">Loading....</span>
 
-<table class="table table-striped">
-    <thead>
+<div full-height="180">
+    <table class="table table-striped">
+        <thead>
         <tr ng-repeat="e in tableData.entities" ng-if="$first">
             <th ng-show="e['ref-link']">
                 <a ng-click="order('ref-link')">ref-link</a>
@@ -44,8 +42,8 @@
                 </a>
             </th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         <tr ng-repeat="e in tableData.entities|filter:search|orderBy:predicate:reverse|startFrom:currentPage*formData.pageSize|limitTo:formData.pageSize">
             <td ng-show="e['ref-link']">
                 <a ng-click="showRelations(e)">{{ e['ref-link'] }}</a>
@@ -55,8 +53,10 @@
                 {{ formatValue(key, value) }}
             </td>
         </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
 
 <nav class="pull-right">
     <ul class="pagination">
@@ -65,9 +65,11 @@
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        <li ng-repeat="i in [] |range:tableData.entities.length/formData.pageSize" ng-class="{active: currentPage==i}" ng-click="jump(i)"><a>{{ i + 1 }}</a></li>
+        <li ng-repeat="i in [] |range:tableData.entities.length/formData.pageSize" ng-class="{active: currentPage==i}"
+            ng-click="jump(i)"><a>{{ i + 1 }}</a></li>
         <li>
-            <a aria-label="Next" ng-click="currentPage=(currentPage+1)>tableData.entities.length/formData.pageSize?currentPage:currentPage+1">
+            <a aria-label="Next"
+               ng-click="currentPage=(currentPage+1)>tableData.entities.length/formData.pageSize?currentPage:currentPage+1">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
