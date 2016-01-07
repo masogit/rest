@@ -143,17 +143,20 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     function findDef(table, links) {
-        if (links.length > 1) {
-            var link = table.link.filter(function (obj) {
-                return obj['$']['sqlname'] == links[0];
-            })[0];
-            links.shift();
-            return (link.table) ? findDef(link.table, links) : link.table;
-        } else {
-            return table.field.filter(function (obj) {
-                return obj['$']['sqlname'] == links[0];
-            })[0];
+        if (table) {
+            if (links.length > 1) {
+                var link = table.link.filter(function (obj) {
+                    return obj['$']['sqlname'] == links[0];
+                })[0];
+                links.shift();
+                return (link.table) ? findDef(link.table, links) : link.table;
+            } else {
+                return table.field.filter(function (obj) {
+                    return obj['$']['sqlname'] == links[0];
+                })[0];
+            }
         }
+
     };
 
     // load modal for CRUD
