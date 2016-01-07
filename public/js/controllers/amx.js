@@ -747,7 +747,7 @@ am.directive('fullHeight', function ($window) {
                 //                console.log("document.documentElement.clientHeight: " + document.documentElement.clientHeight);
 
                 var elementTop = (attrs.fullHeight) ? attrs.fullHeight : element.prop('offsetTop');
-                element.css('max-height', ($window.innerHeight - elementTop - 10) + 'px');
+                element.css('height', ($window.innerHeight - elementTop - 10) + 'px');
                 element.css('overflow-y', 'auto');
             };
             scope.initializeWindowSize();
