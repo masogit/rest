@@ -37,6 +37,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             localStorage.setItem(AM_FORM_DATA, JSON.stringify(form));
         }
         delete $scope.serverbar;
+        $scope.metadata('all');
     };
 
     if (localStorage && localStorage[AM_FORM_DATA]) {
