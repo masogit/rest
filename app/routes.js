@@ -6,7 +6,15 @@ module.exports = function (app) {
     var db = new loki('db/template.json');
     var db2 = new loki('db/metadata.json');
     var parseString = require('xml2js').parseString;
-
+    var metadata;
+    db2.loadDatabase({}, function () {
+        metadata = db2.getCollection('metadata');
+        if (!metadata) {
+            console.log("not found Collection: ");
+            metadata = db2.addCollection("metadata");
+            console.log("collection metadata created! ");
+        }
+    });
     // Configuration
     app.get('/json/template', function (req, res) {
         db.loadDatabase({}, function () {
@@ -48,38 +56,31 @@ module.exports = function (app) {
     });
 
     function getMetadata(url, callback) {
-        db2.loadDatabase({}, function () {
-            var metadata = db2.getCollection('metadata');
             if (metadata) {
-                console.log("db found Collection: ");
                 console.log("query url: " + url);
-                // console.log("metadata json: " + JSON.stringify(metadata.data));
 
-                // var metalist = metadata.find({'url': url});
                 var metalist = metadata.find({ 'url': { '$eq': url } });
                 // console.log("metalist: " + JSON.stringify(metalist[0].url));
                 if (metalist && metalist.length > 0) {
-                    callback(metalist[0]);
+                    return metalist[0];
                     console.log("return url data: ");
                 }
                 else{
                     console.log("not find url in Collection: ");
-                    callback(null);
+                    return null;
                 }
             } else {
                 console.log("not found Collection: ");
-                callback(null);
+                return null;
             }
-            db2.saveDatabase();
-        });
     }
 
     function saveMetadata(url, data) {
         console.log("to save url: " + url);
-        var metadata = db2.getCollection('metadata');
         if (!metadata) {
-            console.log("not found collection, create! ");
-            metadata = db2.addCollection("metadata");
+            console.log("not found collection");
+//            metadata = db2.addCollection("metadata");
+            return null;
         }
 
         var temp = { url: url, data: data };
@@ -148,8 +149,8 @@ module.exports = function (app) {
         };
 
         var url_str = "http://" + req.body.server + req.body.context + req.body.metadata;
-        getMetadata(url_str, function (metadata) {
-            if (metadata)
+        var metadata = getMetadata(url_str);
+            if (metadata && metadata.data)
                 res.json(metadata.data);
             else {
                 request = client.get(url, args, function (data, response) {
@@ -166,27 +167,6 @@ module.exports = function (app) {
                 });
             }
         });
-
-        // if (metadata) {
-        //     console.log('get metadata: ' + metadata.url);
-        //     res.json(metadata.data);
-        // } else {
-        //     request = client.get(url, args, function (data, response) {
-        //         parseString(data, function (err, result) {
-        //             //                console.log("meta data json: " + JSON.stringify(result));
-        //             res.json(result);
-        //             metadata = result;
-        //             saveMetadata(url_str, metadata);
-        //         });
-        //     });
-
-        //     request.on('error', function (err) {
-        //         console.log('request error: ' + err);
-        //     });
-        // }
-
-
-    });
 
     // AM REST -------------------------------------------------------------
     app.post('/am/rest', function (req, res) {
