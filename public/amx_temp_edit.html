@@ -35,13 +35,6 @@
                 <div ng-show="tempTable" ng-include="'amTemp'"></div>
             </div>
         </div>
-        <!--<div class="form-group">-->
-        <!--<label>Structure</label>-->
-
-        <!--<div>-->
-        <!--<div ng-show="tempTable" ng-include="'amTemp'"></div>-->
-        <!--</div>-->
-        <!--</div>-->
     </form>
 </div>
 
@@ -49,9 +42,9 @@
 <script type="text/ng-template" id="amTemp">
     <span style="display: none">{{table = (l.table)?l.table:tempTable}}</span>
     <span style="display: none">{{isCard11 = (l['$']['card11'])?true:false}}</span>
-    <h4>{{l['$']['sqlname']}} [{{table['$']['sqlname']}}]
+    <h5>{{ (l['$']['sqlname'])?l['$']['sqlname']:table['$']['sqlname'] }}
         <small ng-show="!isCard11"><a ng-click="table.AQL=' '" ng-show="!table.AQL">Set AQL</a></small>
-    </h4>
+    </h5>
     <ul>
         <span ng-show="table.AQL">Set AQL: <input class="form-control" type="text" ng-model="table.AQL"></span>
         <li ng-repeat="f in table.field">{{f['$']['sqlname']}}</li>

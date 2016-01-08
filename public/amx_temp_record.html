@@ -8,19 +8,14 @@
 <script type="text/ng-template" id="amTempRecord">
 
     <span style="display: none">{{table = (t)?t:((l.table)?l.table:tempRecord)}}</span>
-    <h5>{{l['$']['sqlname']}} [{{table['$']['sqlname']}}]</h5>
-    <!--<div ng-repeat="record in table.records">-->
-    <!--{{ record }}-->
+    <h5>{{ (l['$']['sqlname'])?l['$']['sqlname']:table['$']['sqlname'] }}</h5>
     <ul>
         <li ng-repeat="f in table.field"><strong>{{f['$']['sqlname']}}:</strong>
             {{ formatValue(f['$']['sqlname'], f.data) }}
-            <!--<span ng-show="checkDateType(f['$']['type'])">{{ showValue(f.data) | date }}</span>-->
-            <!--<span ng-show="!checkDateType(f['$']['type'])">{{ showValue(f.data) }}</span>-->
         </li>
     </ul>
 
     <span ng-repeat="l in table.link">
-    <!--{{l.form}}-->
         <div ng-show="l.table && l['$']['card11']=='yes'" ng-include="'amTempRecord'" style="padding-left: 20px"></div>
         <div ng-show="l.tables && !l['$']['card11']" style="padding-left: 20px">
             <a ng-click="l.showChild=!l.showChild" ng-show="!l.showChild"><span class="glyphicon glyphicon-plus"></span></a>

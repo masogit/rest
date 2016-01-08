@@ -67,7 +67,7 @@
         <span class="glyphicon glyphicon-minus"></span>
     </a>
 
-    <a ng-click="metadata(link['$']['desttable'])">[{{ link["$"]["sqlname"] }}]</a>
+    <a ng-click="metadata(link['$']['desttable'])">[{{ ((link['parent'])?(link['parent']+'.'):'')+link["$"]["sqlname"] }}]</a>
     <!--loading-->
     <span class="text-center" ng-show="link.loading">Loading....</span>
 
