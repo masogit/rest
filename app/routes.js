@@ -52,32 +52,41 @@ module.exports = function (app) {
             var metadata = db2.getCollection('metadata');
             if (metadata) {
                 console.log("db found Collection: ");
-                console.log("url: " + url);
+                console.log("query url: " + url);
                 // console.log("metadata json: " + JSON.stringify(metadata.data));
 
                 // var metalist = metadata.find({'url': url});
                 var metalist = metadata.find({ 'url': { '$eq': url } });
                 // console.log("metalist: " + JSON.stringify(metalist[0].url));
-                if (metalist && metalist.length > 0)
+                if (metalist && metalist.length > 0) {
                     callback(metalist[0]);
-                else
+                    console.log("return url data: ");
+                }
+                else{
+                    console.log("not find url in Collection: ");
                     callback(null);
+                }
+            } else {
+                console.log("not found Collection: ");
+                callback(null);
             }
             db2.saveDatabase();
         });
     }
 
     function saveMetadata(url, data) {
-        console.log("saveMetadata: ");
+        console.log("to save url: " + url);
         var metadata = db2.getCollection('metadata');
         if (!metadata) {
-            console.log("db not get collection: ");
+            console.log("not found collection, create! ");
             metadata = db2.addCollection("metadata");
         }
-        console.log("ready to insert: " + data);
+
         var temp = { url: url, data: data };
         //        console.log("temp: " + JSON.stringify(temp));
         metadata.insert(temp);
+
+        console.log("url saved: " + temp.url);
 
         db2.saveDatabase();
 
