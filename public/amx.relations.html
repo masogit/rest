@@ -31,11 +31,11 @@
                 <thead>
                 <tr ng-repeat="e in r.records" ng-if="$first">
                     <th ng-show="e['ref-link']">
-                        <label class="badge">{{ r.link }}</label>
-                        <label class="glyphicon glyphicon-resize-full" ng-if="r['showFields']"
-                               ng-click="r['showFields']=!r['showFields']"></label>
-                        <label class="glyphicon glyphicon-resize-small" ng-if="!r['showFields']"
-                               ng-click="r['showFields']=!r['showFields']"></label>
+                        <span class="badge" ng-click="r['showFields']=!r['showFields']">
+                            {{ r.link }}
+                            <span class="glyphicon glyphicon-zoom-out" ng-if="r['showFields']"></span>
+                            <span class="glyphicon glyphicon-zoom-in" ng-if="!r['showFields']"></span>
+                        </span>
                     </th>
                     <th ng-repeat="(key, value) in e" ng-show="key!='ref-link'">{{ key }}</th>
                 </tr>
