@@ -9,7 +9,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         collection: "",     // "EmplDepts",
         param: {
             limit: "100",
-            offset: "1",
+            offset: "0",
             filter: "",
             orderby: "",
             fields: []
@@ -565,15 +565,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         for (var i in tempRecord.link) {
             var form = clone($scope.formData);
             var link = tempRecord.link[i];
-            if (link['$']['card11'] == 'yes') {
-                form["ref-link"] = "db/" + link['$']['desttable'];
-                form.param.filter = link['$']['reverse'] + ".PK=" + data["ref-link"].split('/')[2];
-            } else {
-                form["ref-link"] = data["ref-link"];
-                form["collection"] = "/" + link['$']['sqlname'];
-                if (link.table.AQL)
-                    form.param.filter = link.table.AQL;
-            }
+            form["ref-link"] = "db/" + link['$']['desttable'];
+            form.param.filter = link['$']['reverse'] + ".PK=" + data["ref-link"].split('/')[2];
+            if (link.table.AQL)
+                form.param.filter = form.param.filter + ' AND ' + link.table.AQL;
 
             for (var j in link.table.field)
                 form.param.fields.push(link.table.field[j]['$']['sqlname']);
