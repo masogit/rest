@@ -515,11 +515,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $http.post('/json/template', temp).success(function (data) {
             //            console.log("saveTemplate: " + JSON.stringify(data));
             temp = data;
-        });
 
-        $scope.loadTemplates();
-        $scope.tab = "templates";
-        delete $scope.tempTable;
+            $scope.loadTemplates();
+            $scope.tab = "templates";
+            delete $scope.tempTable;
+        });
 
     };
 
