@@ -61,7 +61,7 @@
 <nav class="pull-right">
     <ul class="pagination">
         <li>
-            <a aria-label="Previous" ng-click="currentPage=(currentPage-1)<0?0:currentPage-1">
+            <a aria-label="Previous" ng-click="jump((currentPage-1)<0?0:currentPage-1)">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
@@ -69,7 +69,7 @@
             ng-click="jump(i)"><a>{{ i + 1 }}</a></li>
         <li>
             <a aria-label="Next"
-               ng-click="currentPage=(currentPage+1)>tableData.entities.length/formData.pageSize?currentPage:currentPage+1">
+               ng-click="jump((currentPage+1)>tableData.entities.length/formData.pageSize?currentPage:currentPage+1)">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
