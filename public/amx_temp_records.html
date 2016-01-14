@@ -7,17 +7,16 @@
         <table class="table table-striped" ng-show="tempRecords">
             <thead>
             <tr>
-                <th>Ref-Link</th>
                 <th>Self</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="record in tempRecords.records" ng-class="{selected: tempRecords['selected']==record['ref-link']}">
-                <td>
-                    <a ng-click="getRecordByTemp(record, tempRecords, true)">{{ record['ref-link'] }}</a>
+            <tr ng-repeat="record in tempRecords.records"
+                ng-class="{selected: tempRecords['selected']==record['ref-link']}"
+                ng-click="getRecordByTemp(record, tempRecords, true)">
                 <td>
                     <a ng-click="showRelations(record)"><span class="glyphicon glyphicon-zoom-in"></span></a>
-                    {{ record['self'] }}
+                    <a ng-click="getRecordByTemp(record, tempRecords, true)">{{ record['self'] }}</a>
                 </td>
             </tr>
             </tbody>
