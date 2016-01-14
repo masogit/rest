@@ -99,7 +99,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#"> {{ title }}
-               <small>({{ formData.server }})</small>
+                <small>({{ formData.server }})</small>
             </a>
         </div>
 
@@ -131,8 +131,9 @@
     <div class="row">
         <!--   nav bar -->
         <!--<div class="row" role="toolbar" ng-include="'amx_toolbar.html'"></div>-->
+        <div class="col-md-12" ng-show="relations" ng-include="'amx.relations.html'"></div>
 
-        <div class="col-md-3">
+        <div class="col-md-3" ng-show="!relations">
             <ul class="nav nav-pills nav-justified" ng-init="tab='templates'">
                 <li ng-class="{active: tab=='templates'}"><a ng-click="tab='templates'">Views</a></li>
                 <li ng-class="{active: tab=='tables'}"><a ng-click="tab='tables'">Tables</a></li>
@@ -143,16 +144,12 @@
             <div ng-include="'amx_tree.html'" ng-init="metadata('all')" ng-show="tab=='tables'"></div>
         </div>
 
-        <div class="col-md-9 main">
-            <div class="records" role="content">
-                <div ng-show="tableData && !relations" ng-include="'amx_records.html'"></div>
-                <div ng-show="relations" ng-include="'amx.relations.html'"></div>
-            </div>
-        </div>
 
-        <div class="col-md-3" ng-show="tempTable && !tableData" ng-include="'amx_temp_edit.html'"></div>
-        <div class="col-md-3" ng-show="tempRecords && !tableData" ng-include="'amx_temp_records.html'"></div>
-        <div class="col-md-3" ng-show="tempRecord && !tableData" ng-include="'amx_temp_record.html'"></div>
+        <div class="col-md-9" ng-show="tableData && !relations" ng-include="'amx_records.html'"></div>
+
+        <div class="col-md-3" ng-show="tempTable && !tableData && !relations" ng-include="'amx_temp_edit.html'"></div>
+        <div class="col-md-3" ng-show="tempRecords && !tableData && !relations" ng-include="'amx_temp_records.html'"></div>
+        <div class="col-md-3" ng-show="tempRecord && !tableData && !relations" ng-include="'amx_temp_record.html'"></div>
 
     </div>
 </div>
