@@ -1,7 +1,7 @@
 var am = angular.module('am', ['ui.bootstrap']);
 am.controller('amCtl', function ($scope, $http, $uibModal) {
     var AM_FORM_DATA = "amFormData";
-    $scope.title = "AM REST DB Client";
+    $scope.title = "AM Browser";
     $scope.formData = {
         server: "16.165.217.186:8081",
         context: "/AssetManagerWebService/rs/",
