@@ -9,16 +9,20 @@
 
     <span style="display: none">{{table = (t)?t:((l.table)?l.table:tempRecord)}}</span>
     <h5>
+        <small>
+            <span class="glyphicon glyphicon-eye-close" ng-click="table.showSelf=!table.showSelf" ng-show="!table.showSelf"></span>
+            <span class="glyphicon glyphicon-eye-open" ng-click="table.showSelf=!table.showSelf" ng-show="table.showSelf"></span>
+        </small>
         {{ (l['$']['sqlname']) ? l['$']['sqlname'] : table['$']['sqlname'] }}
         <small>({{ table['ID'] }})</small>
     </h5>
-    <ul>
+    <ul ng-show="!table.showSelf">
         <li ng-repeat="f in table.field"><strong>{{f['$']['sqlname']}}:</strong>
             {{ formatValue(f['$']['sqlname'], f.data) }}
         </li>
     </ul>
 
-    <span ng-repeat="l in table.link">
+    <span ng-show="!table.showSelf" ng-repeat="l in table.link">
         <div ng-show="l.table && l['$']['card11']=='yes'" ng-include="'amTempRecord'" style="padding-left: 20px"></div>
         <div ng-show="l.tables && !l['$']['card11']" style="padding-left: 20px">
             <a ng-click="l.showChild=!l.showChild" ng-show="!l.showChild"><span class="glyphicon glyphicon-plus"></span></a>
