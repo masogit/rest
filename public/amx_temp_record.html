@@ -1,4 +1,3 @@
-
 <h4><strong>{{tempRecord.name}} </strong>
     <small>Elapsed time: {{ tempRecord.timeEnd - tempRecord.timeStart }}ms</small>
 </h4>
@@ -17,8 +16,8 @@
         <small>({{ table['ID'] }})</small>
     </h5>
     <ul ng-show="!table.showSelf">
-        <li ng-repeat="f in table.field"><strong>{{(f.aliasName)?f.aliasName:f['$']['sqlname']}}:</strong>
-            {{ formatValue(f['$']['sqlname'], f.data) }}
+        <li ng-repeat="f in table.field"><strong>{{(f.aliasName)?f.aliasName:(tempTable.showLabel)?f['$']['label']:f['$']['sqlname']}}:</strong> {{ formatValue(f['$']['sqlname'],
+            f.data) }}
         </li>
     </ul>
 
@@ -26,9 +25,9 @@
         <div ng-show="l.table && l['$']['card11']=='yes'" ng-include="'amTempRecord'" style="padding-left: 20px"></div>
         <div ng-show="l.tables && !l['$']['card11']" style="padding-left: 20px">
             <a ng-click="l.showChild=!l.showChild" ng-show="!l.showChild"><span class="glyphicon glyphicon-plus"></span></a>
-            <a ng-click="l.showChild=!l.showChild" ng-show="l.showChild"><span class="glyphicon glyphicon-minus"></span></a>
-            {{l['$']['sqlname']}} ({{l.tables.length}})
-            <div ng-show="l.showChild" ng-repeat="t in l.tables" ng-include="'amTempRecord'" style="padding-left: 18px"></div>
-        </div>
+    <a ng-click="l.showChild=!l.showChild" ng-show="l.showChild"><span class="glyphicon glyphicon-minus"></span></a> {{l['$']['sqlname']}}
+    ({{l.tables.length}})
+    <div ng-show="l.showChild" ng-repeat="t in l.tables" ng-include="'amTempRecord'" style="padding-left: 18px"></div>
+    </div>
     </span>
 </script>
