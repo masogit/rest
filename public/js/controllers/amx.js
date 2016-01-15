@@ -552,11 +552,12 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
     };
 
-    $scope.getRecordByTemp = function (data, template, root) {
+    $scope.getRecordByTemp = function (data, tempRecord, root) {
 
-        var tempRecord = template;
+        if (root)
+            tempRecord['selected'] = data["ref-link"];
 
-        tempRecord['selected'] = data["ref-link"];
+        tempRecord['ID'] = data["ref-link"].split('/')[2];
 
         for (var i in tempRecord.field) {
             var sqlname = tempRecord.field[i]["$"]["sqlname"];
