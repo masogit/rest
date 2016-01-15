@@ -377,83 +377,12 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
     };
 
-    $scope.showRelations = function (record, parent) {
-        var form = clone($scope.formData);
-        form["ref-link"] = record["ref-link"];
-        form.method = "get";
-        if (!parent) {
-            $scope.relations = [];
-            $scope.relations.push({
-                link: record["ref-link"].split("/")[1],
-                'ref-link': record["ref-link"],
-                schema: record["ref-link"].split("/")[1],
-                active: true,
-                form: form,
-                records: [],
-                displayColumns: [],
-                child: null
-            });
-        } else {
-            parent.child = [];
-            parent.child.push({
-                link: parent.link,
-                'ref-link': parent["ref-link"],
-                schema: parent.schema,
-                form: parent.form,
-                active: true,
-                records: [],
-                displayColumns: [],
-                child: null
-            });
-        }
 
-        //        $scope.addBreadcrumb(record["ref-link"]);
-
-        $scope.metadata(record["ref-link"].split("/")[1], null, function (data) {
-            var links = data.table.link;
-
-            for (var i in links) {
-                var form = clone($scope.formData);
-                var sqlname = links[i]['$']['sqlname'];
-                var schema = links[i]['$']['desttable'];
-
-                // check 1v1
-                if (links[i]['$']['card11']) {
-                    form["ref-link"] = "db/" + schema;
-                    form.param.filter = links[i]['$']['reverse'] + ".PK=" + record["ref-link"].split('/')[2];
-                } else {
-                    form["ref-link"] = record["ref-link"];
-                    form["collection"] = "/" + sqlname;
-                }
-
-                form.param.fields = "";
-                form.method = "get";
-
-                if (!parent) {
-                    $scope.relations.push({
-                        link: sqlname,
-                        schema: schema,
-                        records: [],
-                        displayColumns: [],
-                        form: form
-                    });
-                } else {
-                    parent.child.push({
-                        link: sqlname,
-                        schema: schema,
-                        records: [],
-                        displayColumns: [],
-                        form: form
-                    });
-                }
-                //                console.log("fields: " + JSON.stringify(fields));
-
-            }
-        });
-
-    };
-
-    // template module---------------------------------------------------------
+    /**
+     * Template module
+     * @param table
+     * @param isNew
+     */
     $scope.toNewTemp = function (table, isNew) {
         if ($scope.tempTable && !isNew) {
             var tableOld = clone($scope.tempTable);
@@ -617,21 +546,89 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                     }
                 }
 
-                //                if (data instanceof Object) {
-                //                    //                console.log("query data:" + JSON.stringify(data));
-                //                    if (data.entities instanceof Array)
-                //                        $scope.tableData = data;
-                //                    else if (data.type == 'Buffer') {
-                //                        $scope.tableData.count = 0;
-                //                    } else {
-                //                        $scope.tableData.count = 1;
-                //                        $scope.tableData.entities = [];
-                //                        $scope.tableData.entities.push(data);
-                //                    }
-                //                } else {
-                //                    $scope.message = JSON.stringify(form) + "<br>" + data;
-                //                }
             });
+
+    };
+
+
+    /**
+     * Build show relations
+     * @param record
+     * @param parent
+     */
+    $scope.showRelations = function (record, parent) {
+        var form = clone($scope.formData);
+        form["ref-link"] = record["ref-link"];
+        form.method = "get";
+        if (!parent) {
+            $scope.relations = [];
+            $scope.relations.push({
+                link: record["ref-link"].split("/")[1],
+                'ref-link': record["ref-link"],
+                schema: record["ref-link"].split("/")[1],
+                active: true,
+                form: form,
+                records: [],
+                displayColumns: [],
+                child: null
+            });
+        } else {
+            parent.child = [];
+            parent.child.push({
+                link: parent.link,
+                'ref-link': parent["ref-link"],
+                schema: parent.schema,
+                form: parent.form,
+                active: true,
+                records: [],
+                displayColumns: [],
+                child: null
+            });
+        }
+
+        //        $scope.addBreadcrumb(record["ref-link"]);
+
+        $scope.metadata(record["ref-link"].split("/")[1], null, function (data) {
+            var links = data.table.link;
+
+            for (var i in links) {
+                var form = clone($scope.formData);
+                var sqlname = links[i]['$']['sqlname'];
+                var schema = links[i]['$']['desttable'];
+
+                // check 1v1
+                if (links[i]['$']['card11']) {
+                    form["ref-link"] = "db/" + schema;
+                    form.param.filter = links[i]['$']['reverse'] + ".PK=" + record["ref-link"].split('/')[2];
+                } else {
+                    form["ref-link"] = record["ref-link"];
+                    form["collection"] = "/" + sqlname;
+                }
+
+                form.param.fields = "";
+                form.method = "get";
+
+                if (!parent) {
+                    $scope.relations.push({
+                        link: sqlname,
+                        schema: schema,
+                        records: [],
+                        displayColumns: [],
+                        form: form
+                    });
+                } else {
+                    parent.child.push({
+                        link: sqlname,
+                        schema: schema,
+                        records: [],
+                        displayColumns: [],
+                        form: form
+                    });
+                }
+                //                console.log("fields: " + JSON.stringify(fields));
+
+            }
+        });
 
     };
 
@@ -696,8 +693,14 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         delete $scope.message;
     };
 
-    $scope.length = function (obj) {
-        return Object.keys(obj).length;
+    $scope.colNumber = function (obj) {
+        if(obj){
+            var keys = Object.keys(obj);
+            if (keys instanceof Array)
+                return Object.keys(obj).length;
+            else
+                return 0;
+        }
     };
 
     // list order by and pagination =============================

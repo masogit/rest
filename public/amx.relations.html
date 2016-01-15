@@ -42,7 +42,7 @@
 
                 <!-- Fields select area -->
                 <tr ng-show="r['showFields']">
-                    <td colspan="{{ length(r.records[0]) }}">
+                    <td colspan="{{ colNumber(r.records[0]) }}">
                         <form class="form-inline" ng-init="getFields(r)">
                             <input type="text" class="form-control" placeholder="Search fields..."
                                    ng-model="r.fieldSearch.sqlname">
