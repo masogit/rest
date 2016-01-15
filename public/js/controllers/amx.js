@@ -519,9 +519,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
             $scope.loadTemplates();
             $scope.tab = "templates";
-            delete $scope.tempTable;
         });
 
+        $scope.backTableList();
     };
 
     $scope.closeTemplate = function () {
