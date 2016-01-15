@@ -21,8 +21,10 @@
             <a ng-click="backTableList()" class="badge"><span class="glyphicon glyphicon-arrow-left"></span></a> 
             {{ metadata.table['$']['sqlname'] }}
             <span class="pull-right">
-                <a ng-click="toNewTemp(metadata.table)" class="badge" ng-show="metadata.table.fields.length > 0"><span
-                        class="glyphicon glyphicon-plus"></span> View</a>
+                <a ng-click="toNewTemp(metadata.table, true)" class="badge" ng-show="metadata.table.fields.length > 0"><span
+                        class="glyphicon glyphicon-plus"></span></a>
+                <a ng-click="toNewTemp(metadata.table)" class="badge" ng-show="metadata.table.fields.length > 0 && tempTable"><span
+                        class="glyphicon glyphicon-random"></span></a>
             <a ng-click="addFields(metadata.table.fields)" class="badge">
                 <span class="glyphicon glyphicon-eye-open"></span> Query</a>
             </span>

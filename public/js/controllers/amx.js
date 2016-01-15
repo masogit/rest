@@ -454,10 +454,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     // template module---------------------------------------------------------
-    $scope.toNewTemp = function (table) {
-        var tempTable = clone(table);
-        $scope.tempTable = table2template(tempTable);
-
+    $scope.toNewTemp = function (table, isNew) {
+        if ($scope.tempTable && !isNew) {
+            var tableOld = clone($scope.tempTable);
+            var tableNew = clone(table);
+            $scope.tempTable = Object.assign(tableOld, table2template(tableNew));
+        } else {
+            var tempTable = clone(table);
+            $scope.tempTable = table2template(tempTable);
+        }
         delete $scope.tableData;
         delete $scope.relations;
         // console.log("table2template table: " + JSON.stringify(tempTable));
@@ -465,8 +470,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
     function table2template(table) {
         delete table['index'];
-        // delete table['$'];
-        // console.log("raw table: " + JSON.stringify(table));
 
         // remove all not selected fields
         var selectedFields = table.field.filter(function (obj) {
@@ -476,10 +479,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
         // remove all linked without child table
         var expandLinks = table.link.filter(function (obj) {
-            // call self to check child table
             if (obj.table)
                 obj.table = table2template(obj.table);
-            // console.log("obj.table: " + obj.table);
             return (obj.table === undefined) ? false : true;
         });
         table.link = expandLinks;
@@ -487,8 +488,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         // When both filed and link empty, set null
         if (table.field.length == 0 && table.link.length == 0)
             table = undefined;
-
-        // console.log("template table: " + JSON.stringify(table));
 
         return table;
     };
