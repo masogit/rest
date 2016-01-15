@@ -554,8 +554,11 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
     $scope.getRecordByTemp = function (data, tempRecord, root) {
 
-        if (root)
+        if (root){
+            $scope.tempRecord = tempRecord;
             tempRecord['selected'] = data["ref-link"];
+            $scope.tempRecord['timeStart'] = Date.now();
+        }
 
         tempRecord['ID'] = data["ref-link"].split('/')[2];
 
@@ -579,8 +582,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
             $scope.queryLinkData(link);
         }
-        if (root)
-            $scope.tempRecord = tempRecord;
+
+        $scope.tempRecord['timeEnd'] = Date.now();
+
     };
 
     $scope.queryLinkData = function (link) {

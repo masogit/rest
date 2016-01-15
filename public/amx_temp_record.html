@@ -1,6 +1,6 @@
 
 <h4><strong>{{tempRecord.name}} </strong>
-    <small>Query fields: {{ tempRecord.fields.length }}</small>
+    <small>Elapsed time: {{ tempRecord.timeEnd - tempRecord.timeStart }}ms</small>
 </h4>
 <hr>
 <div ng-show="tempRecord" ng-include="'amTempRecord'" full-height="155"></div>
