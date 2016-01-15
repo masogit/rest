@@ -47,7 +47,12 @@
     </h5>
     <ul>
         <span ng-show="table.AQL">Set AQL: <input class="form-control" type="text" ng-model="table.AQL"></span>
-        <li ng-repeat="f in table.field">{{f['$']['sqlname']}}</li>
+        <li ng-repeat="f in table.field">
+            <span ng-click="f.aliasName=f['$']['sqlname']">{{ f['$']['sqlname'] }}</span>
+            <small ng-show="f.aliasName">
+                <span class="glyphicon glyphicon-pencil" contenteditable ng-model="f.aliasName"></span>
+            </small>
+        </li>
     </ul>
     <span ng-repeat="l in table.link">
         <div ng-show="l.table" ng-include="'amTemp'" style="padding-left: 20px"></div>

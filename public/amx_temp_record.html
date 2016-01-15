@@ -17,7 +17,7 @@
         <small>({{ table['ID'] }})</small>
     </h5>
     <ul ng-show="!table.showSelf">
-        <li ng-repeat="f in table.field"><strong>{{f['$']['sqlname']}}:</strong>
+        <li ng-repeat="f in table.field"><strong>{{(f.aliasName)?f.aliasName:f['$']['sqlname']}}:</strong>
             {{ formatValue(f['$']['sqlname'], f.data) }}
         </li>
     </ul>

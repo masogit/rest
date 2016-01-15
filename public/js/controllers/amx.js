@@ -778,6 +778,32 @@ am.directive('ngConfirmClick', [
     }
 ]);
 
+am.directive('contenteditable', [
+    function () {
+        return {
+            require: 'ngModel',
+            link: function (scope, elm, attrs, ctrl) {
+                // view -> model
+                elm.bind('blur keyup change', function () {
+//                    console.log(elm);
+//                    console.log(scope.toggleSelectProp);
+                    scope.$apply(function () {
+                        ctrl.$setViewValue(elm.text());
+                    });
+                });
+
+                // model -> view
+                ctrl.$render = function () {
+                    elm.html(ctrl.$viewValue);
+                };
+
+                // load init value from DOM
+//                ctrl.$setViewValue(elm.html());
+            }
+        }
+    }
+]);
+
 am.filter('startFrom', function () {
     return function (input, start) {
         if (input) {
