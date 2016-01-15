@@ -734,24 +734,13 @@ am.directive('fullHeight', function ($window) {
             fullHeight: '&'
         },
         link: function (scope, element, attrs) {
-            //            var obj = element.prop('offsetTop');;
-            //            console.log("attrs.fullHeight: " + attrs.fullHeight);
 
             scope.initializeWindowSize = function () {
-
-                //                console.log("$window.innerHeight: " + $window.innerHeight);
-                //                console.log("$window.innerWidth: " + $window.innerWidth);
-                //                console.log("offsetTop: " + element.prop('offsetTop'));
-                //                console.log("clientTop: " + element.prop('clientTop'));
-                //                console.log("scrollTop: " + element.prop('scrollTop'));
-                //                console.log("offsetLeft: " + element.prop('offsetLeft'));
-                //                console.log("document.documentElement.clientWidth: " + document.documentElement.clientWidth);
-                //                console.log("document.documentElement.clientHeight: " + document.documentElement.clientHeight);
-
                 var elementTop = (attrs.fullHeight) ? attrs.fullHeight : element.prop('offsetTop');
                 element.css('height', ($window.innerHeight - elementTop - 10) + 'px');
                 element.css('overflow-y', 'auto');
             };
+
             scope.initializeWindowSize();
             angular.element($window).bind('resize', function () {
                 scope.initializeWindowSize();
@@ -760,6 +749,23 @@ am.directive('fullHeight', function ($window) {
     };
 });
 
+am.directive('ngConfirmClick', [
+    function () {
+        return {
+            priority: -1,
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                element.bind('click', function (e) {
+                    var message = attrs.ngConfirmClick;
+                    if (message && !confirm(message)) {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+                    }
+                });
+            }
+        }
+    }
+]);
 
 am.filter('startFrom', function () {
     return function (input, start) {

@@ -25,9 +25,9 @@
             <div class="panel-heading">Structure
         <span class="pull-right">
             <!--<a ng-click="closeTemplate()" class="badge"><span class="glyphicon glyphicon-remove"></span> Close</a>-->
-            <a ng-click="saveTemplate(tempTable)" class="badge" ng-show="tempForm.$valid"><span
+            <a ng-click="saveTemplate(tempTable)" class="badge" ng-show="tempForm.$valid" ng-confirm-click="Save this template?"><span
                     class="glyphicon glyphicon-floppy-save"></span> Save</a>
-            <a ng-click="removeTemplate(tempTable)" class="badge"><span
+            <a ng-click="removeTemplate(tempTable)" class="badge" ng-confirm-click="Delete this template?"><span
                     class="glyphicon glyphicon-floppy-remove"></span> Delete</a>
         </span>
             </div>
