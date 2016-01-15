@@ -250,13 +250,13 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                         // amTree will check fields and expand related link
                         if ($scope.tempTable) {
                             $scope.metadata["table"]["fields"] = $scope.tempTable.fields;
-                            var fields = $scope.metadata["table"]["fields"];
-
-                            // todo: expand all links defined in template
-                            for (var i in fields) {
-                                var links = fields[i].split('.');
-                                expandChild($scope.metadata["table"], links);
-                            }
+//                            var fields = $scope.metadata["table"]["fields"];
+//
+//                            // todo: expand all links defined in template
+//                            for (var i in fields) {
+//                                var links = fields[i].split('.');
+//                                expandChild($scope.metadata["table"], links);
+//                            }
                         }
 
                     }
@@ -265,6 +265,18 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             }
 
         });
+    };
+
+    $scope.expandLink = function (link) {
+        var linkName = ((link['parent']) ? (link['parent'] + '.') : '') + link["$"]["sqlname"];
+        var fields = $scope.metadata["table"]["fields"];
+
+        var links = fields.filter(function (obj) {
+            return obj.indexOf(linkName) == 0;
+        });
+
+        if (links.length > 0)
+            $scope.metadata(link['$']['desttable'], link);
     };
 
     function expandChild(table, links) {
@@ -555,7 +567,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
 
     $scope.getRecordByTemp = function (data, tempRecord, root) {
 
-        if (root){
+        if (root) {
             $scope.tempRecord = tempRecord;
             tempRecord['selected'] = data["ref-link"];
             $scope.tempRecord['timeStart'] = Date.now();
