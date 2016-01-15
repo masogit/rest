@@ -505,9 +505,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         if (temp.$loki)
             $http.post('/json/template/delete', temp).success(function (data) {
                 $scope.loadTemplates();
+                $scope.tab = "templates";
             });
 
-        delete $scope.tempTable;
+        $scope.backTableList();
     };
 
     $scope.saveTemplate = function (temp) {
