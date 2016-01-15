@@ -377,7 +377,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 schema: record["ref-link"].split("/")[1],
                 active: true,
                 form: form,
-                records: [record],
+                records: [],
                 displayColumns: [],
                 child: null
             });
@@ -389,7 +389,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 schema: parent.schema,
                 form: parent.form,
                 active: true,
-                records: [record],
+                records: [],
                 displayColumns: [],
                 child: null
             });
