@@ -19,73 +19,6 @@
             overflow-x: auto;
         }
     </style>
-    <!--<style>-->
-    <!--@media only screen and (min-height: 700px) {-->
-    <!--.sidebar {-->
-    <!--max-height: 600px;-->
-    <!--overflow-y: auto;-->
-    <!--}-->
-
-    <!--.records {-->
-    <!--max-height: 600px;-->
-    <!--overflow-y: auto;-->
-    <!--}-->
-
-    <!--.table{-->
-    <!--max-height: 600px;-->
-    <!--overflow: auto;-->
-    <!--}-->
-    <!--}-->
-
-    <!--@media only screen and (min-height: 1000px) {-->
-    <!--.sidebar {-->
-    <!--max-height: 900px;-->
-    <!--overflow-y: auto;-->
-    <!--}-->
-
-    <!--.records {-->
-    <!--max-height: 900px;-->
-    <!--overflow-y: auto;-->
-    <!--}-->
-
-    <!--.table{-->
-    <!--max-height: 900px;-->
-    <!--overflow: auto;-->
-    <!--}-->
-    <!--}-->
-    <!--@media only screen and (min-width: 1400px) {-->
-    <!--.panel-body{-->
-    <!--max-width: 1350px;-->
-    <!--overflow: auto;-->
-    <!--}-->
-
-    <!--.table{-->
-    <!--max-width: 1300px;-->
-    <!--overflow: auto;-->
-    <!--}-->
-
-    <!--/*.records {*/-->
-    <!--/*max-width: 1400px;*/-->
-    <!--/*overflow-x: auto;*/-->
-    <!--/*}*/-->
-    <!--}-->
-    <!--@media only screen and (min-width: 1920px) {-->
-    <!--.panel-body{-->
-    <!--max-width: 1550px;-->
-    <!--overflow: auto;-->
-    <!--}-->
-
-    <!--.table{-->
-    <!--max-width: 1500px;-->
-    <!--overflow: auto;-->
-    <!--}-->
-
-    <!--/*.records {*/-->
-    <!--/*max-width: 1600px;*/-->
-    <!--/*overflow-x: auto;*/-->
-    <!--/*}*/-->
-    <!--}-->
-    <!--</style>-->
 </head>
 <!-- SET THE CONTROLLER -->
 
@@ -115,17 +48,17 @@
                 <input type="text" class="form-control" placeholder="Limit" ng-model="formData.param.limit" size="1">
                 <input type="text" class="form-control" placeholder="Pos" ng-model="formData.param.offset" size="1">
                 <input type="text" class="form-control" placeholder="Page" ng-model="formData.pageSize" size="1">
+                <input type="checkbox" ng-model="formData.showLabel">
                 <button class="btn" type="button" ng-click="store()">Save</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" ng-click="serverbar=!serverbar">
-                    <span class="glyphicon glyphicon-menu-left" ng-show="!serverbar"></span>
-                    Configuration
-                    <span class="glyphicon glyphicon-menu-right" ng-show="serverbar"></span>
-                </a>
+                <li>
+                    <a href="#" ng-click="serverbar=!serverbar">
+                        <span class="glyphicon glyphicon-menu-left" ng-show="!serverbar"></span>
+                            Configuration
+                        <span class="glyphicon glyphicon-menu-right" ng-show="serverbar"></span>
+                    </a>
                 </li>
-                <!--<li><a href="#" ng-click="navbar=!navbar">Condition</a></li>
-                <li><a href="index.html">Help</a></li>-->
             </ul>
         </div>
     </div>
@@ -133,7 +66,6 @@
 <div class="container-fluid">
     <div class="row">
         <!--   nav bar -->
-        <!--<div class="row" role="toolbar" ng-include="'amx_toolbar.html'"></div>-->
         <div class="col-md-12" ng-show="relations" ng-include="'amx.relations.html'"></div>
 
         <div class="col-md-3" ng-show="!relations">

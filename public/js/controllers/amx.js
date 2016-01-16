@@ -19,7 +19,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         user: "admin",
         password: "",
 
-        pageSize: 10
+        pageSize: 10,
+        showLabel: false
     };
 
     //    $scope.breadcrumb = [];
@@ -31,6 +32,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 user: $scope.formData.user,
                 password: $scope.formData.password,
                 pageSize: $scope.formData.pageSize,
+                showLabel: $scope.formData.showLabel,
                 limit: $scope.formData.param.limit,
                 offset: $scope.formData.param.offset
             };
@@ -46,6 +48,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.formData.user = form.user;
         $scope.formData.password = form.password;
         $scope.formData.pageSize = form.pageSize;
+        $scope.formData.showLabel = form.showLabel;
         $scope.formData.param.limit = form.limit;
         $scope.formData.param.offset = form.offset;
     }
@@ -250,13 +253,13 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                         // amTree will check fields and expand related link
                         if ($scope.tempTable) {
                             $scope.metadata["table"]["fields"] = $scope.tempTable.fields;
-//                            var fields = $scope.metadata["table"]["fields"];
-//
-//                            // todo: expand all links defined in template
-//                            for (var i in fields) {
-//                                var links = fields[i].split('.');
-//                                expandChild($scope.metadata["table"], links);
-//                            }
+                            //                            var fields = $scope.metadata["table"]["fields"];
+                            //
+                            //                            // todo: expand all links defined in template
+                            //                            for (var i in fields) {
+                            //                                var links = fields[i].split('.');
+                            //                                expandChild($scope.metadata["table"], links);
+                            //                            }
                         }
 
                     }
@@ -351,7 +354,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     $scope.filterFields = function (query) {
         if (query)
             return function (item) {
-                return item['$']['sqlname'].toLowerCase().indexOf(query.toLowerCase()) > -1;
+                if ($scope.formData.showLabel)
+                    return item['$']['label'].toLowerCase().indexOf(query.toLowerCase()) > -1;
+                else
+                    return item['$']['sqlname'].toLowerCase().indexOf(query.toLowerCase()) > -1;
             };
     };
 
@@ -390,6 +396,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             $scope.tempTable = Object.assign(tableOld, table2template(tableNew));
         } else {
             var tempTable = clone(table);
+            tempTable.showLabel = $scope.formData.showLabel;
             $scope.tempTable = table2template(tempTable);
         }
         delete $scope.tableData;
@@ -452,7 +459,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.saveTemplate = function (temp) {
-//        console.log("saveTemplate: " + JSON.stringify(temp));
+        //        console.log("saveTemplate: " + JSON.stringify(temp));
         $http.post('/json/template', temp).success(function (data) {
             //            console.log("saveTemplate: " + JSON.stringify(data));
             temp = data;
@@ -694,7 +701,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.colNumber = function (obj) {
-        if(obj){
+        if (obj) {
             var keys = Object.keys(obj);
             if (keys instanceof Array)
                 return Object.keys(obj).length;
@@ -788,8 +795,8 @@ am.directive('contenteditable', [
             link: function (scope, elm, attrs, ctrl) {
                 // view -> model
                 elm.bind('blur keyup change', function () {
-//                    console.log(elm);
-//                    console.log(scope.toggleSelectProp);
+                    //                    console.log(elm);
+                    //                    console.log(scope.toggleSelectProp);
                     scope.$apply(function () {
                         ctrl.$setViewValue(elm.text());
                     });
@@ -801,7 +808,7 @@ am.directive('contenteditable', [
                 };
 
                 // load init value from DOM
-//                ctrl.$setViewValue(elm.html());
+                //                ctrl.$setViewValue(elm.html());
             }
         }
     }
