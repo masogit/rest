@@ -254,6 +254,10 @@ module.exports = function (app) {
         res.sendfile('./public/amx.html');
     });
 
+    app.get('/m', function (req, res) {
+        res.sendfile('./public/mobile/index.html');
+    });
+    
     app.get('/', function (req, res) {
         res.sendfile('./public/amx.html');
     });
