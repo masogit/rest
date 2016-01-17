@@ -16,15 +16,15 @@
             </span>
         </div>
 
-        <div ng-show="metadata.table">
+        <div ng-show="metadata.table && !tempEdit">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <a ng-click="backTableList()">
                         <span class="fa fa-arrow-left"></span> {{ metadata.table['$']['sqlname'] }}</a>
                     <span class="pull-right">
-                    <a ng-click="toNewTemp(metadata.table, true);nav='templates'" ng-show="metadata.table.fields.length > 0"><span
+                    <a ng-click="toNewTemp(metadata.table, true);tempEdit=true" ng-show="metadata.table.fields.length > 0"><span
                         class="fa fa-plus"></span> Add</a>
-                    <a ng-click="toNewTemp(metadata.table);nav='templates'" ng-show="metadata.table.fields.length > 0 && tempTable"><span
+                    <a ng-click="toNewTemp(metadata.table);tempEdit=true" ng-show="metadata.table.fields.length > 0 && tempTable"><span
                         class="fa fa-random"></span> Sync</a>
                     <a ng-click="addFields(metadata.table.fields)">
                         <span class="fa fa-search"></span> Query</a>
@@ -36,8 +36,9 @@
                         <div ng-show="link.table" ng-include="'amTree'"></div>
                 </div>
             </div>
-
         </div>
+        
+        <div ng-show="tempEdit" class="section" ng-include="'/mobile/template.html'"></div>
     </div>
 </div>
 
