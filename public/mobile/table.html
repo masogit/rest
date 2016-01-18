@@ -1,0 +1,67 @@
+<div ui-content-for="title">
+    <span>{{ metadata.table['$']['sqlname'] }}</span>
+</div>
+
+<div ui-content-for="navbarAction">
+    <div class="btn-group pull-right">
+        <a ui-turn-on='myDropdown' class='btn'>
+            <i class="fa fa-ellipsis-v"></i>
+        </a>
+        <ul ui-state="myDropdown" class="dropdown-menu" ui-outer-click="Ui.turnOff('myDropdown'')" ui-outer-click-if="Ui.active('myDropdown')"
+        role="menu" ui-show="myDropdown" ui-turn-off="myDropdown">
+
+            <li>
+                <a ng-click="backTableList()">
+                    <span class="fa fa-arrow-left"></span> Back</a>
+            </li>
+            <li>
+                <a ng-click="toNewTemp(metadata.table, true);tempEdit=true" ng-show="metadata.table.fields.length > 0">
+                    <i class="fa fa-plus"></i> New View
+                </a>
+            </li>
+            <li>
+                <a ng-click="toNewTemp(metadata.table);tempEdit=true" ng-show="metadata.table.fields.length > 0 && tempTable">
+                    <i class="fa fa-random"></i> Update View
+                </a>
+            </li>
+            <li>
+                <a ng-click="addFields(metadata.table.fields)">
+                    <i class="fa fa-search"></i> Query</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<span style="display: none">{{link.table = metadata.table}}</span>
+<div ng-show="link.table" ng-include="'amTree'"></div>
+
+
+
+<script type="text/ng-template" id="amTree">
+
+    <span style="display: none">{{parent = link.table.parent}}</span>
+    <span ng-repeat="field in link.table.field | filter: filterFields(fieldSearch)">
+        <input type="checkbox"
+               ng-checked="ifChecked(field, metadata.table.fields, link.table.parent)"
+               ng-click="checkTreeFields(field, metadata.table.fields, link.table.parent)">
+        {{ (!formData.showLabel) ? field['$']['sqlname'] : field['$']['label'] }}<br>
+    </span>
+    <span ng-repeat="link in link.table.link | filter: filterFields(linkSearch)" ng-init="link['parent']=parent;expandLink(link)">
+        <a ng-click="metadata(link['$']['desttable'], link)" ng-show="!link.table ">
+            <i class="fa fa-plus"></i>
+            [{{ ((link['parent'])?(link['parent']+'.'):'')+link["$"]["sqlname"] }}]
+        </a>
+
+        <a ng-click="foldChild(link)" ng-show="link.table">
+            <i class="fa fa-minus"></i>
+            [{{ ((link['parent'])?(link['parent']+'.'):'')+link["$"]["sqlname"] }}]
+        </a>
+
+        <!--<a ng-click="metadata(link['$']['desttable'])" ng-init="expandLink(link)">[{{ ((link['parent'])?(link['parent']+'.'):'')+link["$"]["sqlname"] }}]</a>-->
+    <!--loading-->
+    <span class="text-center" ng-show="link.loading">Loading....</span>
+
+    <br>
+    <div ng-show="link.table" ng-include="'amTree'" style="padding-left: 10px"></div>
+    </span>
+</script>
