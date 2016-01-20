@@ -1,50 +1,26 @@
-<!doctype html>
+<script src="js/controllers/am_modal.js"></script>
+<!-- load up our controller -->
+<style>
+    .modal-dialog {
+        width: 900px;
+    }
 
-<!-- ASSIGN OUR ANGULAR MODULE -->
-<html ng-app="am">
-<head>
-    <!-- META -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Optimize mobile viewport -->
-
-    <title>AM REST Client</title>
-
-    <!-- SCROLLS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/hpe.css">
-
-    <!-- IMPORT -->
-    <script src="js/lib/angular.min.js"></script>
-    <script src="js/lib/ui-bootstrap-tpls-0.14.3.min.js"></script>
-
-    <!-- SELF -->
-    <script src="js/controllers/am.js"></script>
-    <script src="js/controllers/am_modal.js"></script>
-    <!-- load up our controller -->
-    <style>
-        .modal-dialog {
-            width: 900px;
+    @media only screen and (min-height: 600px) {
+        .modal-body {
+            max-height: 550px;
+            overflow-y: auto;
         }
+    }
 
-        @media only screen and (min-height: 600px) {
-            .modal-body {
-                max-height: 550px;
-                overflow-y: auto;
-            }
+    @media only screen and (min-height: 1000px) {
+        .modal-body {
+            max-height: 850px;
+            overflow-y: auto;
         }
+    }
+</style>
 
-        @media only screen and (min-height: 1000px) {
-            .modal-body {
-                max-height: 850px;
-                overflow-y: auto;
-            }
-        }
-    </style>
-</head>
-<!-- SET THE CONTROLLER -->
-<body ng-controller="amModalCtrl">
-<div>
+<div g-controller="amModalCtrl">
     <div class="modal-header">
         <h3 class="modal-title">{{ title }}</h3>
         <label class="text-danger" ng-show="message">
@@ -79,5 +55,3 @@
 
 </div>
 
-</body>
-</html>
