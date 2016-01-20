@@ -1,15 +1,15 @@
 var am = angular.module('am', ['ui.bootstrap', 'ngRoute', 'mobile-angular-ui', 'mobile-angular-ui.gestures']);
 
-am.run(function ($transform) {
-    window.$transform = $transform;
-});
-
-am.config(function ($routeProvider) {
-    $routeProvider.when('/m/temp_edit', { templateUrl: '/mobile/temp_edit.html', reloadOnSearch: false });
-    $routeProvider.when('/m/temp_records', { templateUrl: '/mobile/temp_records.html', reloadOnSearch: false });
-    $routeProvider.when('/m/temp_record', { templateUrl: '/mobile/temp_record.html', reloadOnSearch: false });
-    $routeProvider.when('/m/tab_tree', { templateUrl: '/mobile/tab_tree.html', reloadOnSearch: false });
-});
+//am.run(function ($transform) {
+//    window.$transform = $transform;
+//});
+//
+//am.config(function ($routeProvider) {
+//    $routeProvider.when('/m/temp_edit', { templateUrl: '/mobile/temp_edit.html', reloadOnSearch: false });
+//    $routeProvider.when('/m/temp_records', { templateUrl: '/mobile/temp_records.html', reloadOnSearch: false });
+//    $routeProvider.when('/m/temp_record', { templateUrl: '/mobile/temp_record.html', reloadOnSearch: false });
+//    $routeProvider.when('/m/tab_tree', { templateUrl: '/mobile/tab_tree.html', reloadOnSearch: false });
+//});
 
 am.controller('amCtl', function ($scope, $http, $uibModal) {
     var AM_FORM_DATA = "amFormData";
@@ -488,7 +488,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     $scope.queryRootByTemp = function (template) {
-        $scope.backTableList();
+//        $scope.backTableList();
         var template = clone(template);
         var form = clone($scope.formData);
         form["ref-link"] = "db/" + template["$"]["sqlname"];
