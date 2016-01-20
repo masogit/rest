@@ -35,3 +35,15 @@ body {
 .form-control {
     color: #767676;
 }
+
+.nav-pills > li > a {
+    border-radius: 0px;
+}
+
+.form-control {
+    border-radius: 0px;
+}
+
+.btn {
+    border-radius: 0px;
+}
