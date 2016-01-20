@@ -22,20 +22,18 @@
             </span>
         </div>
 
-        <div class="section" ng-show="tempRecords && !tempEdit">
-            <div class="panel-group">
-                <div class="panel panel-default" ng-repeat="record in tempRecords.records">
-                    <div class="panel-heading" ng-click="tempRecords.showIndex=(tempRecords.showIndex==$index)?-1:$index;(tempRecords.showIndex==$index)?getRecordByTemp(record, tempRecords, true):''">
-                        <h4 class="panel-title">
+        <div class="panel-group section" ng-show="tempRecords && !tempEdit" style="padding: 0px 0px;">
+            <div class="panel panel-default" ng-repeat="record in tempRecords.records">
+                <div class="panel-heading" ng-click="tempRecords.showIndex=(tempRecords.showIndex==$index)?-1:$index;(tempRecords.showIndex==$index)?getRecordByTemp(record, tempRecords, true):''">
+                    <h4 class="panel-title">
                             {{ record['self'] }}
                         </h4>
-                    </div>
-                    <div class="panel-body" ng-show="tempRecords.showIndex==$index">
-                        <small class="pull-right">
+                </div>
+                <div class="panel-body" ng-show="tempRecords.showIndex==$index">
+                    <small class="pull-right">
                                 {{ tempRecord.timeEnd - tempRecord.timeStart }}ms
                             </small>
-                        <div ng-show="tempRecord" ng-include="'amTempRecord'"></div>
-                    </div>
+                    <div ng-show="tempRecord" ng-include="'amTempRecord'"></div>
                 </div>
             </div>
         </div>
