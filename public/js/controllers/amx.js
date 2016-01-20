@@ -96,10 +96,10 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.tableName = form["ref-link"].split("/")[1];
 
         form.method = "get";
+        var timeStart = Date.now();
         $http.post('/am/rest', form).success(function (data) {
             $scope.loading = false;
             if (data instanceof Object) {
-                //                console.log("query data:" + JSON.stringify(data));
                 if (data.entities instanceof Array)
                     $scope.tableData = data;
                 else if (data.type == 'Buffer') {
@@ -113,6 +113,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             } else {
                 $scope.message = JSON.stringify(form) + "--------" + data;
             }
+            $scope.tableData['timeStart'] = timeStart;
+            $scope.tableData['timeEnd'] = Date.now();
         });
         //        $scope.store();
     };

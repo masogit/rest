@@ -1,7 +1,8 @@
 <h4><strong>{{ tableName }} </strong>
-    <small>({{ tableData.count }})
+    <small>
         <a ng-click="query(tableData.form)"><span class="glyphicon glyphicon-refresh"></span></a>
         <a ng-click="tableData.aqlEdit=!tableData.aqlEdit"><span class="glyphicon glyphicon-pencil"></span></a>
+        <small>Count: {{ tableData.count }} Elapsed time: {{ tableData.timeEnd - tableData.timeStart }}ms</small>
     </small>
     <small class="pull-right">
         Search
