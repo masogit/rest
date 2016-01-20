@@ -4,20 +4,6 @@
     .modal-dialog {
         width: 900px;
     }
-
-    @media only screen and (min-height: 600px) {
-        .modal-body {
-            max-height: 550px;
-            overflow-y: auto;
-        }
-    }
-
-    @media only screen and (min-height: 1000px) {
-        .modal-body {
-            max-height: 850px;
-            overflow-y: auto;
-        }
-    }
 </style>
 
 <div g-controller="amModalCtrl">
@@ -27,7 +13,7 @@
             <a ng-click="clearMsg()">X</a> {{ message }}
         </label>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" full-height="200">
         <table class="table table-striped">
             <thead>
             <th>Field</th>

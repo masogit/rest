@@ -121,3 +121,17 @@ body {
 .panel-default > .panel-heading {
     border-color: #FFF;
 }
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+    color: #FFF;
+    background-color: #425563;
+    border-bottom: 3px solid #01A982;
+}
+
+.navbar-nav > li > a {
+    padding-bottom: 12px;
+}
+
+.selected {
+    border-left: 5px solid #2AD2C9;
+}

@@ -17,76 +17,69 @@
     <script src="/js/controllers/amx.js"></script>
     <script src="/js/controllers/am_modal.js"></script>
 
-    <style>
-        .selected {
-            border-left: 5px solid #2AD2C9;
-        }
-        .panel-body {
-            overflow-x: auto;
-        }
-    </style>
 </head>
 <!-- SET THE CONTROLLER -->
 
 <body ng-controller="amCtl">
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <img src="/img/22 icon.png" class="pull-left" style="padding-top: 6px; margin-right: 6px;">
-            <a class="navbar-brand" href="#"> {{ title }}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img src="/img/22 icon.png" class="pull-left" style="padding-top: 6px; margin-right: 6px;">
+                <a class="navbar-brand" href="#"> {{ title }}
                 <span style="font-size: 50%">({{ formData.server }})</span>
             </a>
-        </div>
-
-        <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right" ng-show="serverbar">
-                <input type="text" class="form-control" placeholder="Server and port" ng-model="formData.server">
-                <input type="text" class="form-control" placeholder="Username" ng-model="formData.user" size="7">
-                <input type="password" class="form-control" placeholder="Password" ng-model="formData.password"
-                       size="7">
-                <input type="text" class="form-control" placeholder="Limit" ng-model="formData.param.limit" size="1">
-                <input type="text" class="form-control" placeholder="Pos" ng-model="formData.param.offset" size="1">
-                <input type="text" class="form-control" placeholder="Page" ng-model="formData.pageSize" size="1">
-                <input type="checkbox" ng-model="formData.showLabel">
-                <button class="btn" type="button" ng-click="store()">Save</button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#" ng-click="serverbar=!serverbar">
-                        <span class="glyphicon glyphicon-cog"></span>
-                            Configuration
-                        <span class="glyphicon glyphicon-menu-right" ng-show="serverbar"></span>
-                    </a>
-                </li>
+            </div>
+            <ul class="nav navbar-nav" style="padding-left: 50px">
+                <li class="active"><a>Explorer</a></li>
+                <li><a>Builder</a></li>
             </ul>
+            <div id="navbar" class="navbar-collapse collapse">
+                <form class="navbar-form navbar-right" ng-show="serverbar">
+                    <input type="text" class="form-control" placeholder="Server and port" ng-model="formData.server">
+                    <input type="text" class="form-control" placeholder="Username" ng-model="formData.user" size="7">
+                    <input type="password" class="form-control" placeholder="Password" ng-model="formData.password" size="7">
+                    <input type="text" class="form-control" placeholder="Limit" ng-model="formData.param.limit" size="1">
+                    <input type="text" class="form-control" placeholder="Pos" ng-model="formData.param.offset" size="1">
+                    <input type="text" class="form-control" placeholder="Page" ng-model="formData.pageSize" size="1">
+                    <input type="checkbox" ng-model="formData.showLabel">
+                    <button class="btn" type="button" ng-click="store()">Save</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" ng-click="serverbar=!serverbar">
+                            <span class="glyphicon glyphicon-cog"></span> Configuration
+                            <span class="glyphicon glyphicon-menu-right" ng-show="serverbar"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <!--   nav bar -->
+            <div class="col-md-12" ng-show="relations" ng-include="'amx.relations.html'"></div>
+
+            <div class="col-md-3" ng-show="!relations">
+                <ul class="nav nav-pills nav-justified" ng-init="tab='templates'">
+                    <li ng-class="{active: tab=='templates'}"><a ng-click="tab='templates'">Views</a></li>
+                    <li ng-class="{active: tab=='tables'}"><a ng-click="tab='tables'">Tables</a></li>
+                </ul>
+                <br>
+
+                <div ng-include="'amx_templates.html'" ng-init="loadTemplates()" ng-show="tab=='templates'"></div>
+                <div ng-include="'amx_tree.html'" ng-init="metadata('all')" ng-show="tab=='tables'"></div>
+            </div>
+
+
+            <div class="col-md-9" ng-show="tableData && !relations" ng-include="'amx_records.html'"></div>
+
+            <div class="col-md-3" ng-show="tempTable && !tableData && !relations" ng-include="'amx_temp_edit.html'"></div>
+            <div class="col-md-3" ng-show="tempRecords && !tableData && !relations" ng-include="'amx_temp_records.html'"></div>
+            <div class="col-md-3" ng-show="tempRecord && !tableData && !relations" ng-include="'amx_temp_record.html'"></div>
+
         </div>
     </div>
-</nav>
-<div class="container-fluid">
-    <div class="row">
-        <!--   nav bar -->
-        <div class="col-md-12" ng-show="relations" ng-include="'amx.relations.html'"></div>
-
-        <div class="col-md-3" ng-show="!relations">
-            <ul class="nav nav-pills nav-justified" ng-init="tab='templates'">
-                <li ng-class="{active: tab=='templates'}"><a ng-click="tab='templates'">Views</a></li>
-                <li ng-class="{active: tab=='tables'}"><a ng-click="tab='tables'">Tables</a></li>
-            </ul>
-            <br>
-
-            <div ng-include="'amx_templates.html'" ng-init="loadTemplates()" ng-show="tab=='templates'"></div>
-            <div ng-include="'amx_tree.html'" ng-init="metadata('all')" ng-show="tab=='tables'"></div>
-        </div>
-
-
-        <div class="col-md-9" ng-show="tableData && !relations" ng-include="'amx_records.html'"></div>
-
-        <div class="col-md-3" ng-show="tempTable && !tableData && !relations" ng-include="'amx_temp_edit.html'"></div>
-        <div class="col-md-3" ng-show="tempRecords && !tableData && !relations" ng-include="'amx_temp_records.html'"></div>
-        <div class="col-md-3" ng-show="tempRecord && !tableData && !relations" ng-include="'amx_temp_record.html'"></div>
-
-    </div>
-</div>
 
 </body>
 
