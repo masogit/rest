@@ -487,9 +487,9 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         delete $scope.tempTable;
     };
 
-    $scope.queryRootByTemp = function (template) {
-//        $scope.backTableList();
-        var template = clone(template);
+    $scope.queryRootByTemp = function (temp) {
+
+        var template = clone(temp);
         var form = clone($scope.formData);
         form["ref-link"] = "db/" + template["$"]["sqlname"];
 
@@ -506,6 +506,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $http.post('/am/rest', form).success(function (data) {
             $scope.tempRecords.records = data.entities;
             $scope.tempRecords.count = data.count;
+
+            temp['last'] = {
+                time: Date.now(),
+                count: data.count
+            };
+            $http.post('/json/template', temp).success(function (data) {
+
+            });
+
             if (data.entities[0])
                 $scope.getRecordByTemp(data.entities[0], template, true);
         });
