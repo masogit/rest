@@ -7,34 +7,34 @@
     </a>
 </div>
 
-<div class="scrollable" ng-init="loadTemplates()">    
+<div class="scrollable" ng-init="loadTemplates()">
     <input type="text" placeholder="Search view..." class="form-control" ng-show="!tempRecords" ng-model="tempSearch">
     <div class="scrollable-content">
 
         <div class="list-group" ng-show="!tempRecords">
-            <span class="list-group-item" ng-repeat="temp in templates|filter:tempSearch" ng-click="loadOneTemp(temp)">
+            <span class="list-group-item" ng-repeat="temp in templates|filter:tempSearch|orderBy:'-last.time'" ng-click="loadOneTemp(temp)">
                 <strong>{{ temp.name }}</strong>
-                <i class="fa fa-chevron-right pull-right"></i>
-                <small><span class="pull-right">[{{ temp['$']['sqlname'] }}] </span></small>
+                <!--<i class="fa fa-chevron-right pull-right"></i>-->
+                <small class="badge pull-right">{{temp.last.count}}</small>
+                <h6>
+                    <small class="pull-left">{{ temp.description }}</small>
+                    <small class="pull-right">{{temp.last.time | date:'yyyy-MM-dd HH:mm:ss'}}</small></h6>  
             </span>
         </div>
 
         <div class="section" ng-show="tempRecords && !tempEdit">
-            <div class="panel-group" ui-state='myAccordion'>
-
+            <div class="panel-group">
                 <div class="panel panel-default" ng-repeat="record in tempRecords.records">
-                    <div class="panel-heading" ui-set="{'myAccordion': $index}">
-                        <h4 class="panel-title" ng-click="getRecordByTemp(record, tempRecords, true)">
+                    <div class="panel-heading" ng-click="getRecordByTemp(record, tempRecords, true);tempRecords.showIndex=(tempRecords.showIndex==$index)?-1:$index">
+                        <h4 class="panel-title">
                             {{ record['self'] }}
                         </h4>
                     </div>
-                    <div ui-if="myAccordion == {{$index}}">
-                        <div class="panel-body">
-                            <small class="pull-right">
+                    <div class="panel-body" ng-show="tempRecords.showIndex==$index">
+                        <small class="pull-right">
                                 {{ tempRecord.timeEnd - tempRecord.timeStart }}ms
                             </small>
-                            <div ng-show="tempRecord" ng-include="'amTempRecord'"></div>
-                        </div>
+                        <div ng-show="tempRecord" ng-include="'amTempRecord'"></div>
                     </div>
                 </div>
             </div>
@@ -66,13 +66,13 @@
     <span ng-show="!table.showSelf" ng-repeat="l in table.link">
         <div ng-show="l.table && l['$']['card11']=='yes'" ng-include="'amTempRecord'" style="padding-left: 20px" ng-init="isStructure=true"></div>
         <div ng-show="l.tables && !l['$']['card11']" style="padding-left: 20px">
-            <a ng-click="l.showChild=!l.showChild" ng-show="!l.showChild"><span class="fa fa-plus"></span>
+            <a ng-click="l.showChild=!l.showChild" ng-show="!l.showChild"><span class="fa fa-plus"></span> {{l['$']['sqlname']}}
+    ({{l.tables.length}})
+    </a>
+    <a ng-click="l.showChild=!l.showChild" ng-show="l.showChild"><span class="fa fa-minus"></span>
                 {{l['$']['sqlname']}} ({{l.tables.length}})
             </a>
-            <a ng-click="l.showChild=!l.showChild" ng-show="l.showChild"><span class="fa fa-minus"></span>
-                {{l['$']['sqlname']}} ({{l.tables.length}})
-            </a> 
-            
+
     <div ng-show="l.showChild" ng-repeat="t in l.tables" ng-include="'amTempRecord'" style="padding-left: 18px" ng-init="isStructure=false"></div>
     </div>
     </span>

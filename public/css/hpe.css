@@ -65,6 +65,63 @@ body {
 .pagination > li > a:focus, .pagination > li > a:hover, .pagination > li > span:focus, .pagination > li > span:hover {
     color: #01A982;
 }
+
 .pagination > li > a, .pagination > li > span {
     color: #01A982;
+}
+
+.navbar {
+    border-radius: 0px;
+}
+
+.navbar-app .btn-navbar, .navbar-app .btn {
+    color: #FFF;
+}
+
+.btn-group > .btn-default.active, .btn-group > .btn-default.active:focus {
+    color: #FFF;
+    background-color: #01A982;
+    border-color: #080808;
+}
+
+.navbar-app {
+    color: #FFF;
+    background-color: #425563;
+}
+
+.btn-primary {
+    color: #FFF;
+    background-color: #01A982;
+    border-color: #01A982;
+}
+
+.btn-danger {
+    color: #FFF;
+    background-color: #F04953;
+    border-color: #F04953;
+}
+
+.switch.active {
+    background-color: #2AD2C9;
+    border: 1px solid #2AD2C9;
+}
+
+.switch.active .switch-handle {
+    border-color: #2AD2C9;
+}
+
+.panel-group .panel {
+    border-radius: 0px;
+}
+
+.panel-group .panel + .panel {
+    margin-top: 0px;
+}
+
+.section {
+    padding: 0px 0px;
+}
+
+.panel-default > .panel-heading {
+    border-color: #FFF;
 }
