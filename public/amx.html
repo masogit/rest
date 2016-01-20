@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AM Browser</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/hpe.css" />
     <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon" />
     <link rel="apple-touch-icon" href="/img/favicon.png" type="image/x-icon" />
     <script src="/js/lib/angular.min.js"></script>
@@ -31,16 +32,9 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false"
-                    aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+            <img src="/img/22 icon.png" class="pull-left" style="padding-top: 6px; margin-right: 6px;">
             <a class="navbar-brand" href="#"> {{ title }}
-                <small>({{ formData.server }})</small>
+                <span style="font-size: 50%">({{ formData.server }})</span>
             </a>
         </div>
 
@@ -59,7 +53,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a href="#" ng-click="serverbar=!serverbar">
-                        <span class="glyphicon glyphicon-menu-left" ng-show="!serverbar"></span>
+                        <span class="glyphicon glyphicon-cog"></span>
                             Configuration
                         <span class="glyphicon glyphicon-menu-right" ng-show="serverbar"></span>
                     </a>

@@ -1,0 +1,37 @@
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+    background-color: #01A982;
+}
+
+.navbar-inverse {
+    background-color: #425563;
+    border-color: #080808;
+}
+
+a {
+    color: #5F7A76;
+}
+
+a:focus, a:hover {
+    color: #5F7A76;
+}
+
+.panel-default > .panel-heading .badge {
+    color: #FFF;
+    background-color: #617C91;
+}
+
+.badge {
+    color: #FFF;
+    background-color: #617C91;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    color: #425563;
+}
+body {
+    color: #767676;
+}
+
+.form-control {
+    color: #767676;
+}
