@@ -25,7 +25,7 @@
         <div class="section" ng-show="tempRecords && !tempEdit">
             <div class="panel-group">
                 <div class="panel panel-default" ng-repeat="record in tempRecords.records">
-                    <div class="panel-heading" ng-click="getRecordByTemp(record, tempRecords, true);tempRecords.showIndex=(tempRecords.showIndex==$index)?-1:$index">
+                    <div class="panel-heading" ng-click="tempRecords.showIndex=(tempRecords.showIndex==$index)?-1:$index;(tempRecords.showIndex==$index)?getRecordByTemp(record, tempRecords, true):''">
                         <h4 class="panel-title">
                             {{ record['self'] }}
                         </h4>
