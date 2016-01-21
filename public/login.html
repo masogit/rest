@@ -1,0 +1,63 @@
+<!doctype html>
+<html ng-app="am">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AM Browser</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/hpe.css" />
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/img/favicon.png" type="image/x-icon" />
+    <script src="/js/lib/angular.min.js"></script>
+    <script src="/js/lib/ui-bootstrap-tpls-0.14.3.min.js"></script>
+    <script src="/js/lib/angular-route.min.js"></script>
+    <script src="/js/lib/mobile-angular-ui.min.js"></script>
+    <script src="/js/lib/mobile-angular-ui.gestures.min.js"></script>
+    <script src="/js/controllers/amx.js"></script>
+    <script src="/js/controllers/am_modal.js"></script>
+
+    <style>
+        #foo {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: #425563;
+        }
+    </style>
+</head>
+<!-- SET THE CONTROLLER -->
+
+<body ng-controller="amCtl">
+    <div id="foo">
+        <img src="/img/HPE_log_left_wht.png" width="150px" style="padding-left: 50px; padding-top: 20px">
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4" style="background-color: #FFF;">
+                <h4 class="scrollable-header app-name">AM Browser</h4>
+                <form role="form" style="padding-bottom: 30px">
+                    <div class="form-group">
+                        <label>Server and port</label>
+                        <input type="text" class="form-control" placeholder="Server and port" ng-model="formData.server">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" placeholder="Username" ng-model="formData.user">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" placeholder="Password" ng-model="formData.password">
+                    </div>
+
+                    <button class="btn btn-primary btn-block" ng-click="login()">login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

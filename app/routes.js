@@ -258,8 +258,12 @@ module.exports = function (app) {
         res.sendfile('./public/mobile/index.html');
     });
     
+    app.get('/login', function (req, res) {
+        res.sendfile('./public/login.html');
+    });
+        
     app.get('/', function (req, res) {
-        res.sendfile('./public/amx.html');
+        res.sendfile('./public/login.html');
     });
 
 };

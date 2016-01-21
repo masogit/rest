@@ -11,11 +11,11 @@ var am = angular.module('am', ['ui.bootstrap', 'ngRoute', 'mobile-angular-ui', '
 //    $routeProvider.when('/m/tab_tree', { templateUrl: '/mobile/tab_tree.html', reloadOnSearch: false });
 //});
 
-am.controller('amCtl', function ($scope, $http, $uibModal) {
+am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
     var AM_FORM_DATA = "amFormData";
     $scope.title = "AM Browser";
     $scope.formData = {
-        server: "16.165.217.186:8081",
+        server: "16.165.217.186:8081", // "16.165.217.186:8081",
         context: "/AssetManagerWebService/rs/",
         "ref-link": "",     // "db/amLocation/126874",
         collection: "",     // "EmplDepts",
@@ -28,7 +28,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         },
 
         method: "get",
-        user: "admin",
+        user: "admin", // admin
         password: "",
 
         pageSize: 10,
@@ -36,6 +36,17 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     };
 
     //    $scope.breadcrumb = [];
+    $scope.login = function () {
+        $scope.store();
+        // console.log("lastPath: " + $scope.lastPath);
+        window.location.href = "/amx";
+        // $location.path('/amx');
+    };
+
+    $scope.logout = function () {
+        $scope.formData.password = "";
+        window.location.href = "/login";
+    };
 
     $scope.store = function () {
         if (localStorage) {
@@ -63,6 +74,14 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.formData.showLabel = form.showLabel;
         $scope.formData.param.limit = form.limit;
         $scope.formData.param.offset = form.offset;
+    }
+
+    // console.log(window.location.pathname);
+    if (window.location.pathname.indexOf("login") < 0) {
+        if ($scope.formData.server == "" || $scope.formData.user == "") {
+            $scope.lastPath = window.location.pathname;
+            window.location.href = "/login";
+        }
     }
 
     $scope.toggleCheckbox = function (array, field) {
