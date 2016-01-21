@@ -509,13 +509,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             $scope.tempRecords.records = data.entities;
             $scope.tempRecords.count = data.count;
 
-            temp['last'] = {
-                time: Date.now(),
-                count: data.count
-            };
-            $http.post('/json/template', temp).success(function (data) {
+            if (temp.$loki) {
+                temp['last'] = {
+                    time: Date.now(),
+                    count: data.count
+                };
+                $http.post('/json/template', temp).success(function (data) {
 
-            });
+                });
+            }
 
             if (data.entities[0])
                 $scope.getRecordByTemp(data.entities[0], template, true);
