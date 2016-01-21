@@ -9,8 +9,8 @@
         <!--</tr>-->
         <!--</thead>-->
         <tbody>
-        <tr ng-repeat="temp in templates|orderBy:'-last.time'" ng-class="{selected: templates['selected']==temp['$loki']}" ng-click="loadOneTemp(temp)">
-            <td><a ng-click="backTableList();loadOneTemp(temp)">{{ temp.name }}</a>
+        <tr ng-repeat="temp in templates|orderBy:'-last.time'" ng-class="{selected: templates['selected']==temp['$loki']}" ng-click="backTableList();loadOneTemp(temp)">
+            <td><a>{{ temp.name }}</a>
                 <small class="badge pull-right">{{temp.last.count}}</small>
                 <h6>
                     <small class="pull-left">{{ temp.description }}</small>
