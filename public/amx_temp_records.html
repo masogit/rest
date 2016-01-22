@@ -16,7 +16,7 @@
                 ng-click="getRecordByTemp(record, tempRecords, true)">
                 <td>
                     <a ng-click="showRelations(record)"><span class="glyphicon glyphicon-zoom-in"></span></a>
-                    <a ng-click="getRecordByTemp(record, tempRecords, true)">{{ record['self'] }}</a>
+                    {{ record['self'] }}
                 </td>
             </tr>
             </tbody>

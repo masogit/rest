@@ -67,30 +67,33 @@
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-                <input type="text" class="form-control" ng-model="templates.searchView.name" placeholder="Search view...">
+                <input type="text" ng-show="!relations" class="form-control" ng-model="globalSearch" placeholder="Search ...">
             </div>
         </div>
 
         <div ng-show="!tempRecords" class="col-md-3" style="height: 150px;padding-top: 30px; margin-bottom: 20px"
-             ng-repeat="temp in templates|orderBy:'-last.time'|filter:templates.searchView">
+             ng-repeat="temp in templates|orderBy:'-last.time'|filter:globalSearch">
                 <span class="thumbnail" ng-click="backTableList();loadOneTemp(temp)">
                     <h4 style="padding-left: 10px">{{ temp.name }}
                         <strong class="badge pull-right">{{temp.last.count}}</strong>
                     </h4>
-                    <p>
-                        <small class="pull-left">{{ temp.description }}</small>
-                    </p>
+
+                    <small class="pull-left">{{ temp.description }}</small>
+
                     <h6 style="padding-top: 90px;">
                         <small class="pull-right">{{temp.last.time | date:'yyyy-MM-dd HH:mm:ss'}}</small>
                     </h6>
                 </span>
         </div>
+
+        <span class="text-center" ng-show="tempRecords.loading1">Loading....</span>
     </div>
-    <div ng-show="module=='explorer' && tempRecords" ng-include="'amx_temp_records_full.html'"></div>
+    <div ng-show="module=='explorer' && tempRecords && !relations" ng-include="'amx_temp_records_full.html'"></div>
+    <div class="col-md-12" ng-show="relations" ng-include="'amx.relations.html'"></div>
     <div class="row" ng-show="module=='slo'"></div>
     <div class="row" ng-show="module=='builder'">
         <!--   nav bar -->
-        <div class="col-md-12" ng-show="relations" ng-include="'amx.relations.html'"></div>
+
 
         <div class="col-md-3" ng-show="!relations">
             <ul class="nav nav-pills nav-justified" ng-init="tab='templates'">

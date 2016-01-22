@@ -523,10 +523,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
             form.param.filter = template.AQL;
 
         $scope.tempRecords = template;
+        $scope.tempRecords['timeStart1'] = Date.now();
+        $scope.tempRecords.loading1 = true;
 
         $http.post('/am/rest', form).success(function (data) {
             $scope.tempRecords.records = data.entities;
             $scope.tempRecords.count = data.count;
+
+            $scope.tempRecords['timeEnd1'] = Date.now();
+            $scope.tempRecords.loading1 = false;
 
             if (temp.$loki) {
                 temp['last'] = {
