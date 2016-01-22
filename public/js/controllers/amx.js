@@ -767,14 +767,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
         $scope.predicate = predicate;
         //        $scope.formData.param.orderby = predicate + ($scope.reverse) ? " desc" : "";
-        if (predicate != 'ref-link') {
-            var form = $scope.tableData.form;
-            form.param.orderby = predicate;
-            if ($scope.reverse)
-                form.param.orderby = form.param.orderby + " desc";
-        } else {
-            $scope.tableData.form.param.orderby = "";
-        }
+        if ($scope.tableData)
+            if (predicate != 'ref-link') {
+                var form = $scope.tableData.form;
+                form.param.orderby = predicate;
+                if ($scope.reverse)
+                    form.param.orderby = form.param.orderby + " desc";
+            } else {
+                $scope.tableData.form.param.orderby = "";
+            }
     };
 
     $scope.jump = function (i) {
