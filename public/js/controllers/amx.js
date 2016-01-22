@@ -761,7 +761,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
 
     // list order by and pagination =============================
     $scope.predicate = '';
-    $scope.reverse = true;
+    $scope.reverse = false;
     $scope.order = function (predicate) {
         console.log("order: " + predicate);
         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
