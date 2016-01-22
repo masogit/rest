@@ -1,8 +1,8 @@
 <div ng-show="tempTable">
-    <h4>
+    <!--<h4>
         View of [<strong>{{tempTable['$']['sqlname']}}</strong>]
     </h4>
-    <hr>
+    <hr>-->
 
     <form name="tempForm" class="form-horizontal">
         <div class="form-group" ng-class="{'has-error': !tempForm.tempName.$valid}">
@@ -30,7 +30,7 @@
                 <a ng-click="queryRootByTemp(tempTable)" class="badge"><span class="glyphicon glyphicon-play"></span></a>
                 </span>
             </div>
-            <div class="panel-body" full-height="296">
+            <div class="panel-body" full-height="224">
                 <div ng-show="tempTable" ng-include="'amTemp'"></div>
             </div>
         </div>

@@ -1,8 +1,8 @@
-<h4><strong>{{tempRecord.name}} </strong>
+<!--<h4><strong>{{tempRecord.name}} </strong>
     <small>Elapsed time: {{ tempRecord.timeEnd - tempRecord.timeStart }}ms</small>
 </h4>
-<hr>
-<div ng-show="tempRecord" ng-include="'amTempRecord'" full-height="155"></div>
+<hr>-->
+<div ng-show="tempRecord" ng-include="'amTempRecord'" full-height="85"></div>
 
 <script type="text/ng-template" id="amTempRecord">
 
@@ -15,6 +15,7 @@
         </small>
         {{ (l['$']['sqlname']) ? l['$']['sqlname'] : table['$']['sqlname'] }}
         <small>({{ table['ID'] }})</small>
+        <small class="pull-right" ng-show="!l">Elapsed time: {{ tempRecord.timeEnd - tempRecord.timeStart }}ms</small>
     </h5>
     
     <ul ng-show="!table.showSelf">
