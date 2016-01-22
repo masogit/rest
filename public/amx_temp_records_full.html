@@ -1,0 +1,31 @@
+<div ng-show="tempRecords">
+    <div full-height="155">
+        <table class="table table-striped" ng-show="tempRecords">
+            <thead ng-repeat="e in tempRecords.records" ng-if="$first">
+            <tr>
+                <th><a ng-click="backTableList()"><span class="glyphicon glyphicon-remove"></span> Back</a></th>
+                <th ng-repeat="(key, value) in e" ng-show="key!='self'">
+                    <a ng-click="order(key)">{{ key }}
+                        <span class="glyphicon glyphicon-arrow-up" ng-show="predicate==key && !reverse"></span>
+                        <span class="glyphicon glyphicon-arrow-down" ng-show="predicate==key && reverse"></span>
+                    </a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="record in tempRecords.records"
+                ng-class="{selected: tempRecords['selected']==record['ref-link']}"
+                ng-click="getRecordByTemp(record, tempRecords, true)">
+                <td>
+                    <a ng-click="showRelations(record)"><span class="glyphicon glyphicon-zoom-in"></span></a>
+                    <a ng-click="getRecordByTemp(record, tempRecords, true)">{{ record['self'] }}</a>
+                </td>
+                <td ng-repeat="(key, value) in record" ng-show="key!='self'">
+                    {{ formatValue(key, value) }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

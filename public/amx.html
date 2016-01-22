@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <div class="col-md-3" style="height: 150px;padding-top: 30px; margin-bottom: 20px"
+        <div ng-show="!tempRecords" class="col-md-3" style="height: 150px;padding-top: 30px; margin-bottom: 20px"
              ng-repeat="temp in templates|orderBy:'-last.time'|filter:templates.searchView">
                 <span class="thumbnail" ng-click="backTableList();loadOneTemp(temp)">
                     <h4 style="padding-left: 10px">{{ temp.name }}
@@ -85,6 +85,9 @@
                     </h6>
                 </span>
         </div>
+
+        <div ng-show="tempRecords" ng-include="'amx_temp_records_full.html'"></div>
+
     </div>
     <div class="row" ng-show="module=='slo'"></div>
     <div class="row" ng-show="module=='builder'">
