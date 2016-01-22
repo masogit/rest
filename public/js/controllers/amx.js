@@ -171,7 +171,20 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
         else
             return "";
     };
-
+    
+    $scope.getCaptionByTemp = function (key, fields, showLabel) {
+        var field = fields.filter(function (obj) {
+            return obj['$']['sqlname'] == key;
+        })[0];
+        
+        if (field.aliasName)
+            return field.aliasName;
+        else if (field['$']['label'])
+            return field['$']['label']
+        else
+            return key;
+    };
+    
     $scope.getType = function (key) {
         var links = key.split('.');
         var table = $scope.metadata.table;
