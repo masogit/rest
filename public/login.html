@@ -18,46 +18,42 @@
     <script src="/js/controllers/am_modal.js"></script>
 
     <style>
-        #foo {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background-color: #425563;
+        #Login {
+            /*margin-top: 200px;*/
         }
     </style>
 </head>
 <!-- SET THE CONTROLLER -->
 
-<body ng-controller="amCtl">
-    <div id="foo">
+<body ng-controller="amCtl" style="background-color: #425563">
         <img src="/img/HPE_log_left_wht.png" width="150px" style="padding-left: 50px; padding-top: 20px">
-        <div class="row">
+        <div id="Login">
             <div class="col-md-4">
             </div>
-            <div class="col-md-4" style="background-color: #FFF;">
-                <h4 class="scrollable-header app-name">AM Browser</h4>
-                <form role="form" style="padding-bottom: 30px">
-                    <div class="form-group">
-                        <label>Server and port</label>
-                        <input type="text" class="form-control" placeholder="Server and port" ng-model="formData.server">
-                    </div>
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" class="form-control" placeholder="Username" ng-model="formData.user">
-                    </div>
+            <div class="col-md-4" style="background-color: #FFF;margin-left: 10px; margin-right: 10px;">
+                <div>
+                    <h4 class="scrollable-header app-name">AM Browser</h4>
+                    <form role="form" style="padding-bottom: 30px">
+                        <div class="form-group">
+                            <label>Server and port</label>
+                            <input type="text" class="form-control" placeholder="Server and port" ng-model="formData.server">
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control" placeholder="Username" ng-model="formData.user">
+                        </div>
 
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" class="form-control" placeholder="Password" ng-model="formData.password">
-                    </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" placeholder="Password" ng-model="formData.password">
+                        </div>
 
-                    <button class="btn btn-primary btn-block" ng-click="login()">login</button>
-                </form>
+                        <button class="btn btn-primary btn-block" ng-click="login()">login</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+
 </body>
 
 </html>
