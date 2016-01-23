@@ -13,7 +13,12 @@
         <table class="table table-striped" ng-show="tempRecords">
             <thead ng-repeat="e in tempRecords.records" ng-if="$first">
                 <tr>
-                    <th>Self</th>
+                    <th>
+                        <a ng-click="order('self')">Self
+                            <span class="glyphicon glyphicon-arrow-up" ng-show="predicate=='self' && !reverse"></span>
+                            <span class="glyphicon glyphicon-arrow-down" ng-show="predicate=='self' && reverse"></span>
+                        </a>                        
+                    </th>
                     <th ng-repeat="(key, value) in e" ng-show="!(key==('self')||key==('ref-link'))">
                         <a ng-click="order(key)">{{ getCaptionByTemp(key, tempTable.field, tempTable.showLabel) }}
                             <span class="glyphicon glyphicon-arrow-up" ng-show="predicate==key && !reverse"></span>
