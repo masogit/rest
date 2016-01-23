@@ -152,3 +152,8 @@ body {
 .panel-body{
     overflow-x: auto;
 }
+
+.thumbnail {
+    border-radius: 0px;
+    border-top: 4px solid #425563;
+}
