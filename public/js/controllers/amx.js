@@ -171,19 +171,31 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             return "";
     };
 
-    $scope.getCaptionByTemp = function (key, temp) {
-        var field = temp.field.filter(function (obj) {
-            return obj['$']['sqlname'] == key;
-        })[0];
+    $scope.getCaptionByTemp = function (key, temp, showLabel) {
+        var links = key.split(".");
 
-        if (!field)
-            return key;
-        if (field['aliasName'])
-            return field['aliasName'];
-        else if (temp.showLabel)
-            return field['$']['label'];
-        else
-            return key;
+        if (links.length == 1) {
+            var field = temp.field.filter(function (obj) {
+                return obj['$']['sqlname'] == key;
+            })[0];
+
+            if (!field)
+                return key;
+            if (field['aliasName'])
+                return field['aliasName'];
+            else if (showLabel)
+                return field['$']['label'];
+            else
+                return key;
+        } else {
+            var linkName = links.shift();
+            var link = temp.link.filter(function (obj) {
+                return obj['$']['sqlname'] == linkName;
+            })[0];
+            var newKey = links.join(".");
+            return $scope.getCaptionByTemp(newKey, link.table, showLabel);
+        }
+
     };
 
     $scope.getType = function (key) {

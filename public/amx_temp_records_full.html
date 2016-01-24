@@ -23,7 +23,7 @@
                         </a>                        
                     </th>
                     <th ng-repeat="(key, value) in e" ng-show="!(key==('self')||key==('ref-link'))">
-                        <a ng-click="order(key)">{{ getCaptionByTemp(key, tempTable) }}
+                        <a ng-click="order(key)">{{ getCaptionByTemp(key, tempTable, tempTable.showLabel) }}
                             <span class="glyphicon glyphicon-arrow-up" ng-show="predicate==key && !reverse"></span>
                             <span class="glyphicon glyphicon-arrow-down" ng-show="predicate==key && reverse"></span>
                         </a>
