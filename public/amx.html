@@ -62,6 +62,9 @@
         </div>
     </div>
 </nav>
+
+<uib-alert class="container" ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
+
 <div class="container-fluid">
     <div class="container" ng-show="module=='explorer'">
         <div class="row">

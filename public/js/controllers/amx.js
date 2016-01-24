@@ -35,6 +35,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         showLabel: false
     };
 
+    $scope.alerts = [];
+
     $scope.login = function () {
         $scope.store();
         // console.log("lastPath: " + $scope.lastPath);
@@ -129,12 +131,26 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 }
                 $scope.tableData.form = form;
             } else {
-                $scope.message = JSON.stringify(form) + "--------" + data;
+
+                $scope.alerts.push({
+                    type: 'warning',
+                    msg: JSON.stringify(form)
+                });
+
+                $scope.alerts.push({
+                    type: 'danger',
+                    msg: data
+                });
+
             }
             $scope.tableData['timeStart'] = timeStart;
             $scope.tableData['timeEnd'] = Date.now();
         });
         //        $scope.store();
+    };
+
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
     };
 
     $scope.formatValue = function (key, value, fields) {
