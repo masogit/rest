@@ -11,7 +11,7 @@ var am = angular.module('am', ['ui.bootstrap', 'ngRoute', 'mobile-angular-ui', '
 //    $routeProvider.when('/m/tab_tree', { templateUrl: '/mobile/tab_tree.html', reloadOnSearch: false });
 //});
 
-am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
+am.controller('amCtl', function ($scope, $http, $uibModal) {
     var AM_FORM_DATA = "amFormData";
     $scope.title = "AM Browser";
     $scope.formData = {
@@ -166,26 +166,26 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
         })[0];
 
         if (field && field['type'])
-            return field['type']
+            return field['type'];
         else
             return "";
     };
-    
+
     $scope.getCaptionByTemp = function (key, temp) {
         var field = temp.field.filter(function (obj) {
             return obj['$']['sqlname'] == key;
         })[0];
-        
-        if(!field)
+
+        if (!field)
             return key;
-        if (field.aliasName)
-            return field.aliasName;
+        if (field['aliasName'])
+            return field['aliasName'];
         else if (temp.showLabel)
-            return field['$']['label']
+            return field['$']['label'];
         else
             return key;
     };
-    
+
     $scope.getType = function (key) {
         var links = key.split('.');
         var table = $scope.metadata.table;
@@ -208,7 +208,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
             }
         }
 
-    };
+    }
 
     // load modal for CRUD
     $scope.load = function (data) {
@@ -756,10 +756,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
     };
 
     $scope.checkDateType = function (type) {
-        if (type == 'Date+Time' || type == 'Date' || type == 'Time')
-            return true;
-        else
-            return false;
+        return (type == 'Date+Time' || type == 'Date' || type == 'Time');
     };
 });
 
