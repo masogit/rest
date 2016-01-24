@@ -35,7 +35,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
         showLabel: false
     };
 
-    //    $scope.breadcrumb = [];
     $scope.login = function () {
         $scope.store();
         // console.log("lastPath: " + $scope.lastPath);
@@ -301,13 +300,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
                         // amTree will check fields and expand related link
                         if ($scope.tempTable) {
                             $scope.metadata["table"]["fields"] = $scope.tempTable.fields;
-                            //                            var fields = $scope.metadata["table"]["fields"];
-                            //
-                            //                            // todo: expand all links defined in template
-                            //                            for (var i in fields) {
-                            //                                var links = fields[i].split('.');
-                            //                                expandChild($scope.metadata["table"], links);
-                            //                            }
                         }
 
                     }
@@ -360,43 +352,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
         delete link["table"];
     };
 
-    // Breadcrumb feature ----------------------------------
-    //    $scope.addBreadcrumb = function (refLink) {
-    //        var bread = {
-    //            label: refLink.split("/")[1] + "[" + refLink.split("/")[2] + "]",
-    //            link: refLink
-    //        };
-    //
-    //        if ($scope.breadcrumb.map(function (e) {
-    //            return e.label;
-    //        }).indexOf(bread.label) < 0)
-    //            $scope.breadcrumb.push(bread);
-    //    };
-    //
-    //    $scope.useBreadcrumb = function (bread) {
-    //        var form = clone($scope.formData);
-    //        form["ref-link"] = bread.link;
-    //        form.param.fields = [];
-    //        $scope.query(form);
-    //        $scope.hiddenRelations();
-    //    };
-    //
-    //    $scope.removeBreadcrumb = function (refLink) {
-    //        //        console.log("refLink: " + refLink);
-    //        if (!refLink)
-    //            $scope.breadcrumb = [];
-    //        else {
-    //            var bread = {
-    //                label: refLink.split("/")[1] + "[" + refLink.split("/")[2] + "]",
-    //                link: refLink
-    //            };
-    //            var pos = $scope.breadcrumb.map(function (e) {
-    //                return e.label;
-    //            }).indexOf(bread.label);
-    //
-    //            $scope.breadcrumb.splice(pos, 1);
-    //        }
-    //    };
 
     // advanced filter condition for ng-repeat
     $scope.filterFields = function (query) {
@@ -657,8 +612,6 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
             });
         }
 
-        //        $scope.addBreadcrumb(record["ref-link"]);
-
         $scope.metadata(record["ref-link"].split("/")[1], null, function (data) {
             var links = data.table.link;
 
@@ -729,18 +682,15 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
     $scope.hiddenRelations = function (record) {
         //        console.log("record: " + JSON.stringify(record));
         if (record && record.link) {
-            //            $scope.removeBreadcrumb("db/" + record.table + "/dummy");
             delete record.child;
         } else {
             delete $scope.relations;
-            //            $scope.removeBreadcrumb();
         }
     };
 
     $scope.backTableList = function () {
         delete $scope.metadata["table"];
         $scope.formData.param.fields = [];
-        //        $scope.breadcrumb = [];
         $scope.hiddenRelations();
         delete $scope.tableData;
         delete $scope.tableName;
