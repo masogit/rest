@@ -41,7 +41,7 @@
 <script type="text/ng-template" id="amTemp">
     <span style="display: none">{{table = (l.table)?l.table:tempTable}}</span>
     <span style="display: none">{{isCard11 = (l['$']['card11'])?true:false}}</span>
-    <h5>{{ (l['$']['sqlname'])?l['$']['sqlname']:table['$']['sqlname'] }}
+    <h5>{{ (tempTable.showLabel)?(l['$']['label'])?l['$']['label']:table['$']['sqlname']:(l['$']['sqlname'])?l['$']['sqlname']:table['$']['sqlname'] }}
         <small ng-show="!isCard11"><a ng-click="table.AQL=' '" ng-show="!table.AQL">Set AQL</a></small>
     </h5>
     <ul>

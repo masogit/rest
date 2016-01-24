@@ -193,7 +193,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 return obj['$']['sqlname'] == linkName;
             })[0];
             var newKey = links.join(".");
-            return $scope.getCaptionByTemp(newKey, link.table, showLabel);
+            linkName = (showLabel) ? link['$']['label'] : linkName;
+            return linkName + "." + $scope.getCaptionByTemp(newKey, link.table, showLabel);
         }
 
     };
