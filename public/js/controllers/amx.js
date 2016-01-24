@@ -171,8 +171,8 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
             return "";
     };
     
-    $scope.getCaptionByTemp = function (key, fields, showLabel) {
-        var field = fields.filter(function (obj) {
+    $scope.getCaptionByTemp = function (key, temp) {
+        var field = temp.field.filter(function (obj) {
             return obj['$']['sqlname'] == key;
         })[0];
         
@@ -180,7 +180,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
             return key;
         if (field.aliasName)
             return field.aliasName;
-        else if (showLabel)
+        else if (temp.showLabel)
             return field['$']['label']
         else
             return key;
