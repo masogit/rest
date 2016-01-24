@@ -180,7 +180,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal, $location) {
             return key;
         if (field.aliasName)
             return field.aliasName;
-        else if (field['$']['label'])
+        else if (showLabel)
             return field['$']['label']
         else
             return key;

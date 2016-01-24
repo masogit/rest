@@ -157,3 +157,8 @@ body {
     border-radius: 0px;
     border-top: 4px solid #425563;
 }
+
+.thumbnail:hover {
+    border-radius: 0px;
+    border-top: 4px solid #2AD2C9;
+}
