@@ -9,6 +9,9 @@
             <span class="glyphicon glyphicon glyphicon-step-{{(tempRecords.showDetail)?'forward':'backward'}}"></span>
         </a>
     </div>
+
+    <span class="text-center" ng-show="tempRecords.loading1">Loading....</span>
+
     <div class="{{(tempRecords.showDetail)?'col-md-9':'col-md-12'}}" full-height="130">
         <table class="table table-striped" ng-show="tempRecords">
             <thead ng-repeat="e in tempRecords.records" ng-if="$first">
