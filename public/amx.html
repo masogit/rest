@@ -46,6 +46,7 @@
                 Page:
                 <input type="text" class="form-control" placeholder="Page" ng-model="formData.pageSize" size="1">
                 <input type="checkbox" ng-model="formData.showLabel"> Label
+                <!--<input type="checkbox" ng-model="formData.showError"> Error-->
                 <button class="btn" type="button" ng-click="store()">Save</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
@@ -56,6 +57,15 @@
                     </a>
                 </li>
                 <li>
+                    <a href="#" ng-click="formData.showError=!formData.showError">
+                        Error
+                        <span class="badge" style="background-color: #F04953"
+                              ng-show="formData.showError || alerts.length>0">
+                            {{alerts.length}}
+                        </span>
+                    </a>
+                </li>
+                <li>
                     <a href="#" ng-click="logout()">Exit</a>
                 </li>
             </ul>
@@ -63,9 +73,12 @@
     </div>
 </nav>
 
-<uib-alert class="container" ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
+<uib-alert ng-show="formData.showError" ng-repeat="alert in alerts"
+           type="{{alert.type}}" close="closeAlert($index)" class="container">
+    {{alert.msg}}
+</uib-alert>
 
-<div class="container-fluid" ng-show="alerts.length==0">
+<div class="container-fluid" ng-hide="formData.showError && alerts.length>0">
     <div class="container" ng-show="module=='explorer'">
         <div class="row">
             <div class="col-md-2"></div>

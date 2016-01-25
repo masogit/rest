@@ -32,6 +32,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         password: "",
 
         pageSize: 10,
+//        showError: false,
         showLabel: false
     };
 
@@ -57,6 +58,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                 password: $scope.formData.password,
                 pageSize: $scope.formData.pageSize,
                 showLabel: $scope.formData.showLabel,
+//                showError: $scope.formData.showError,
                 limit: $scope.formData.param.limit,
                 offset: $scope.formData.param.offset
             };
@@ -73,6 +75,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.formData.password = form.password;
         $scope.formData.pageSize = form.pageSize;
         $scope.formData.showLabel = form.showLabel;
+//        $scope.formData.showError = form.showError;
         $scope.formData.param.limit = form.limit;
         $scope.formData.param.offset = form.offset;
     }
