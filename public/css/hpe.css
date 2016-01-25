@@ -102,6 +102,12 @@ body {
     background-color: #425563;
 }
 
+.btn-primary {
+    color: #FFF;
+    background-color: #01A982;
+    border-color: #01A982;
+}
+
 .btn-primary:hover {
     color: #FFF;
     background-color: #2AD2C9;
