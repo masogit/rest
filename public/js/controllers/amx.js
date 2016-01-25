@@ -149,7 +149,7 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         //        $scope.store();
     };
 
-    $scope.closeAlert = function(index) {
+    $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
     };
 
@@ -526,24 +526,40 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
         $scope.tempRecords.loading1 = true;
 
         $http.post('/am/rest', form).success(function (data) {
-            $scope.tempRecords.records = data.entities;
-            $scope.tempRecords.count = data.count;
+            if (data instanceof Object) {
+                $scope.tempRecords.records = data.entities;
+                $scope.tempRecords.count = data.count;
 
-            $scope.tempRecords['timeEnd1'] = Date.now();
-            $scope.tempRecords.loading1 = false;
+                $scope.tempRecords['timeEnd1'] = Date.now();
+                $scope.tempRecords.loading1 = false;
 
-            if (temp.$loki) {
-                temp['last'] = {
-                    time: Date.now(),
-                    count: data.count
-                };
-                $http.post('/json/template', temp).success(function (data) {
+                if (temp.$loki) {
+                    temp['last'] = {
+                        time: Date.now(),
+                        count: data.count
+                    };
+                    $http.post('/json/template', temp).success(function (data) {
 
+                    });
+                }
+
+                if (data.entities[0])
+                    $scope.getRecordByTemp(data.entities[0], template, true);
+
+            } else {
+
+                $scope.alerts.push({
+                    type: 'warning',
+                    msg: JSON.stringify(form)
                 });
+
+                $scope.alerts.push({
+                    type: 'danger',
+                    msg: data
+                });
+
             }
 
-            if (data.entities[0])
-                $scope.getRecordByTemp(data.entities[0], template, true);
         });
 
     };
@@ -599,6 +615,18 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
                             link.tables.push(table);
                         }
                     }
+                } else {
+
+                    $scope.alerts.push({
+                        type: 'warning',
+                        msg: JSON.stringify(form)
+                    });
+
+                    $scope.alerts.push({
+                        type: 'danger',
+                        msg: data
+                    });
+
                 }
 
             });
@@ -700,10 +728,24 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
             }
 
             $http.post('/am/rest', record.form).success(function (data) {
-                if (data.entities)
-                    record.records = data.entities;
-                else if (data)
-                    record.records = [data];
+                if (data instanceof Object) {
+                    if (data.entities)
+                        record.records = data.entities;
+                    else if (data)
+                        record.records = [data];
+                } else {
+
+                    $scope.alerts.push({
+                        type: 'warning',
+                        msg: JSON.stringify(form)
+                    });
+
+                    $scope.alerts.push({
+                        type: 'danger',
+                        msg: data
+                    });
+
+                }
             });
         }
     };
