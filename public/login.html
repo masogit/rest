@@ -27,6 +27,7 @@
 
 <body ng-controller="amCtl" style="background-color: #425563">
         <img src="/img/HPE_log_left_wht.png" width="150px" style="padding-left: 50px; padding-top: 20px">
+
         <div id="Login">
             <div class="col-md-4">
             </div>
@@ -46,7 +47,10 @@
                             <label>Password</label>
                             <input type="password" class="form-control" placeholder="Password" ng-model="formData.password">
                         </div>
-
+                        <uib-alert ng-repeat="alert in alerts" dismiss-on-timeout="2000"
+                                   type="{{alert.type}}" close="closeAlert($index)">
+                            {{alert.msg}}
+                        </uib-alert>
                         <button class="btn btn-primary btn-block" ng-click="login()">login</button>
                     </form>
             </div>

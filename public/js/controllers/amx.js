@@ -39,10 +39,26 @@ am.controller('amCtl', function ($scope, $http, $uibModal) {
     $scope.alerts = [];
 
     $scope.login = function () {
-        $scope.store();
-        // console.log("lastPath: " + $scope.lastPath);
-        window.location.href = "/amx";
-        // $location.path('/amx');
+        var form = clone($scope.formData);
+        form['ref-link'] = "db/amEmplDept";
+        form.param.filter = "UserLogin='" + form.user.trim() + "'";
+        $http.post('/am/rest', form).success(function (data) {
+            if (data instanceof Object) {
+                $scope.store();
+                window.location.href = "/amx";
+            } else {
+                $scope.alerts.push({
+                    type: 'danger',
+                    msg: 'Username or password incorrect!'
+                });
+
+            }
+        }).error(function (data) {
+                $scope.alerts.push({
+                    type: 'danger',
+                    msg: 'Server can not be reached!'
+                });
+            });
     };
 
     $scope.logout = function () {
