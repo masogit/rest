@@ -108,6 +108,12 @@ body {
     border-color: #01A982;
 }
 
+.btn-primary:hover {
+    color: #FFF;
+    background-color: #2AD2C9;
+    border-color: #2AD2C9;
+}
+
 .btn-danger {
     color: #FFF;
     background-color: #F04953;
